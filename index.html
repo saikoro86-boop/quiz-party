@@ -1,181 +1,218 @@
-<title>みんなのクイズ</title>
+<title>ミサト&タイガ ウェディングクイズ</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Pinyon+Script&family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap">
 <style>
-/* お祭りの夜。藍の地に白い紙の札、朱と山吹の差し色。提灯の列が進み具合を示す。
+/* ミサトとタイガの結婚式の夜。深い緑の地に、象牙の招待状のような札、金の縁取り。
+   背景では花びらがゆっくり舞い、進み具合は金のハートで示す。
    明暗どちらの設定でも同じ見た目にする(意図して1つの世界に決めている)。 */
 :root {
-  --ai: #17306e;          /* 地の藍 */
-  --ai-check: #1c3880;    /* 市松の明るい方 */
-  --ai-deep: #0c1c47;     /* 影・ふち */
-  --paper: #fffdf8;       /* 札の白 */
-  --ink: #14224a;
-  --muted: #5a668a;
-  --line: #cfd6e8;
-  --shu: #d93a22;         /* 朱 */
-  --yamabuki: #f6b81c;    /* 山吹 */
-  --sora: #1f76d2;        /* 空 */
-  --take: #0c8062;        /* 若竹 */
-  --on-ground: #ffffff;
-  --on-ground-muted: #b9c6ea;
-  --silver: #8d99b3;
-  --bronze: #b9722f;
-  --font-display: "Dela Gothic One", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
-  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --forest: #0e3a31;       /* 地の深緑 */
+  --forest-deep: #072720;
+  --forest-glow: #1b5a4a;
+  --paper: #fffaf0;        /* 招待状の象牙 */
+  --ink: #2a2118;
+  --muted: #6f6253;
+  --gold: #d4a944;
+  --gold-hi: #f3dc94;
+  --gold-lo: #a97c22;
+  --blush: #f4c7cc;
+  --rose: #c8566b;
+  --rose-soft: #f6d3d7;
+  --sage-soft: #d5e8d9;
+  --sage: #4e8f6f;
+  --sun-soft: #f7e6ae;
+  --lav-soft: #dfe1f7;
+  --lav: #6a74c4;
+  --on-forest: #fdf6e6;
+  --on-forest-muted: #b9d1c6;
+  --line: #e4d6b5;
+  --silver: #9aa3a8;
+  --copper: #c98a62;
+  --font-script: "Pinyon Script", "Snell Roundhand", cursive;
+  --font-mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-num: "Cormorant Garamond", "Times New Roman", serif;
+  --gold-grad: linear-gradient(180deg, var(--gold-hi), var(--gold) 55%, var(--gold-lo));
   color-scheme: light;
 }
 * { box-sizing: border-box; }
-html { background: var(--ai); }
+html { background: var(--forest-deep); }
 body {
-  background-color: var(--ai);
-  background-image: conic-gradient(var(--ai-check) 25%, transparent 0 50%, var(--ai-check) 0 75%, transparent 0);
-  background-size: 56px 56px;
-  color: var(--on-ground); font-family: var(--font-body); font-weight: 500; font-size: 16px; line-height: 1.6;
+  background-color: var(--forest);
+  background-image:
+    radial-gradient(ellipse 90% 40% at 50% -5%, rgba(244, 199, 204, .28), transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50% 105%, rgba(212, 169, 68, .24), transparent 70%),
+    radial-gradient(circle at 50% 40%, var(--forest-glow), var(--forest) 60%, var(--forest-deep));
+  background-attachment: fixed;
+  color: var(--on-forest); font-family: var(--font-body); font-weight: 500; font-size: 16px; line-height: 1.65;
   min-height: 100%;
-  padding-block: 18px 56px;
+  padding-block: 22px 64px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-main { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+main { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 h1, h2, h3, p { margin: 0; }
-h1, h2, h3 { text-wrap: balance; line-height: 1.3; }
+h2, h3 { text-wrap: balance; line-height: 1.4; }
+#petals { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-/* ---- 見出しと提灯 ---- */
-.mast { display: flex; flex-direction: column; gap: 10px; }
-.mast-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 7vw, 40px); letter-spacing: .02em; text-shadow: 3px 3px 0 var(--ai-deep); }
-h1 span { color: var(--yamabuki); }
-.chip { font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 2px solid var(--on-ground); color: var(--on-ground); white-space: nowrap; }
-.who { color: var(--on-ground-muted); font-size: 14px; min-height: 1.6em; }
-.garland { display: flex; flex-wrap: wrap; gap: 10px 7px; padding-top: 5px; border-top: 2px solid var(--on-ground-muted); }
-.lan { position: relative; width: 15px; height: 20px; border-radius: 50%; border: 2px solid var(--on-ground-muted); background: transparent; }
-.lan::before, .lan::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); width: 7px; height: 3px; background: var(--ai-deep); border-radius: 1px; }
-.lan::before { top: -5px; height: 5px; width: 2px; background: var(--on-ground-muted); }
-.lan::after { bottom: -3px; }
-.lan.lit { border-color: var(--shu); background: radial-gradient(circle at 50% 45%, var(--yamabuki) 0 35%, var(--shu) 75%); box-shadow: 0 0 10px 1px rgba(246, 184, 28, .55); }
-.lan.cur { border-color: var(--yamabuki); background: var(--yamabuki); box-shadow: 0 0 12px 3px rgba(246, 184, 28, .8); }
+/* ---- ヒーロー ---- */
+.hero { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding-top: 6px; }
+.eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: .5em; text-indent: .5em; color: var(--gold-hi); }
+.names { margin: 0; font-family: var(--font-script); font-weight: 400; font-size: clamp(60px, 19vw, 104px); line-height: 1.02;
+  display: flex; flex-direction: column; align-items: center; }
+.names span { white-space: nowrap; background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(7, 39, 32, .7)) drop-shadow(0 0 18px rgba(243, 220, 148, .28)); padding: 0 .1em .08em; }
+.names span:first-child { transform: translateX(-.45em); }
+.names span:last-child { transform: translateX(.4em); }
+@media (min-width: 640px) {
+  .names { flex-direction: row; column-gap: .25em; align-items: baseline; font-size: 88px; }
+  .names span:first-child, .names span:last-child { transform: none; }
+}
+.orn { display: flex; align-items: center; gap: 12px; width: min(340px, 80%); margin-top: 2px; color: var(--gold); }
+.orn::before, .orn::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.orn::after { background: linear-gradient(270deg, transparent, var(--gold)); }
+.orn i { width: 8px; height: 8px; transform: rotate(45deg); background: var(--gold); }
+.tagline { font-family: var(--font-mincho); font-weight: 700; font-size: 16px; letter-spacing: .06em; margin-top: 6px; text-wrap: balance; }
+.status { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.chip { font-weight: 700; font-size: 13px; letter-spacing: .08em; padding: 4px 16px; border-radius: 99px; border: 1px solid var(--gold); color: var(--gold-hi); background: rgba(7, 39, 32, .45); white-space: nowrap; }
+.who { color: var(--on-forest-muted); font-size: 14px; }
+.hearts { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 4px; font-size: 20px; line-height: 1.2; margin-top: 4px; max-width: 100%; }
+.hearts span { color: rgba(185, 209, 198, .55); }
+.hearts span.lit { color: var(--blush); text-shadow: 0 0 10px rgba(244, 199, 204, .75); }
+.hearts span.cur { color: var(--gold-hi); text-shadow: 0 0 14px rgba(243, 220, 148, .95); }
 
-/* ---- 札(カード) ---- */
-.card { background: var(--paper); color: var(--ink); border: 3px solid var(--ai-deep); border-radius: 18px; box-shadow: 0 6px 0 var(--ai-deep); padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.card h2 { font-family: var(--font-display); font-weight: 400; font-size: 20px; }
-.card h3 { font-weight: 900; font-size: 15px; }
-.hint { color: var(--on-ground-muted); font-size: 14px; }
+/* ---- 招待状の札 ---- */
+.card { position: relative; background: var(--paper); color: var(--ink); border: 1px solid var(--gold); border-radius: 10px; padding: 24px 20px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .32), inset 0 0 0 1px rgba(255, 255, 255, .6); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.card::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(212, 169, 68, .6); border-radius: 6px; pointer-events: none; }
+.card > * { position: relative; }
+.card h2 { font-family: var(--font-mincho); font-weight: 800; font-size: 21px; letter-spacing: .06em; }
+.card h3 { font-family: var(--font-mincho); font-weight: 800; font-size: 16px; letter-spacing: .04em; }
+.hint { color: var(--on-forest-muted); font-size: 14px; }
 .card .hint { color: var(--muted); }
-.warn { background: var(--paper); color: var(--shu); border: 2px solid var(--shu); border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 700; }
-.stat { display: flex; gap: 22px; align-items: baseline; color: var(--on-ground-muted); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.stat b { font-family: var(--font-display); font-weight: 400; color: var(--on-ground); font-size: 34px; line-height: 1; margin: 0 4px; }
-.stat.sm b { font-size: 22px; }
+.warn { background: var(--paper); color: var(--rose); border: 1.5px solid var(--rose); border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 700; }
+.stat { display: flex; justify-content: center; gap: 30px; align-items: baseline; color: var(--on-forest-muted); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat b { font-family: var(--font-num); font-style: italic; font-weight: 600; color: var(--gold-hi); font-size: 46px; line-height: 1; margin: 0 6px; }
+.stat.sm b { font-size: 30px; }
 
 /* ---- 入力 ---- */
-.f { font-weight: 900; font-size: 14px; display: block; margin-bottom: 6px; }
-textarea, input[type="text"] { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: #ffffff; border: 2px solid var(--ink); border-radius: 12px; padding: 10px 12px; min-height: 48px; }
+.f { font-weight: 700; font-size: 14px; letter-spacing: .04em; display: block; margin-bottom: 6px; }
+textarea, input[type="text"] { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: #ffffff; border: 1.5px solid #cdb78a; border-radius: 10px; padding: 10px 12px; min-height: 48px; }
 textarea { resize: vertical; min-height: 92px; }
-::placeholder { color: var(--muted); opacity: .75; }
-textarea:focus, input[type="text"]:focus { outline: 3px solid var(--yamabuki); outline-offset: 1px; }
-button:focus-visible { outline: 3px solid var(--yamabuki); outline-offset: 3px; }
-.stack { display: flex; flex-direction: column; gap: 10px; }
+::placeholder { color: var(--muted); opacity: .6; }
+textarea:focus, input[type="text"]:focus { outline: 3px solid var(--gold); outline-offset: 1px; border-color: var(--gold-lo); }
+button:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 3px; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
 .optrow { display: grid; grid-template-columns: 56px 1fr; gap: 8px; align-items: center; }
-.radio { display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 12px; border: 2px dashed var(--muted); cursor: pointer; font-weight: 900; font-size: 13px; color: var(--muted); }
+.radio { position: relative; display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; border: 1.5px dashed var(--gold-lo); cursor: pointer; font-weight: 700; font-size: 13px; color: var(--gold-lo); }
 .radio input { position: absolute; opacity: 0; pointer-events: none; }
-.radio:has(input:checked) { background: var(--shu); border: 2px solid var(--shu); color: #ffffff; }
-.radio:has(input:focus-visible) { outline: 3px solid var(--yamabuki); outline-offset: 2px; }
+.radio:has(input:checked) { background: var(--gold-grad); border: 1.5px solid var(--gold-lo); color: var(--ink); }
+.radio:has(input:focus-visible) { outline: 3px solid var(--gold); outline-offset: 2px; }
 
 /* ---- ボタン ---- */
 button { font: inherit; cursor: pointer; }
-.btn { font-weight: 900; min-height: 52px; padding: 0 20px; border-radius: 14px; border: 3px solid var(--ai-deep); background: var(--paper); color: var(--ink); box-shadow: 0 5px 0 var(--ai-deep); }
-.btn.primary { background: var(--yamabuki); }
-.btn.danger { color: var(--shu); }
-.btn.small { min-height: 40px; padding: 0 12px; font-size: 14px; white-space: nowrap; flex-shrink: 0; border-width: 2px; box-shadow: 0 3px 0 var(--ai-deep); }
-.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 var(--ai-deep); }
+.btn { font-family: var(--font-mincho); font-weight: 800; font-size: 17px; letter-spacing: .1em; min-height: 54px; padding: 0 22px; border-radius: 99px;
+  border: 1.5px solid var(--gold-lo); background: var(--paper); color: var(--ink); box-shadow: 0 4px 0 rgba(120, 86, 20, .55), 0 10px 18px rgba(0, 0, 0, .2); }
+.btn.primary { background: var(--gold-grad); color: #3b2a08; border-color: var(--gold-lo); }
+.btn.danger { color: var(--rose); }
+.btn.small { min-height: 40px; padding: 0 14px; font-size: 14px; letter-spacing: .04em; white-space: nowrap; flex-shrink: 0; box-shadow: 0 2px 0 rgba(120, 86, 20, .5); }
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 rgba(120, 86, 20, .55); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
-.item { display: flex; gap: 10px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 6px 0 12px; min-width: 0; }
+.item { display: flex; gap: 10px; align-items: center; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 6px 0 12px; min-width: 0; }
 .item:last-child { border-bottom: 0; padding-bottom: 0; }
 .item .t { min-width: 0; overflow-wrap: anywhere; font-weight: 700; }
 .item small { color: var(--muted); display: block; font-weight: 500; }
 
 /* ---- 出題 ---- */
-.qhead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.qno { font-family: var(--font-display); font-size: clamp(28px, 6vw, 44px); line-height: 1.1; text-shadow: 3px 3px 0 var(--ai-deep); }
-.qno small { font-family: var(--font-body); font-weight: 700; font-size: 14px; color: var(--on-ground-muted); margin-left: 8px; text-shadow: none; }
-.by { font-size: 14px; font-weight: 700; color: var(--on-ground-muted); overflow-wrap: anywhere; }
-.qtext { font-weight: 900; font-size: clamp(21px, 3.6vw, 34px); line-height: 1.5; overflow-wrap: anywhere; }
+.qhead { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+.qno { font-family: var(--font-script); font-size: clamp(44px, 12vw, 68px); line-height: 1.1; color: var(--gold-hi); text-shadow: 0 2px 0 rgba(7, 39, 32, .7), 0 0 20px rgba(243, 220, 148, .35); }
+.qno small { font-family: var(--font-body); font-weight: 700; font-size: 14px; color: var(--on-forest-muted); margin-left: 10px; text-shadow: none; letter-spacing: .08em; }
+.by { font-size: 14px; font-weight: 700; color: var(--on-forest-muted); overflow-wrap: anywhere; }
+.qcard { padding-block: 30px; text-align: center; }
+.qtext { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(22px, 4vw, 34px); line-height: 1.6; overflow-wrap: anywhere; letter-spacing: .03em; }
 .opts { display: grid; grid-template-columns: 1fr; gap: 14px; }
 @media (min-width: 640px) { .opts { grid-template-columns: 1fr 1fr; } }
-.opt { --c: var(--shu); --on-c: #ffffff; display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; text-align: left; width: 100%; min-width: 0;
-  min-height: 68px; padding: 10px 14px; border-radius: 16px; border: 3px solid var(--ai-deep); box-shadow: 0 6px 0 var(--ai-deep);
-  background: var(--c); color: var(--on-c); font-weight: 900; font-size: clamp(17px, 2.4vw, 22px); line-height: 1.4; }
-.opt[data-i="1"] { --c: var(--sora); }
-.opt[data-i="2"] { --c: var(--yamabuki); --on-c: var(--ink); }
-.opt[data-i="3"] { --c: var(--take); }
-.opt .badge { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--ink); font-family: var(--font-display); font-weight: 400; font-size: 20px; border: 2px solid var(--ai-deep); }
+.opt { --c: var(--rose-soft); --cb: var(--rose); position: relative; display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; text-align: left; width: 100%; min-width: 0;
+  min-height: 72px; padding: 10px 16px 10px 12px; border-radius: 16px; border: 1.5px solid var(--cb); background: var(--c); color: var(--ink);
+  font-family: var(--font-mincho); font-weight: 800; font-size: clamp(17px, 2.4vw, 21px); line-height: 1.45; box-shadow: 0 8px 18px rgba(0, 0, 0, .28); }
+.opt[data-i="1"] { --c: var(--sage-soft); --cb: var(--sage); }
+.opt[data-i="2"] { --c: var(--sun-soft); --cb: var(--gold-lo); }
+.opt[data-i="3"] { --c: var(--lav-soft); --cb: var(--lav); }
+.opt .badge { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--cb); color: #ffffff; font-family: var(--font-num); font-style: italic; font-weight: 600; font-size: 26px; line-height: 1; }
 .opt .label { overflow-wrap: anywhere; min-width: 0; }
 .opt .side { display: flex; align-items: center; gap: 6px; }
-.tag { font-size: 12px; font-weight: 900; background: var(--paper); color: var(--ink); border-radius: 99px; padding: 2px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.stamp { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--shu); border: 3px double var(--shu); font-weight: 900; font-size: 14px; transform: rotate(-12deg); }
-.opt.open:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--ai-deep); }
+.tag { font-family: var(--font-body); font-size: 12px; font-weight: 700; background: var(--paper); color: var(--ink); border: 1px solid var(--cb, var(--gold)); border-radius: 99px; padding: 1px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.stamp { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-grad); color: #3b2a08; border: 2px solid var(--gold-lo); font-family: var(--font-mincho); font-weight: 800; font-size: 14px; box-shadow: 0 0 0 3px var(--paper), 0 0 16px 3px rgba(243, 220, 148, .9); transform: rotate(-10deg); }
+.opt.open:active { transform: translateY(3px); box-shadow: 0 3px 8px rgba(0, 0, 0, .28); }
 .opt.locked { cursor: default; }
-.opt.dim { opacity: .62; box-shadow: none; transform: translateY(4px); }
-.opt.chosen { outline: 4px solid var(--paper); outline-offset: 3px; }
-.verdict { font-weight: 900; font-size: 16px; padding: 12px 16px; border-radius: 14px; text-align: center; }
-.verdict.na { background: rgba(255, 255, 255, .12); color: var(--on-ground); border: 2px dashed var(--on-ground-muted); }
-.verdict.ok { background: var(--yamabuki); color: var(--ink); border: 3px solid var(--ai-deep); box-shadow: 0 6px 0 var(--ai-deep); font-family: var(--font-display); font-weight: 400; font-size: 30px; }
-.verdict.ng { background: var(--paper); color: var(--shu); border: 3px solid var(--ai-deep); box-shadow: 0 6px 0 var(--ai-deep); font-size: 18px; }
-.names { display: flex; flex-wrap: wrap; gap: 6px; }
-.names span { background: var(--yamabuki); color: var(--ink); border-radius: 99px; padding: 2px 12px; font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
+.opt.dim { opacity: .55; box-shadow: none; }
+.opt.chosen { outline: 3px solid var(--gold-hi); outline-offset: 3px; }
+.opt.right { border-color: var(--gold-lo); box-shadow: 0 0 0 3px var(--gold), 0 0 26px 4px rgba(243, 220, 148, .75); }
+.verdict { font-weight: 700; font-size: 15px; padding: 12px 16px; border-radius: 14px; text-align: center; letter-spacing: .04em; }
+.verdict.na { background: rgba(7, 39, 32, .4); color: var(--on-forest); border: 1px dashed var(--on-forest-muted); }
+.verdict.ok { background: var(--gold-grad); color: #3b2a08; border: 1.5px solid var(--gold-lo); box-shadow: 0 0 30px rgba(243, 220, 148, .55); font-family: var(--font-script); font-weight: 400; font-size: 46px; line-height: 1.2; padding-block: 6px 10px; }
+.verdict.ng { background: var(--paper); color: var(--rose); border: 1.5px solid var(--rose); font-family: var(--font-mincho); font-weight: 800; font-size: 17px; }
+.winners { display: flex; flex-wrap: wrap; gap: 6px; }
+.winners span { background: var(--sun-soft); color: var(--ink); border: 1px solid var(--gold); border-radius: 99px; padding: 2px 12px; font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
 
 /* ---- 司会 ---- */
-.host { border: 2px dashed var(--yamabuki); background: rgba(12, 28, 71, .5); border-radius: 18px; padding: 14px 14px 18px; display: flex; flex-direction: column; gap: 10px; }
-.host .lbl { font-size: 13px; font-weight: 900; color: var(--yamabuki); letter-spacing: .08em; }
+.host { border: 1.5px dashed var(--gold); background: rgba(7, 39, 32, .5); border-radius: 18px; padding: 14px 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+.host .lbl { font-size: 12px; font-weight: 700; color: var(--gold-hi); letter-spacing: .3em; }
 .host .btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .host .btns .btn { flex: 1 1 180px; }
-.wait { color: var(--on-ground-muted); font-size: 14px; text-align: center; }
+.wait { color: var(--on-forest-muted); font-size: 14px; text-align: center; }
 
 /* ---- 結果 ---- */
-.final-title { font-family: var(--font-display); font-size: clamp(32px, 8vw, 52px); text-align: center; text-shadow: 4px 4px 0 var(--ai-deep); }
-.mine { text-align: center; font-weight: 700; color: var(--on-ground); }
-.mine b { font-family: var(--font-display); font-weight: 400; color: var(--yamabuki); font-size: 26px; margin: 0 4px; }
+.final-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.final-title { font-family: var(--font-script); font-weight: 400; font-size: clamp(54px, 16vw, 88px); line-height: 1.1; color: var(--gold-hi); text-shadow: 0 2px 0 rgba(7, 39, 32, .7), 0 0 26px rgba(243, 220, 148, .4); }
+.mine { text-align: center; font-weight: 700; }
+.mine b { font-family: var(--font-num); font-style: italic; font-weight: 600; color: var(--gold-hi); font-size: 36px; margin: 0 6px; }
 .ranks { display: flex; flex-direction: column; gap: 10px; }
-.rank { display: grid; grid-template-columns: 46px 1fr auto; gap: 12px; align-items: center; padding: 10px 16px 10px 10px; border-radius: 14px; background: var(--paper); color: var(--ink); border: 3px solid var(--ai-deep); box-shadow: 0 4px 0 var(--ai-deep); min-width: 0; }
-.rank .n { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 20px; background: var(--line); color: var(--ink); }
-.rank .nm { overflow-wrap: anywhere; font-weight: 900; min-width: 0; }
-.rank .nm .tag { background: var(--ink); color: var(--paper); margin-left: 8px; }
-.rank .sc { font-variant-numeric: tabular-nums; font-weight: 900; white-space: nowrap; }
-.rank .sc small { font-weight: 700; color: var(--muted); }
-.rank.r1 { background: var(--yamabuki); padding-block: 16px; box-shadow: 0 6px 0 var(--ai-deep); }
-.rank.r1 .n { background: var(--ink); color: var(--yamabuki); }
-.rank.r1 .nm { font-size: 20px; }
-.rank.r1 .sc small { color: var(--ink); }
+.rank { display: grid; grid-template-columns: 46px 1fr auto; gap: 12px; align-items: center; padding: 10px 18px 10px 10px; border-radius: 14px; background: var(--paper); color: var(--ink); border: 1px solid var(--gold); box-shadow: 0 8px 18px rgba(0, 0, 0, .25); min-width: 0; }
+.rank .n { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-num); font-style: italic; font-weight: 600; font-size: 28px; line-height: 1; background: var(--line); color: var(--ink); }
+.rank .nm { overflow-wrap: anywhere; font-family: var(--font-mincho); font-weight: 800; min-width: 0; }
+.rank .nm .tag { margin-left: 8px; }
+.rank .sc { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+.rank .sc small { font-weight: 500; color: var(--muted); }
+.rank.r1 { background: var(--gold-grad); border: 1.5px solid var(--gold-lo); padding-block: 18px; box-shadow: 0 0 34px rgba(243, 220, 148, .5), 0 10px 20px rgba(0, 0, 0, .3); }
+.rank.r1 .n { background: var(--forest); color: var(--gold-hi); width: 52px; height: 52px; font-size: 34px; }
+.rank.r1 .nm { font-size: 21px; }
+.rank.r1 .sc small { color: #5b430f; }
 .rank.r2 .n { background: var(--silver); color: #ffffff; }
-.rank.r3 .n { background: var(--bronze); color: #ffffff; }
+.rank.r3 .n { background: var(--copper); color: #ffffff; }
+.thanks { text-align: center; font-family: var(--font-mincho); font-weight: 700; letter-spacing: .1em; color: var(--gold-hi); }
 
-#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--paper); color: var(--ink); border: 2px solid var(--ai-deep); font-weight: 700; padding: 10px 18px; border-radius: 99px; font-size: 14px; max-width: 90vw; z-index: 20; }
+#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--paper); color: var(--ink); border: 1px solid var(--gold); font-weight: 700; padding: 10px 18px; border-radius: 99px; font-size: 14px; max-width: 90vw; z-index: 20; }
 #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
-#app { display: flex; flex-direction: column; gap: 18px; }
+#app { display: flex; flex-direction: column; gap: 20px; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .btn, .opt { transition: transform .08s, box-shadow .08s, opacity .2s; }
-  .lan.cur { animation: glow 1.2s ease-in-out infinite alternate; }
-  #app.enter > * { animation: pop .38s cubic-bezier(.2, 1.5, .4, 1) backwards; }
-  #app.enter > *:nth-child(2) { animation-delay: .05s; }
-  #app.enter > *:nth-child(3) { animation-delay: .1s; }
-  #app.enter > *:nth-child(n+4) { animation-delay: .15s; }
-  .stamp { animation: stamp .3s cubic-bezier(.2, 1.6, .4, 1) backwards; }
+  .btn, .opt { transition: transform .1s, box-shadow .1s, opacity .25s; }
+  .hearts span.cur { animation: beat 1.1s ease-in-out infinite; }
+  .names span { animation: shimmer 6s ease-in-out infinite alternate; }
+  #app.enter > * { animation: rise .55s cubic-bezier(.2, .9, .3, 1.15) backwards; }
+  #app.enter > *:nth-child(2) { animation-delay: .07s; }
+  #app.enter > *:nth-child(3) { animation-delay: .14s; }
+  #app.enter > *:nth-child(n+4) { animation-delay: .21s; }
+  .stamp { animation: seal .4s cubic-bezier(.2, 1.6, .4, 1) backwards; }
 }
-@keyframes glow { from { box-shadow: 0 0 6px 1px rgba(246, 184, 28, .5); } to { box-shadow: 0 0 14px 5px rgba(246, 184, 28, .9); } }
-@keyframes pop { from { transform: translateY(14px) scale(.97); } }
-@keyframes stamp { from { transform: rotate(-12deg) scale(1.8); } }
+@keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.28); } }
+@keyframes shimmer { from { filter: drop-shadow(0 2px 0 rgba(7, 39, 32, .7)) drop-shadow(0 0 10px rgba(243, 220, 148, .15)); } to { filter: drop-shadow(0 2px 0 rgba(7, 39, 32, .7)) drop-shadow(0 0 26px rgba(243, 220, 148, .55)); } }
+@keyframes rise { from { transform: translateY(18px) scale(.98); opacity: 0; } }
+@keyframes seal { from { transform: rotate(-10deg) scale(2); opacity: 0; } }
 </style>
 
+<canvas id="petals" aria-hidden="true"></canvas>
 <main>
-  <header class="mast">
-    <div class="mast-row">
-      <h1>みんなの<span>クイズ</span></h1>
-      <span class="chip" id="phaseChip">準備中</span>
-    </div>
-    <div class="garland" id="garland" hidden></div>
-    <div class="who" id="who"></div>
+  <header class="hero">
+    <div class="eyebrow">WEDDING QUIZ</div>
+    <h1 class="names" aria-label="Misato and Taiga"><span>Misato</span><span>&amp; Taiga</span></h1>
+    <div class="orn" aria-hidden="true"><i></i></div>
+    <p class="tagline">ふたりのこと、どれだけ知ってる?</p>
+    <div class="status"><span class="chip" id="phaseChip">準備中</span><span class="who" id="who"></span></div>
+    <div class="hearts" id="hearts" hidden></div>
   </header>
   <div id="notice"></div>
   <div id="app"><p class="wait">読み込み中です…</p></div>
@@ -191,6 +228,7 @@ button { font: inherit; cursor: pointer; }
   var S = { state: DEFAULT_STATE, questions: [], players: [], answers: [] };
   var db = null, isHost = false, canWrite = true, mounted = "";
   var $ = function (s) { return document.querySelector(s); };
+  var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   // 端末に保存できないとき(プライベートモード等)でも動くようにする
   var LS = {
@@ -260,9 +298,39 @@ button { font: inherit; cursor: pointer; }
   }
 
   // ---------- 演出 ----------
-  // 提灯の列: 集めている間は集まった問題の数、出題中は進み具合
-  var garlandSig = "";
-  function drawGarland() {
+  function colors() {
+    var css = getComputedStyle(document.documentElement);
+    return function (v) { return css.getPropertyValue(v).trim(); };
+  }
+  // 背景にゆっくり舞う花びら(動きを減らす設定の端末では出さない)
+  function petals() {
+    if (reduced) return;
+    var cv = $("#petals"), ctx = cv.getContext("2d"), W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    function size() { W = window.innerWidth; H = window.innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); window.addEventListener("resize", size);
+    var col = colors(), tints = [col("--blush"), col("--paper"), col("--blush"), col("--gold-hi")];
+    var ps = [];
+    for (var i = 0; i < 18; i++) ps.push(seed(true, i));
+    function seed(anywhere, i) {
+      return { x: Math.random() * W, y: anywhere ? Math.random() * H : -20, s: 7 + Math.random() * 9, r: Math.random() * 6.28, vr: (Math.random() - .5) * .03,
+        vy: .35 + Math.random() * .7, ph: Math.random() * 6.28, sw: .6 + Math.random() * 1.2, c: tints[i % tints.length], a: .2 + Math.random() * .3 };
+    }
+    var t = 0;
+    (function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden) return;
+      t += .016; ctx.clearRect(0, 0, W, H);
+      ps.forEach(function (p, i) {
+        p.y += p.vy; p.x += Math.sin(t * p.sw + p.ph) * .6; p.r += p.vr;
+        if (p.y > H + 20) ps[i] = seed(false, i);
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * .55, 0, 0, 6.2832); ctx.fill(); ctx.restore();
+      });
+    })();
+  }
+  // 進み具合のハート: 集めている間は集まった問題の数、出題中は進み具合
+  var heartSig = "";
+  function drawHearts() {
     var st = S.state, ph = st.phase, n, lit, cur = -1, label;
     if (ph === "collect") { n = S.questions.length; lit = n; label = "集まった問題 " + n + " 問"; }
     else {
@@ -272,30 +340,34 @@ button { font: inherit; cursor: pointer; }
       label = "全 " + n + " 問のうち " + lit + " 問が終了";
     }
     var sig = n + ":" + lit + ":" + cur;
-    if (sig === garlandSig) return;
-    garlandSig = sig;
-    var g = $("#garland"); g.hidden = n === 0; g.setAttribute("aria-label", label); g.setAttribute("role", "img");
+    if (sig === heartSig) return;
+    heartSig = sig;
+    var g = $("#hearts"); g.hidden = n === 0; g.setAttribute("aria-label", label); g.setAttribute("role", "img");
     var kids = [];
-    for (var i = 0; i < n; i++) kids.push(h("span", { class: "lan" + (i === cur ? " cur" : i < lit ? " lit" : "") }));
+    for (var i = 0; i < n; i++) {
+      var on = i === cur || i < lit;
+      kids.push(h("span", { class: i === cur ? "cur" : i < lit ? "lit" : "", text: on ? "♥" : "♡" }));
+    }
     g.replaceChildren.apply(g, kids);
   }
   function confetti() {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (reduced) return;
     var cv = $("#fx"), ctx = cv.getContext("2d");
     var W = cv.width = window.innerWidth, H = cv.height = window.innerHeight;
-    var css = getComputedStyle(document.documentElement);
-    var cols = ["--shu", "--yamabuki", "--sora", "--take", "--paper"].map(function (v) { return css.getPropertyValue(v).trim(); });
+    var col = colors(), cols = ["--gold", "--gold-hi", "--blush", "--paper", "--sage", "--lav"].map(col);
     var ps = [];
-    for (var i = 0; i < 110; i++) ps.push({ x: W / 2 + (Math.random() - .5) * W * .5, y: H * .38, vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 4, s: 6 + Math.random() * 7, r: Math.random() * 6.3, vr: (Math.random() - .5) * .4, c: cols[i % cols.length] });
+    for (var i = 0; i < 130; i++) ps.push({ x: W / 2 + (Math.random() - .5) * W * .5, y: H * .4, vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 4, s: 6 + Math.random() * 7, r: Math.random() * 6.3, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], round: i % 3 === 0 });
     cv.hidden = false;
     var t0 = performance.now();
     (function tick(t) {
       ctx.clearRect(0, 0, W, H);
       ps.forEach(function (p) {
-        p.vy += .42; p.x += p.vx; p.y += p.vy; p.vx *= .99; p.r += p.vr;
-        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); ctx.restore();
+        p.vy += .4; p.x += p.vx; p.y += p.vy; p.vx *= .99; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+        if (p.round) { ctx.beginPath(); ctx.ellipse(0, 0, p.s / 2, p.s / 3, 0, 0, 6.2832); ctx.fill(); } else ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+        ctx.restore();
       });
-      if (t - t0 < 2400) requestAnimationFrame(tick); else { ctx.clearRect(0, 0, W, H); cv.hidden = true; }
+      if (t - t0 < 2600) requestAnimationFrame(tick); else { ctx.clearRect(0, 0, W, H); cv.hidden = true; }
     })(t0);
   }
 
@@ -308,7 +380,7 @@ button { font: inherit; cursor: pointer; }
   var formEl = null;
   function buildForm() {
     var radios = [], inputs = [];
-    var ta = h("textarea", { id: "qText", maxlength: "120", placeholder: "例: 〇〇さんが入社して最初に配属された部署は?" });
+    var ta = h("textarea", { id: "qText", maxlength: "120", placeholder: "例: タイガがミサトにプロポーズした場所は?" });
     var err = h("p", { class: "warn", hidden: "" });
     var rows = LETTERS.map(function (L, i) {
       var r = h("input", { type: "radio", name: "correct", id: "ok" + i, value: String(i) });
@@ -337,7 +409,7 @@ button { font: inherit; cursor: pointer; }
       guard(db.collection("questions").add({ text: text, options: opts, answer: answer, by: pid, byName: myName, at: Date.now() }))
         .then(function () {
           ta.value = ""; inputs.forEach(function (i) { i.value = ""; }); radios.forEach(function (r) { r.checked = false; });
-          toast("登録しました。提灯がひとつ灯りました");
+          toast("登録しました。ハートがひとつ増えました");
         }).catch(function () {}).then(function () { post.disabled = false; });
     });
     return h("div", { class: "stack" },
@@ -359,9 +431,9 @@ button { font: inherit; cursor: pointer; }
     go.addEventListener("click", join);
     inp.addEventListener("keydown", function (e) { if (e.key === "Enter") join(); });
     $("#app").replaceChildren(h("section", { class: "card" },
-      h("h2", { text: "お名前は?" }),
+      h("h2", { text: "お名前を教えてください" }),
       h("p", { class: "hint", text: "順位表に出ます。ニックネームでも大丈夫です。" }),
-      h("div", null, h("label", { class: "f", for: "nameIn", text: "名前" }), inp), go));
+      h("div", null, h("label", { class: "f", for: "nameIn", text: "お名前" }), inp), go));
     mounted = "name";
   }
 
@@ -370,7 +442,7 @@ button { font: inherit; cursor: pointer; }
     $("#app").replaceChildren(
       h("div", { class: "stat", id: "stat" }),
       h("section", { class: "card" },
-        h("h2", { text: "問題を出す" }),
+        h("h2", { text: "ふたりへの問題を出す" }),
         h("p", { class: "hint", text: "みんなの問題を混ぜて出題します。自分の問題には答えられません。" }),
         formEl),
       h("section", { class: "card", id: "mine" }),
@@ -407,6 +479,7 @@ button { font: inherit; cursor: pointer; }
     return h("div", { class: "opts" }, q.options.map(function (text, i) {
       var chosen = !!mine && mine.choice === i;
       var cls = "opt" + (open ? " open" : " locked") + (chosen ? " chosen" : "");
+      if (reveal && i === q.answer) cls += " right";
       if (reveal ? i !== q.answer : (mine && !chosen)) cls += " dim";
       var side = [];
       if (chosen) side.push(h("span", { class: "tag", text: "あなた" }));
@@ -425,7 +498,7 @@ button { font: inherit; cursor: pointer; }
     var st = S.state, last = st.idx + 1 >= st.order.length;
     var q = qById(st.order[st.idx]);
     var head = h("div", { class: "qhead" },
-      h("div", { class: "qno" }, "第" + (st.idx + 1) + "問", h("small", { text: "全" + st.order.length + "問" })),
+      h("div", { class: "qno" }, "Question " + (st.idx + 1), h("small", { text: "全" + st.order.length + "問" })),
       q ? h("span", { class: "by", text: "出題: " + (q.byName || "不明") }) : null);
     var next = btn("primary", reveal ? (last ? "結果発表へ" : "次の問題へ") : "答え合わせ");
     next.addEventListener("click", function () {
@@ -436,7 +509,7 @@ button { font: inherit; cursor: pointer; }
     var app = $("#app");
     if (!q) { app.replaceChildren(head, h("div", { class: "card" }, h("p", { text: "この問題は取り下げられました。" })), hostBox([next])); return; }
     var mine = myAnswer(q.id), isAuthor = q.by === pid;
-    var parts = [head, h("div", { class: "card" }, h("div", { class: "qtext", text: q.text })), optionsView(q, reveal, mine, isAuthor)];
+    var parts = [head, h("div", { class: "card qcard" }, h("div", { class: "qtext", text: q.text })), optionsView(q, reveal, mine, isAuthor)];
     if (!reveal) {
       var got = answersOf(q.id).filter(function (a) { return a.pid !== q.by; }).length;
       parts.push(h("p", { class: "verdict na", text: isAuthor ? "あなたの問題です。みんなの回答を待ちましょう。" : mine ? "回答しました。答え合わせを待っています。" : "ひとつ選んでタップ。選び直しはできません。" }));
@@ -444,12 +517,12 @@ button { font: inherit; cursor: pointer; }
     } else {
       if (isAuthor) parts.push(h("p", { class: "verdict na", text: "あなたの問題でした。" }));
       else if (!mine) parts.push(h("p", { class: "verdict na", text: "今回は回答していません。" }));
-      else if (mine.choice === q.answer) parts.push(h("p", { class: "verdict ok", text: "正解!" }));
+      else if (mine.choice === q.answer) parts.push(h("p", { class: "verdict ok", text: "Correct!" }));
       else parts.push(h("p", { class: "verdict ng", text: "ざんねん。正解は " + LETTERS[q.answer] + " でした。" }));
       var winners = answersOf(q.id).filter(function (a) { return a.pid !== q.by && a.choice === q.answer; })
         .map(function (a) { var p = S.players.filter(function (x) { return x.id === a.pid; })[0]; return p ? p.name : null; }).filter(Boolean);
       parts.push(h("div", { class: "card" }, h("h3", { text: "正解した人(" + winners.length + "人)" }),
-        winners.length ? h("div", { class: "names" }, winners.map(function (n) { return h("span", { text: n }); })) : h("p", { class: "hint", text: "正解者はいませんでした。" })));
+        winners.length ? h("div", { class: "winners" }, winners.map(function (n) { return h("span", { text: n }); })) : h("p", { class: "hint", text: "正解者はいませんでした。" })));
     }
     parts.push(hostBox([next], reveal ? "司会が次へ進めるのを待っています。" : "司会が答え合わせをするまでお待ちください。"));
     app.replaceChildren.apply(app, parts);
@@ -459,7 +532,7 @@ button { font: inherit; cursor: pointer; }
   function viewFinal() {
     var rows = ranking();
     var me = rows.filter(function (r) { return r.id === pid; })[0];
-    var parts = [h("h2", { class: "final-title", text: "結果発表" })];
+    var parts = [h("div", { class: "final-head" }, h("h2", { class: "final-title", text: "Results" }), h("p", { class: "eyebrow", text: "結果発表" }))];
     if (me) parts.push(h("p", { class: "mine" }, "あなたは", h("b", { text: me.rank + "位" }), me.score + " / " + me.total + " 問正解"));
     parts.push(h("div", { class: "ranks" }, rows.map(function (r) {
       return h("div", { class: "rank" + (r.rank <= 3 ? " r" + r.rank : "") },
@@ -467,6 +540,7 @@ button { font: inherit; cursor: pointer; }
         h("span", { class: "nm" }, r.name, r.id === pid ? h("span", { class: "tag", text: "あなた" }) : null),
         h("span", { class: "sc" }, String(r.score), h("small", { text: " / " + r.total })));
     })));
+    parts.push(h("p", { class: "thanks" }, "ご列席ありがとうございました", h("br"), "ミサト & タイガ"));
     if (isHost) {
       var again = btn("danger", resetArmed ? "本当にやり直す(得点が消えます)" : "同じ問題でやり直す");
       again.addEventListener("click", function () {
@@ -494,12 +568,12 @@ button { font: inherit; cursor: pointer; }
     $("#phaseChip").textContent = CHIPS[ph] || "準備中";
     $("#who").textContent = myName ? myName + " さん" + (isHost ? "(司会)" : "") : "";
     $("#notice").replaceChildren(canWrite ? [] : h("p", { class: "warn", text: "このリンクでは見るだけの権限です。参加するには、主催者に共有を「コントリビューター」以上にしてもらってください。" }));
-    drawGarland();
+    drawHearts();
     if (!myName) { if (mounted !== "name") mountName(); return; }
     // 場面が変わったときだけ動きを付ける(誰かが回答するたびに揺れないように)
     var key = ph + ":" + S.state.idx, entered = key !== lastKey;
     lastKey = key;
-    if (entered) { app.classList.add("enter"); clearTimeout(enterTimer); enterTimer = setTimeout(function () { app.classList.remove("enter"); }, 700); }
+    if (entered) { app.classList.add("enter"); clearTimeout(enterTimer); enterTimer = setTimeout(function () { app.classList.remove("enter"); }, 900); }
     if (ph === "collect") {
       if (mounted !== "collect") mountCollect();
       fillCollect();
@@ -545,6 +619,7 @@ button { font: inherit; cursor: pointer; }
     coll("questions"); coll("players"); coll("answers");
   }
 
+  petals();
   var c = window.claude;
   if (!c || !c.use) { fail("このページはClaudeの画面で開いてください。"); return; }
   Promise.all([c.use("db"), c.use("user")]).then(function (r) {
