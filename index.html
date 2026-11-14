@@ -381,7 +381,7 @@ button { font: inherit; cursor: pointer; }
   var Snd = (function () {
     var ctx = null, out = null, conv = null, bus = null, on = false, timer = null, nextT = 0, bar = 0;
     var fileBuf = null, fileSrc = null;
-    var LSTEP = 60 / (124 * 3), loopKit = null;
+    var loopKit = null;
     function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
     function clamp(x) { return Math.max(0, Math.min(1, x)); }
     function init() {
@@ -411,24 +411,34 @@ button { font: inherit; cursor: pointer; }
     // 本編のBGM: 冒険活劇のループ。8小節ごとに厚みが増し(笛 → 金管 → 金管のオクターブ重ね → 全開)、32小節で一周する
     function pirateBar(bar, t) {
       var ch = PROG[bar % 8], pass = Math.floor(bar / 8) % 4, v = .45 + .17 * pass, th = THEME[bar % 8], K = loopKit, pos;
+      var step = 60 / ((118 + 22 * ((bar % 32) / 31)) * 3);   // 32小節かけてテンポが上がり、一周したら戻る
       for (pos = 0; pos < 6; pos++) {
-        var tt = t + pos * LSTEP;
-        K.bass(tt, ch.r + (pos === 3 ? 7 : 0), .24 * v, LSTEP * 2.2);
-        if (pos === 0 || pos === 3) K.kick(tt, .45 + .35 * v);
+        var tt = t + pos * step;
+        K.bass(tt, ch.r + (pos === 3 ? 7 : 0), .24 * v, step * 2.2);
+        K.cello(tt, ch.r + 12 + [0, 0, 7, 0, 0, 7][pos], step * .85, (pos % 3 === 0 ? .17 : .1) * v);
+        if (pos === 0 || pos === 3) { K.kick(tt, .45 + .35 * v); if (pass >= 2) K.taiko(tt, .2 + .1 * pass); }
         if (pos === 3) K.snare(tt, .18 + .12 * v);
+        if (pos === 5 && pass >= 1) K.snare(tt, .06 + .03 * pass);
         K.hat(tt, .05 + .06 * v);
         K.pluck(tt, ch.t[[0, 1, 2, 1, 2, 1][pos]] + 12, .035 + .035 * v);
-        if (pos === 0) K.chord(tt, ch.t, LSTEP * 6, .035 * v);
+        if (pos === 0) K.chord(tt, ch.t, step * 6, .035 * v);
+        if (pos === 0 && pass >= 2 && bar % 2 === 0) K.choir(tt, ch.t.map(function (m) { return m + 12; }), step * 12, .03 + .01 * pass);
+        if (pos === 0 && pass === 3 && bar % 2 === 0) ch.t.forEach(function (m) { K.brass(tt, m + 12, step * 1.5, .05); });
         th.forEach(function (nt) {
           if (nt[1] !== pos) return;
-          if (pass === 0) K.flute(tt, nt[0], nt[2] * LSTEP, .1);
-          else { K.brass(tt, nt[0], nt[2] * LSTEP, .05 + .02 * pass); if (pass >= 2) K.brass(tt, nt[0] + 12, nt[2] * LSTEP, .03); }
+          if (pass === 0) K.flute(tt, nt[0], nt[2] * step, .1);
+          else {
+            K.brass(tt, nt[0], nt[2] * step, .05 + .02 * pass);
+            if (pass >= 2) K.brass(tt, nt[0] + 12, nt[2] * step, .03);
+            if (pass === 3) K.brass(tt, nt[0] - 5, nt[2] * step, .035);
+          }
         });
         if (bar % 8 === 0 && pos === 0) K.crash(tt, .1 + .04 * pass);
         if (bar % 8 === 7 && pos >= 3) K.tom(tt, .3 + .1 * pass);
       }
+      return 6 * step;
     }
-    function tick() { while (nextT < ctx.currentTime + .7) { pirateBar(bar++, nextT); nextT += 6 * LSTEP; } }
+    function tick() { while (nextT < ctx.currentTime + .7) { nextT += pirateBar(bar++, nextT); } }
     function stopFile() { if (fileSrc) { try { fileSrc.stop(); } catch (e) {} fileSrc = null; } }
     function startPlayback() {
       bus = ctx.createGain(); bus.connect(out); bus.connect(conv);
@@ -500,6 +510,20 @@ button { font: inherit; cursor: pointer; }
         var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .04); g.gain.setValueAtTime(v, t + d * .75); g.gain.linearRampToValueAtTime(.0001, t + d + .04);
         var lp = filt("lowpass", 2200, B); g.connect(lp); osc(t, "sawtooth", hz(m), d + .05, g); osc(t, "sawtooth", hz(m) * 1.004, d + .05, g);
       }
+      // チェロ(8分音符の刻み)、合唱風の和音、太鼓
+      function cello(t, m, d, v) {
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+        var lp = filt("lowpass", 1100, B); g.connect(lp); osc(t, "sawtooth", hz(m), d + .03, g); osc(t, "sawtooth", hz(m) * 1.006, d + .03, g);
+      }
+      function choir(t, notes, d, v) {
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + Math.min(.8, d * .4)); g.gain.setValueAtTime(v, t + d * .7); g.gain.linearRampToValueAtTime(.0001, t + d);
+        [700, 1150].forEach(function (f) { g.connect(filt("bandpass", f, B, 4)); });
+        notes.forEach(function (m) { osc(t, "sawtooth", hz(m), d + .03, g); osc(t, "sawtooth", hz(m) * 1.005, d + .03, g); });
+      }
+      function taiko(t, v) {
+        var g = env(t, v, .5); g.connect(B); osc(t, "sine", 95, .5, g).frequency.exponentialRampToValueAtTime(42, t + .35);
+        var g2 = env(t, v * .5, .12); g2.connect(filt("lowpass", 900, B)); noise(t, .12, g2);
+      }
       function boom(t, v) {
         var g = env(t, v, 1.6); g.connect(B); osc(t, "sine", 100, 1.6, g).frequency.exponentialRampToValueAtTime(28, t + .9);
         var g2 = env(t, v * .4, .5); g2.connect(filt("lowpass", 1600, B)); noise(t, .5, g2);
@@ -515,7 +539,7 @@ button { font: inherit; cursor: pointer; }
           g.connect(filt("lowpass", 700, B)); noise(t + w, 4, g);
         }
       }
-      return { nb: nb, filt: filt, env: env, osc: osc, noise: noise, kick: kick, tom: tom, snare: snare, hat: hat, crash: crash, bass: bass, pluck: pluck, tone: tone, bl: bl, flute: flute, brass: brass, boom: boom, chord: chord, waves: waves, arpLP: arpLP };
+      return { nb: nb, filt: filt, env: env, osc: osc, noise: noise, kick: kick, tom: tom, snare: snare, hat: hat, crash: crash, bass: bass, pluck: pluck, tone: tone, bl: bl, flute: flute, brass: brass, cello: cello, choir: choir, taiko: taiko, boom: boom, chord: chord, waves: waves, arpLP: arpLP };
     }
 
     // オープニングの音楽と効果音(画面の進行 OPEN_TL と同じ時刻で鳴らす。すべてその場で合成したオリジナル)。
@@ -530,11 +554,11 @@ button { font: inherit; cursor: pointer; }
       clearInterval(cineTimer);
       cineBus = B; B.connect(out); B.connect(conv);
       out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.68, ctx.currentTime, .1);
-      var K = kit(B), nb = K.nb, filt = K.filt, env = K.env, osc = K.osc, noise = K.noise, kick = K.kick, tom = K.tom, snare = K.snare, hat = K.hat, crash = K.crash, bass = K.bass, pluck = K.pluck, tone = K.tone, bl = K.bl, flute = K.flute, brass = K.brass, boom = K.boom, chord = K.chord, waves = K.waves, arpLP = K.arpLP;
+      var K = kit(B), nb = K.nb, filt = K.filt, env = K.env, osc = K.osc, noise = K.noise, kick = K.kick, tom = K.tom, snare = K.snare, hat = K.hat, crash = K.crash, bass = K.bass, pluck = K.pluck, tone = K.tone, bl = K.bl, flute = K.flute, brass = K.brass, cello = K.cello, choir = K.choir, taiko = K.taiko, boom = K.boom, chord = K.chord, waves = K.waves, arpLP = K.arpLP;
       function at(sec, fn) { ev.push([sec, fn]); }
 
       // ---- 曲: 8分音符の升目(6つで1小節)。テンポは、場面ごとの目標値をなめらかにつなぎ、最後まで上げ続ける ----
-      var TEMPO = [[0, 60], [10, 66], [27.5, 88], [49.5, 96], [61, 66], [67.5, 112], [75, 132], [89, 168]];
+      var TEMPO = [[0, 60], [10, 66], [27.5, 88], [49.5, 96], [61, 66], [67.5, 112], [75, 132], [89, 176]];
       function bpmAt(x) { for (var q = 1; q < TEMPO.length; q++) if (x <= TEMPO[q][0]) { var a = TEMPO[q - 1], b = TEMPO[q]; return a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0]); } return TEMPO[TEMPO.length - 1][1]; }
       function secOf(x) { return x < L.profA ? 0 : x < L.lost ? 1 : x < L.map ? 2 : x < L.compass ? 3 : x < L.heart ? 5 : x < L.value ? 6 : x < L.sea ? 7 : 8; }
       function stepAt(st, sec, pos, bar, step) {
@@ -579,15 +603,24 @@ button { font: inherit; cursor: pointer; }
             // 夜明けの海: 全員がそろう。全音上がり、テンポは上がり続ける
             p = clamp((st - L.sea) / (T - L.sea)); v = .4 + .85 * p;
             bass(t, ch.r + K + (pos === 3 ? 7 : 0), .3 * v, step * 2.2);
-            if (pos === 0 || pos === 3) kick(t, .5 + .4 * v);
+            cello(t, ch.r + 12 + K + [0, 0, 7, 0, 0, 7][pos], step * .85, (pos % 3 === 0 ? .2 : .12) * v);
+            if (pos === 0 || pos === 3) { kick(t, .5 + .4 * v); if (p > .2) taiko(t, .25 + .3 * v); }
             if (pos === 3) snare(t, .2 + .15 * v);
+            if (pos === 5) snare(t, .06 + .06 * v);
             hat(t, .04 + .1 * v);
             pluck(t, ch.t[[0, 1, 2, 1, 2, 1][pos]] + 12 + K, .035 + .05 * v);
             if (pos === 0) chord(t, ch.t.map(function (m) { return m + K; }), step * 6, .06 * v);
+            if (pos === 0 && p > .25 && bar % 2 === 0) choir(t, ch.t.map(function (m) { return m + K + 12; }), step * 12, .03 + .04 * v);
+            if (pos === 0 && p > .4 && bar % 2 === 0) ch.t.forEach(function (m) { brass(t, m + K + 12, step * 1.5, .03 + .04 * v); });
             if (bar % 4 === 0 && pos === 0) crash(t, .12 + .12 * v);
             if (bar % 4 === 3 && pos >= 3) tom(t, .3 + .3 * v);
             th = THEME[bar % 8];
-            th.forEach(function (nt) { if (nt[1] === pos) { brass(t, nt[0] + K, nt[2] * step, .05 + .09 * v); if (p > .3) brass(t, nt[0] + K + 12, nt[2] * step, .03 + .06 * v); } });
+            th.forEach(function (nt) {
+              if (nt[1] !== pos) return;
+              brass(t, nt[0] + K, nt[2] * step, .05 + .09 * v);
+              if (p > .3) brass(t, nt[0] + K + 12, nt[2] * step, .03 + .06 * v);
+              if (p > .55) brass(t, nt[0] + K - 5, nt[2] * step, .03 + .05 * v);
+            });
             if (st > T - 9) { snare(t, .1 + .4 * (st - (T - 9)) / 9); if (st > T - 3) tom(t, .6); }
             q = p;
           }
