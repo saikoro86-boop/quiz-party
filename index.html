@@ -224,6 +224,17 @@ button { font: inherit; cursor: pointer; }
 @media (min-width: 640px) { .o-names { flex-direction: row; column-gap: .25em; align-items: baseline; font-size: 112px; } .o-names span:first-child, .o-names span:last-child { transform: none; } }
 .o-rule { width: 0; height: 1.5px; background: linear-gradient(90deg, transparent, #f6d98a, transparent); }
 .o-tag { opacity: 0; font-weight: 900; font-size: clamp(15px, 4vw, 20px); letter-spacing: .5em; text-indent: .5em; }
+.o-bird { position: absolute; left: -12%; width: 40px; opacity: 0; fill: #0a0610; }
+.o-bird.b1 { top: 26%; } .o-bird.b2 { top: 18%; width: 26px; }
+.o-bird path { transform-origin: 50% 40%; }
+.o-dos { grid-area: 1 / 1; position: relative; opacity: 0; text-align: left; font-weight: 700; font-size: clamp(15px, 4.2vw, 21px); line-height: 2.2; letter-spacing: .12em;
+  padding: 2px 44px 2px 16px; border-left: 3px solid #f6d98a; text-shadow: 0 0 14px rgba(255, 190, 120, .5); }
+.o-dl { clip-path: inset(0 100% 0 0); white-space: nowrap; }
+.o-dl.l1 { color: #f6d98a; font-weight: 900; }
+.o-stamp { position: absolute; right: 0; bottom: -40px; opacity: 0; border: 3px solid #e8483c; color: #e8483c; background: rgba(0, 0, 0, .35); padding: 0 12px; font-weight: 900; font-size: 26px; letter-spacing: .2em; text-indent: .2em; transform: rotate(-9deg); text-shadow: none; }
+.o-word { grid-area: 1 / 1; opacity: 0; font-weight: 900; font-size: clamp(110px, 38vw, 240px); line-height: 1.1; color: #fff3d6; text-shadow: 0 0 40px rgba(255, 170, 90, .8), 0 6px 0 rgba(0, 0, 0, .45); text-wrap: balance; }
+.o-word.w4 { font-size: clamp(44px, 14vw, 104px); letter-spacing: .06em; }
+.o-credit { margin-top: 10px; opacity: 0; font-size: 13px; font-weight: 700; letter-spacing: .3em; text-indent: .3em; color: rgba(243, 230, 207, .75); }
 .o-flash { position: absolute; inset: 0; background: #fff6dc; opacity: 0; z-index: 4; pointer-events: none; }
 .o-gate { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 24px; background: #05060d; transition: opacity .5s ease; }
 .o-gate.go { opacity: 0; pointer-events: none; }
@@ -237,20 +248,40 @@ button { font: inherit; cursor: pointer; }
   border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
 #open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
 @media (prefers-reduced-motion: no-preference) {
-  #open.run .o-scene { animation: ozoom 26s ease-out forwards; }
-  #open.run .o-dawn { animation: ofade 17s ease-in forwards; }
-  #open.run .o-sun { animation: osun 18s cubic-bezier(.2, .6, .3, 1) forwards; }
-  #open.run .o-bar { animation: obar 2.2s cubic-bezier(.7, 0, .2, 1) forwards; }
-  #open.run .o-line.a { animation: oline 3.4s 2.6s ease-in-out forwards; }
-  #open.run .o-line.b { animation: oline 4.0s 6.2s ease-in-out forwards; }
-  #open.run .o-line.c { animation: oline 3.8s 10.4s ease-in-out forwards; }
-  #open.run .o-line.d { animation: oline 3.2s 14.4s ease-in-out forwards; }
-  #open.run .o-title { animation: otitle 2.2s 17.6s cubic-bezier(.1, .8, .2, 1) forwards; }
-  #open.run .o-names span { animation: osheen 4s 17.8s ease-out forwards; }
-  #open.run .o-rule { animation: orule 1.6s 19.2s ease-out forwards; }
-  #open.run .o-tag { animation: ofade 1.4s 20.2s ease-out forwards; }
-  #open.run .o-flash { animation: oflash .9s 17.6s ease-out; }
+  #open.run .o-scene { animation: ozoom 33s ease-out forwards; }
+  #open.run .o-dawn { animation: ofade 22s ease-in forwards; }
+  #open.run .o-sun { animation: osun 24s cubic-bezier(.2, .6, .3, 1) forwards; }
+  #open.run .o-bar { animation: obar 2s cubic-bezier(.7, 0, .2, 1) forwards; }
+  #open.run .o-bird.b1 { animation: obird 17s 3s linear forwards; }
+  #open.run .o-bird.b2 { animation: obird 15s 8s linear forwards; }
+  #open.run .o-bird path { animation: oflap .8s ease-in-out infinite alternate; }
+  #open.run .o-line.a { animation: oline 3.4s 2.4s ease-in-out forwards; }
+  #open.run .o-dos { animation: odos 7s 5.8s linear forwards; }
+  #open.run .o-dl.l1 { animation: ofile .8s 6.2s steps(12) forwards; }
+  #open.run .o-dl.l2 { animation: ofile .8s 7.1s steps(13) forwards; }
+  #open.run .o-dl.l3 { animation: ofile .8s 8.0s steps(11) forwards; }
+  #open.run .o-dl.l4 { animation: ofile .8s 8.9s steps(11) forwards; }
+  #open.run .o-stamp { animation: ostamp .35s 10.0s cubic-bezier(.2, 1.6, .4, 1) forwards; }
+  #open.run .o-line.b { animation: oline 3.8s 12.4s ease-in-out forwards; }
+  #open.run .o-line.c { animation: oline 3.6s 16.2s ease-in-out forwards; }
+  #open.run .o-word.w1 { animation: oword .8s 20.0s forwards; }
+  #open.run .o-word.w2 { animation: oword .8s 20.8s forwards; }
+  #open.run .o-word.w3 { animation: oword .8s 21.6s forwards; }
+  #open.run .o-word.w4 { animation: oword 1.8s 22.4s forwards; }
+  #open.run .o-line.d { animation: oline 2.8s 24.0s ease-in-out forwards; }
+  #open.run .o-title { animation: otitle 2.2s 26.8s cubic-bezier(.1, .8, .2, 1) forwards; }
+  #open.run .o-names span { animation: osheen 4s 27.0s ease-out forwards; }
+  #open.run .o-rule { animation: orule 1.6s 28.4s ease-out forwards; }
+  #open.run .o-tag { animation: ofade 1.4s 29.4s ease-out forwards; }
+  #open.run .o-credit { animation: ofade 1.4s 30.6s ease-out forwards; }
+  #open.run .o-flash { animation: oflash .9s 26.8s ease-out; }
 }
+@keyframes obird { 0% { opacity: .9; transform: translate(0, 0); } 50% { transform: translate(60vw, -4vh); } 100% { opacity: .9; transform: translate(125vw, 3vh); } }
+@keyframes oflap { from { transform: scaleY(1); } to { transform: scaleY(.45); } }
+@keyframes odos { 0% { opacity: 0; } 5% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes ofile { to { clip-path: inset(0 0 0 0); } }
+@keyframes ostamp { from { opacity: 0; transform: rotate(-9deg) scale(2.2); } to { opacity: .95; transform: rotate(-9deg) scale(1); } }
+@keyframes oword { 0% { opacity: 1; transform: scale(1.4); } 14% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(.97); } }
 @keyframes ozoom { from { transform: scale(1); } to { transform: scale(1.12); } }
 @keyframes ofade { to { opacity: 1; } }
 @keyframes osun { to { opacity: 1; transform: translateY(2vh); } }
@@ -287,6 +318,8 @@ button { font: inherit; cursor: pointer; }
 <div id="open" role="dialog" aria-modal="true" aria-label="オープニング" hidden>
   <div class="o-scene">
     <div class="o-dawn"></div><div class="o-sun"></div>
+    <svg class="o-bird b1" viewBox="-16 -10 32 20" aria-hidden="true" focusable="false"><path d="M-15 0 Q-8 -9 0 -1 Q8 -9 15 0 Q8 -3 0 3 Q-8 -3 -15 0Z"/></svg>
+    <svg class="o-bird b2" viewBox="-16 -10 32 20" aria-hidden="true" focusable="false"><path d="M-15 0 Q-8 -9 0 -1 Q8 -9 15 0 Q8 -3 0 3 Q-8 -3 -15 0Z"/></svg>
     <svg class="o-dunes" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
       <path d="M0 120 C60 100 120 130 200 112 S340 100 400 118 L400 200 L0 200Z" fill="#3a1a2a"/>
       <path d="M0 142 C80 118 150 152 230 134 S350 120 400 140 L400 200 L0 200Z" fill="#22101c"/>
@@ -297,14 +330,23 @@ button { font: inherit; cursor: pointer; }
   <div class="o-vig"></div>
   <div class="o-text">
     <p class="o-line a">ふたりは、出会った。</p>
+    <div class="o-dos" aria-hidden="true">
+      <div class="o-dl l1">FILE No.0001</div>
+      <div class="o-dl l2">対象 ： ミサト &amp; タイガ</div>
+      <div class="o-dl l3">容疑 ： 幸せすぎること</div>
+      <div class="o-dl l4">判定 ： 結婚(確定)</div>
+      <div class="o-stamp">極秘</div>
+    </div>
     <p class="o-line b">笑って、ぶつかって、<br>それでも、手を離さなかった。</p>
     <p class="o-line c">そして今夜、<br>すべての秘密が明かされる。</p>
+    <div class="o-word w1" aria-hidden="true">愛</div><div class="o-word w2" aria-hidden="true">絆</div><div class="o-word w3" aria-hidden="true">秘密</div><div class="o-word w4" aria-hidden="true">全員、主役。</div>
     <p class="o-line d">ご列席のみなさまに、問う。</p>
     <div class="o-title">
       <div class="o-eye">WEDDING QUIZ</div>
       <div class="o-names" aria-label="Misato and Taiga"><span>Misato</span><span>&amp; Taiga</span></div>
       <div class="o-rule"></div>
       <div class="o-tag">全問、正解せよ。</div>
+      <div class="o-credit">出演 ― ご列席のみなさま全員</div>
     </div>
   </div>
   <div class="o-bar top"></div><div class="o-bar bot"></div>
@@ -499,7 +541,7 @@ button { font: inherit; cursor: pointer; }
     function cine() {
       if (!init()) return false;
       ctx.resume();
-      var t0 = ctx.currentTime + .12, T = 17.6, old = bus, i;
+      var t0 = ctx.currentTime + .12, T = 26.8, old = bus, i;
       cineBus = ctx.createGain(); cineBus.connect(out); cineBus.connect(conv); bus = cineBus;
       out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.9, ctx.currentTime, .1);
       var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(120, t0); lp.frequency.exponentialRampToValueAtTime(900, t0 + T);
@@ -509,10 +551,10 @@ button { font: inherit; cursor: pointer; }
       var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), nd = nb.getChannelData(0);
       for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
       var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
-      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + T - 5); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
-      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + T - 5); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
-      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + T - 5); ns.stop(t0 + T + .1);
-      [2.6, 5, 7.4, 9.8, 11.4, 13, 14.2, 15.2, 16, 16.6, 17, 17.3].forEach(function (dt) {
+      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + T - 6); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
+      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + T - 6); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
+      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + T - 6); ns.stop(t0 + T + .1);
+      [2.4, 4.6, 6.8, 9, 11, 13, 15, 16.6, 18, 19, 19.6, 24.6, 25.4, 26, 26.4, 26.7].forEach(function (dt) {
         var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
         o.frequency.setValueAtTime(70, t0 + dt); o.frequency.exponentialRampToValueAtTime(40, t0 + dt + .3);
         g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(.5, t0 + dt + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .45);
@@ -527,7 +569,24 @@ button { font: inherit; cursor: pointer; }
       var g2 = ctx.createGain(); g2.gain.setValueAtTime(.6, t0 + T); g2.gain.exponentialRampToValueAtTime(.0001, t0 + T + 1.6);
       n2.connect(lp2); lp2.connect(g2); g2.connect(bus); n2.start(t0 + T); n2.stop(t0 + T + 1.7);
       // 山場までの、静かで少し切ない旋律
-      [[2.8, 64], [4.4, 67], [6.4, 62], [8, 65], [10.6, 59], [12.2, 62], [14.6, 57], [16, 60]].forEach(function (n) { bell(t0 + n[0], n[1], .09, 4.2); });
+      [[2.6, 64], [4.2, 67], [6.6, 62], [8.8, 65], [12.6, 59], [14.2, 62], [16.4, 57], [18, 60], [24.2, 64], [25.4, 67]].forEach(function (n) { bell(t0 + n[0], n[1], .09, 4.2); });
+      // 極秘ファイルを打つ音と、言葉が切り替わるたびの衝撃音
+      function click(dt) {
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "square"; o.frequency.value = 2200;
+        g.gain.setValueAtTime(.05, t0 + dt); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .03);
+        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .04);
+      }
+      function hit(dt, v) {
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
+        o.frequency.setValueAtTime(110, t0 + dt); o.frequency.exponentialRampToValueAtTime(35, t0 + dt + .35);
+        g.gain.setValueAtTime(v, t0 + dt); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .7);
+        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .75);
+        var n = ctx.createBufferSource(); n.buffer = nb; var f = ctx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 1800;
+        var ng = ctx.createGain(); ng.gain.setValueAtTime(.35, t0 + dt); ng.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .25);
+        n.connect(f); f.connect(ng); ng.connect(bus); n.start(t0 + dt); n.stop(t0 + dt + .3);
+      }
+      [[6.2, 12], [7.1, 13], [8, 11], [8.9, 11]].forEach(function (l) { for (var k = 0; k < l[1]; k++) click(l[0] + k * (.8 / l[1])); });
+      hit(10, .7); hit(20, .8); hit(20.8, .8); hit(21.6, .9); hit(22.4, 1);
       [60, 67, 72, 76, 79].forEach(function (m) { bell(t0 + T + .02, m, .16, 5); });
       [84, 88, 91, 96].forEach(function (m, k) { bell(t0 + T + .5 + k * .28, m, .13, 3.2); });
       bus = old;
@@ -963,7 +1022,7 @@ button { font: inherit; cursor: pointer; }
       if (sound && !Snd.cine()) withSound = false;
       gate.classList.add("go"); ov.classList.add("run");
       $("#oskip").focus();
-      endTimer = setTimeout(finish, 25200);
+      endTimer = setTimeout(finish, 33800);
     }
     $("#oSound").onclick = function () { go(true); };
     $("#oQuiet").onclick = function () { go(false); };
