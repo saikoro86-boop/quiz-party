@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Shippori+Mincho+B1:wght@500;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
 <style>
 /* ウェディング雑誌のような、白とベビーピンクの明るい誌面。
    丸い札、ピンクの押しボタン、パステルの選択肢。背景には花びらと金のきらめきが舞い、上には真珠の飾りが光る。
@@ -31,6 +31,7 @@
   --spark: #e5ae4f;
   --bokeh-rgb: 255, 150, 185;
   --pink-grad: linear-gradient(135deg, #f7578f, #e03a78);
+  --font-mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
   --font-script: "Pinyon Script", "Snell Roundhand", cursive;
   --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
   color-scheme: light;
@@ -200,7 +201,7 @@ button { font: inherit; cursor: pointer; }
 #app { display: flex; flex-direction: column; gap: 20px; }
 
 /* ---- オープニング(作戦室の画面。回線 → レーダー → 接触 → ハート → 画面が割れる → タイトル) ---- */
-#open { position: fixed; inset: 0; z-index: 50; background: #04070d; color: #ffd9a0; overflow: hidden; font-family: var(--font-body); }
+#open { position: fixed; inset: 0; z-index: 50; background: #04070d; color: #ffd9a0; overflow: hidden; font-family: var(--font-mincho); font-weight: 800; }
 #open.out { opacity: 0; transition: opacity .9s ease; pointer-events: none; }
 #ofx { position: absolute; inset: 0; width: 100%; height: 100%; }
 .o-vig { position: absolute; inset: 0; pointer-events: none;
@@ -228,12 +229,12 @@ button { font: inherit; cursor: pointer; }
 #oskip { position: absolute; z-index: 7; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); height: 40px; padding: 0 16px; border-radius: 99px;
   border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
 #open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
-#open.run .o-title { animation: otitle 2.2s 54s cubic-bezier(.1, .8, .2, 1) forwards, oglitch .5s 54s steps(1); }
-#open.run .o-names span { animation: osheen 4s 54.2s ease-out forwards; }
-#open.run .o-rule { animation: orule 1.6s 55.6s ease-out forwards; }
-#open.run .o-tag { animation: ofade 1.4s 56.6s ease-out forwards; }
-#open.run .o-credit { animation: ofade 1.4s 57.8s ease-out forwards; }
-#open.run .o-flash { animation: oflash .9s 54s ease-out; }
+#open.run .o-title { animation: otitle 2.2s 89s cubic-bezier(.1, .8, .2, 1) forwards, oglitch .5s 89s steps(1); }
+#open.run .o-names span { animation: osheen 4s 89.2s ease-out forwards; }
+#open.run .o-rule { animation: orule 1.6s 90.6s ease-out forwards; }
+#open.run .o-tag { animation: ofade 1.4s 91.6s ease-out forwards; }
+#open.run .o-credit { animation: ofade 1.4s 92.8s ease-out forwards; }
+#open.run .o-flash { animation: oflash .9s 89s ease-out; }
 @keyframes ofade { to { opacity: 1; } }
 @keyframes otitle { from { opacity: 0; transform: scale(1.18); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes oglitch { 0% { transform: translate(-8px, 2px) scale(1.18); } 25% { transform: translate(6px, -2px) scale(1.18); } 50% { transform: translate(-3px, 0) scale(1.18); } 75% { transform: translate(2px, 1px) scale(1.18); } }
@@ -281,7 +282,7 @@ button { font: inherit; cursor: pointer; }
     <div class="o-eye">WEDDING QUIZ</div>
     <button class="btn gold" id="oSound" type="button">音ありで始める</button>
     <button class="btn ghost" id="oQuiet" type="button">音なしで始める</button>
-    <p class="o-note">約1分です。右上の SKIP でいつでも飛ばせます。<br>音ありは、終わったあとBGMが続きます(右下の ♪ で止められます)。</p>
+    <p class="o-note">約1分半です。右上の SKIP でいつでも飛ばせます。<br>音ありは、終わったあとBGMが続きます(右下の ♪ で止められます)。</p>
   </div>
   <button id="oskip" type="button">SKIP ▸</button>
 </div>
@@ -369,26 +370,20 @@ button { font: inherit; cursor: pointer; }
   function setState(patch) { return guard(stateDoc().set(Object.assign({}, S.state, patch))); }
 
   // ---------- 音(BGMと効果音) ----------
-  // 標準のBGMは音源ファイルを使わず、その場でオルゴール風の音を合成する
-  // (カノン進行 C-G-Am-Em-F-C-F-G のやさしいアルペジオ)。
+  // 標準のBGMは音源ファイルを使わず、その場で冒険活劇風の曲を合成する(ニ短調・6/8拍子、オリジナル)。
+  // 正解のチャイムなどの効果音は、鈴の音(bell)で鳴らす。
   // 「曲を選ぶ」で、その端末に入っている自分の音楽ファイルを流すこともできる。
   // ファイルは端末の中で読み込むだけで、アップロードも他の人への配信もしない。
   // どちらも「オン」にした端末だけで鳴る。
   // オープニングの時刻表(秒)。画面と音の両方がこれに合わせる
-  var OPEN_TL = { radar: 4, pinA: 6, pinB: 7.6, link: 8.4, profA: 10, profB: 15, route: 20, ms: [21.25, 23.75, 26.25], count: 30, contact: 35.2, heart: 36,
-    analyze: 42, error: 45.6, words: [47, 47.8, 48.6, 49.4, 50.2, 51], ask: 52.6, title: 54, end: 61.4 };
+  var OPEN_TL = { radar: 4, pinA: 5.6, pinB: 7, link: 7.8, profA: 10, profB: 17, lost: 24, map: 27.5, stops: [33.5, 38.8, 44], arrive: 47, compass: 49.5, lock: 58.5,
+    heart: 61, value: 67.5, error: 72, sea: 75, line1: 76.5, line2: 81, ask: 85.5, title: 89, end: 97 };
   var Snd = (function () {
     var ctx = null, out = null, conv = null, bus = null, on = false, timer = null, nextT = 0, bar = 0;
     var fileBuf = null, fileSrc = null;
-    var BEAT = 60 / 66;
-    var CH = [
-      { n: [36, 43, 60, 64, 67, 72], mel: [76, 74] }, { n: [31, 38, 59, 62, 67, 71], mel: [72, 71] },
-      { n: [33, 40, 60, 64, 69, 72], mel: [69, 67] }, { n: [28, 35, 59, 64, 67, 71], mel: [69, 71] },
-      { n: [29, 36, 60, 65, 69, 72], mel: [72, 69] }, { n: [36, 43, 60, 64, 67, 72], mel: [67, 76] },
-      { n: [29, 36, 60, 65, 69, 72], mel: [77, 76] }, { n: [31, 38, 59, 62, 67, 71], mel: [74, 71] }
-    ];
-    var ARP = [1, 3, 4, 5, 4, 3, 4, 2];
+    var LSTEP = 60 / (124 * 3), loopKit = null;
     function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+    function clamp(x) { return Math.max(0, Math.min(1, x)); }
     function init() {
       if (ctx) return true;
       var AC = window.AudioContext || window.webkitAudioContext;
@@ -413,25 +408,27 @@ button { font: inherit; cursor: pointer; }
         o.connect(pg); pg.connect(g); o.start(t); o.stop(t + d + .05);
       });
     }
-    function pad(t, notes, d) {
-      var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1100;
-      var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.05, t + .9); g.gain.linearRampToValueAtTime(.0001, t + d);
-      lp.connect(g); g.connect(bus);
-      notes.forEach(function (m) {
-        [-4, 4].forEach(function (cents) {
-          var o = ctx.createOscillator(); o.type = "triangle"; o.frequency.value = hz(m); o.detune.value = cents;
-          o.connect(lp); o.start(t); o.stop(t + d + .05);
+    // 本編のBGM: 冒険活劇のループ。8小節ごとに厚みが増し(笛 → 金管 → 金管のオクターブ重ね → 全開)、32小節で一周する
+    function pirateBar(bar, t) {
+      var ch = PROG[bar % 8], pass = Math.floor(bar / 8) % 4, v = .45 + .17 * pass, th = THEME[bar % 8], K = loopKit, pos;
+      for (pos = 0; pos < 6; pos++) {
+        var tt = t + pos * LSTEP;
+        K.bass(tt, ch.r + (pos === 3 ? 7 : 0), .24 * v, LSTEP * 2.2);
+        if (pos === 0 || pos === 3) K.kick(tt, .45 + .35 * v);
+        if (pos === 3) K.snare(tt, .18 + .12 * v);
+        K.hat(tt, .05 + .06 * v);
+        K.pluck(tt, ch.t[[0, 1, 2, 1, 2, 1][pos]] + 12, .035 + .035 * v);
+        if (pos === 0) K.chord(tt, ch.t, LSTEP * 6, .035 * v);
+        th.forEach(function (nt) {
+          if (nt[1] !== pos) return;
+          if (pass === 0) K.flute(tt, nt[0], nt[2] * LSTEP, .1);
+          else { K.brass(tt, nt[0], nt[2] * LSTEP, .05 + .02 * pass); if (pass >= 2) K.brass(tt, nt[0] + 12, nt[2] * LSTEP, .03); }
         });
-      });
+        if (bar % 8 === 0 && pos === 0) K.crash(tt, .1 + .04 * pass);
+        if (bar % 8 === 7 && pos >= 3) K.tom(tt, .3 + .1 * pass);
+      }
     }
-    function playBar(i, t) {
-      var ch = CH[i % CH.length], n = ch.n;
-      pad(t, [n[1], n[2], n[3], n[4]], 4 * BEAT + .8);
-      bell(t, n[0] + 12, .14, 3.2); bell(t + 2 * BEAT, n[0] + 12, .1, 2.4);
-      ARP.forEach(function (k, j) { bell(t + j * BEAT / 2, n[k], .1, 1.6); });
-      bell(t, ch.mel[0], .17, 2.4); bell(t + 2 * BEAT, ch.mel[1], .17, 2.4);
-    }
-    function tick() { while (nextT < ctx.currentTime + .7) { playBar(bar++, nextT); nextT += 4 * BEAT; } }
+    function tick() { while (nextT < ctx.currentTime + .7) { pirateBar(bar++, nextT); nextT += 6 * LSTEP; } }
     function stopFile() { if (fileSrc) { try { fileSrc.stop(); } catch (e) {} fileSrc = null; } }
     function startPlayback() {
       bus = ctx.createGain(); bus.connect(out); bus.connect(conv);
@@ -439,7 +436,7 @@ button { font: inherit; cursor: pointer; }
       if (fileBuf) {
         fileSrc = ctx.createBufferSource(); fileSrc.buffer = fileBuf; fileSrc.loop = true;
         fileSrc.connect(out); fileSrc.start();
-      } else { nextT = ctx.currentTime + .15; bar = 0; tick(); clearInterval(timer); timer = setInterval(tick, 200); }
+      } else { loopKit = kit(bus); nextT = ctx.currentTime + .15; bar = 0; tick(); clearInterval(timer); timer = setInterval(tick, 200); }
     }
     function set(v) {
       if (v) {
@@ -465,32 +462,44 @@ button { font: inherit; cursor: pointer; }
       });
     }
 
-    // オープニングの音楽と効果音(画面の進行 OPEN_TL と同じ時刻で鳴らす。すべてその場で合成)。
-    // 曲は、鼓動だけの静かな始まりから、ベース → 分散和音 → ドラムと重なり、
-    // ハートの場面でいったん静まり、最後はテンポを上げながらタイトルへなだれ込む。
-    // 1分ぶんを一度に予約すると重いので、少し先の音だけを順に予約していく。
-    var cineBus = null, cineTimer = null;
-    function cine() {
-      if (!init()) return false;
-      ctx.resume();
-      var L = OPEN_TL, t0 = ctx.currentTime + .15, T = L.title, B = ctx.createGain(), ev = [], i, k;
-      clearInterval(cineTimer);
-      cineBus = B; B.connect(out); B.connect(conv);
-      out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.9, ctx.currentTime, .1);
+    // ---- 冒険活劇の和声と主題(ニ短調、6/8拍子)。オープニングと本編のBGMで共用 ----
+    var PROG = [{ r: 38, t: [62, 65, 69] }, { r: 38, t: [62, 65, 69] }, { r: 34, t: [58, 62, 65] }, { r: 36, t: [60, 64, 67] },
+                { r: 38, t: [62, 65, 69] }, { r: 38, t: [62, 65, 69] }, { r: 43, t: [58, 62, 67] }, { r: 33, t: [57, 61, 64] }];
+    var MAJ = [{ r: 38, t: [62, 66, 69] }, { r: 33, t: [61, 64, 69] }, { r: 35, t: [59, 62, 66] }, { r: 43, t: [59, 62, 67] }];
+    // 主題(8小節): [音, 小節内の位置, 長さ]
+    var THEME = [
+      [[69, 0, 1], [74, 1, 1], [77, 2, 1], [81, 3, 3]], [[79, 0, 1], [77, 1, 1], [76, 2, 1], [74, 3, 3]],
+      [[74, 0, 1], [77, 1, 1], [82, 2, 1], [81, 3, 3]], [[79, 0, 1], [76, 1, 1], [84, 2, 1], [83, 3, 3]],
+      [[74, 0, 2], [77, 2, 1], [81, 3, 1], [86, 4, 2]], [[84, 0, 1], [81, 1, 1], [77, 2, 1], [81, 3, 3]],
+      [[82, 0, 1], [81, 1, 1], [79, 2, 1], [77, 3, 1], [79, 4, 2]], [[81, 0, 1], [85, 1, 1], [88, 2, 1], [81, 3, 3]]];
+    // 楽器の一式。出力先の bus を渡して作る(オープニングの曲と、本編のBGMの両方で使う)
+    function kit(B) {
+      var i;
       var nb = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate), nd = nb.getChannelData(0);
       for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
-      function filt(type, f, dest) { var x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; x.connect(dest); return x; }
-      var bassLP = filt("lowpass", 340, B), arpLP = filt("lowpass", 2600, B), hatHP = filt("highpass", 7000, B), snHP = filt("highpass", 1400, B);
-      function env(t, v, d) { var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .005); g.gain.exponentialRampToValueAtTime(.0001, t + d); return g; }
+      function filt(type, f, dest, q) { var x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; x.connect(dest); return x; }
+      var bassLP = filt("lowpass", 360, B), arpLP = filt("lowpass", 2800, B), hatHP = filt("highpass", 7000, B), snHP = filt("highpass", 1400, B), crHP = filt("highpass", 3500, B);
+      function env(t, v, d) { var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + d); return g; }
       function osc(t, type, f, d, g) { var o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); o.connect(g); o.start(t); o.stop(t + d + .03); return o; }
       function noise(t, d, g) { var n = ctx.createBufferSource(); n.buffer = nb; n.loop = true; n.connect(g); n.start(t); n.stop(t + d + .03); }
       function kick(t, v) { var g = env(t, v, .3); g.connect(B); osc(t, "sine", 130, .3, g).frequency.exponentialRampToValueAtTime(40, t + .18); }
+      function tom(t, v) { var g = env(t, v, .28); g.connect(B); osc(t, "sine", 170, .28, g).frequency.exponentialRampToValueAtTime(75, t + .2); }
       function snare(t, v) { var g = env(t, v, .14); g.connect(snHP); noise(t, .14, g); var g2 = env(t, v * .5, .09); g2.connect(B); osc(t, "triangle", 190, .09, g2); }
       function hat(t, v) { var g = env(t, v, .04); g.connect(hatHP); noise(t, .04, g); }
+      function crash(t, v) { var g = env(t, v, 2.2); g.connect(crHP); noise(t, 2.2, g); }
       function bass(t, m, v, d) { var g = env(t, v, d); g.connect(bassLP); osc(t, "sawtooth", hz(m), d, g); }
-      function pluck(t, m, v) { var g = env(t, v, .2); g.connect(arpLP); osc(t, "square", hz(m), .2, g); }
+      function pluck(t, m, v) { var g = env(t, v, .22); g.connect(arpLP); osc(t, "square", hz(m), .22, g); }
       function tone(t, f, v, d, type) { var g = env(t, v, d); g.connect(B); osc(t, type || "sine", f, d, g); }
       function bl(t, m, v, d) { tone(t, hz(m), v, d); tone(t, hz(m) * 2.01, v * .28, d * .7); }
+      // 笛(ビブラート付き)と金管(明るいのこぎり波)
+      function flute(t, m, d, v) {
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .05); g.gain.setValueAtTime(v, t + d * .7); g.gain.linearRampToValueAtTime(.0001, t + d + .05); g.connect(B);
+        var o = osc(t, "triangle", hz(m), d + .05, g), l = ctx.createOscillator(), lg = ctx.createGain(); l.frequency.value = 5.2; lg.gain.value = hz(m) * .012; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + d + .1);
+      }
+      function brass(t, m, d, v) {
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .04); g.gain.setValueAtTime(v, t + d * .75); g.gain.linearRampToValueAtTime(.0001, t + d + .04);
+        var lp = filt("lowpass", 2200, B); g.connect(lp); osc(t, "sawtooth", hz(m), d + .05, g); osc(t, "sawtooth", hz(m) * 1.004, d + .05, g);
+      }
       function boom(t, v) {
         var g = env(t, v, 1.6); g.connect(B); osc(t, "sine", 100, 1.6, g).frequency.exponentialRampToValueAtTime(28, t + .9);
         var g2 = env(t, v * .4, .5); g2.connect(filt("lowpass", 1600, B)); noise(t, .5, g2);
@@ -500,73 +509,119 @@ button { font: inherit; cursor: pointer; }
         var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .2); g.gain.setValueAtTime(v, t + d * .6); g.gain.linearRampToValueAtTime(.0001, t + d); g.connect(lp);
         notes.forEach(function (m) { [-6, 6].forEach(function (c) { osc(t, "sawtooth", hz(m), d, g).detune.value = c; }); });
       }
+      function waves(t, d, v) {
+        for (var w = 0; w < d; w += 4) {
+          var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t + w); g.gain.linearRampToValueAtTime(v, t + w + 2); g.gain.linearRampToValueAtTime(.0001, t + w + 4);
+          g.connect(filt("lowpass", 700, B)); noise(t + w, 4, g);
+        }
+      }
+      return { nb: nb, filt: filt, env: env, osc: osc, noise: noise, kick: kick, tom: tom, snare: snare, hat: hat, crash: crash, bass: bass, pluck: pluck, tone: tone, bl: bl, flute: flute, brass: brass, boom: boom, chord: chord, waves: waves, arpLP: arpLP };
+    }
+
+    // オープニングの音楽と効果音(画面の進行 OPEN_TL と同じ時刻で鳴らす。すべてその場で合成したオリジナル)。
+    // 6/8拍子の、ニ短調の冒険活劇。静かな電子音の始まり → 宝の地図の笛の主題 → コンパスの緊張 → ハートの静かな長調
+    // → 金貨の洪水 → 夜明けの海で全員がそろい、半音2つ分(全音)上がって、テンポを上げ続けながらタイトルへ。
+    // 1分半ぶんを一度に予約すると重いので、少し先の音だけを順に予約していく。
+    var cineBus = null, cineTimer = null;
+    function cine() {
+      if (!init()) return false;
+      ctx.resume();
+      var L = OPEN_TL, t0 = ctx.currentTime + .15, T = L.title, B = ctx.createGain(), ev = [], i, k;
+      clearInterval(cineTimer);
+      cineBus = B; B.connect(out); B.connect(conv);
+      out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.68, ctx.currentTime, .1);
+      var K = kit(B), nb = K.nb, filt = K.filt, env = K.env, osc = K.osc, noise = K.noise, kick = K.kick, tom = K.tom, snare = K.snare, hat = K.hat, crash = K.crash, bass = K.bass, pluck = K.pluck, tone = K.tone, bl = K.bl, flute = K.flute, brass = K.brass, boom = K.boom, chord = K.chord, waves = K.waves, arpLP = K.arpLP;
       function at(sec, fn) { ev.push([sec, fn]); }
 
-      // ---- 曲: 16分音符の升目を、場面ごとのテンポで並べる(ニ短調 Dm - B♭ - F - C) ----
-      var PROG = [[38, [62, 65, 69, 74]], [34, [58, 62, 65, 70]], [41, [60, 65, 69, 72]], [36, [60, 64, 67, 72]]];
-      var SEC = [0, L.profA, L.route, L.count, L.contact, L.analyze, T], BPM = [80, 92, 104, 118, 76, 126];
-      var st = 0, sec = 0, n = 0;
-      function stepAt(st, sec, pos, bar, p, step) {
+      // ---- 曲: 8分音符の升目(6つで1小節)。テンポは、場面ごとの目標値をなめらかにつなぎ、最後まで上げ続ける ----
+      var TEMPO = [[0, 60], [10, 66], [27.5, 88], [49.5, 96], [61, 66], [67.5, 112], [75, 132], [89, 168]];
+      function bpmAt(x) { for (var q = 1; q < TEMPO.length; q++) if (x <= TEMPO[q][0]) { var a = TEMPO[q - 1], b = TEMPO[q]; return a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0]); } return TEMPO[TEMPO.length - 1][1]; }
+      function secOf(x) { return x < L.profA ? 0 : x < L.lost ? 1 : x < L.map ? 2 : x < L.compass ? 3 : x < L.heart ? 5 : x < L.value ? 6 : x < L.sea ? 7 : 8; }
+      function stepAt(st, sec, pos, bar, step) {
         at(st, function (t) {
-          var ch = PROG[bar % 4], root = ch[0], arp = ch[1], v;
-          if (sec === 0) { if (pos === 0) kick(t, .5); if (pos === 3) kick(t, .3); }
+          var K = st >= L.sea ? 2 : 0, ch = PROG[bar % 8], mj = MAJ[bar % 4], u, p, v, th, q;
+          if (sec === 0) { if (pos === 0 && st > 1) kick(t, .35); }
           else if (sec === 1) {
-            if (pos === 0 || pos === 3) kick(t, pos ? .3 : .55);
-            if (pos % 4 === 0) bass(t, root, .22, .3);
-            if (pos % 4 === 2) pluck(t, arp[(pos >> 2) % 4], .035);
-          } else if (sec === 2) {
-            if (pos % 8 === 0) kick(t, .6);
-            if (pos % 2 === 0) { bass(t, root, .22, .16); pluck(t, arp[(pos >> 1) % 4], .045); }
-            if (pos % 4 === 2) hat(t, .08);
-            if (pos === 12) snare(t, .12);
+            if (pos === 0) { chord(t, ch.t, step * 6, .03); bass(t, ch.r, .14, step * 2.5); }
+            if (pos === 3) bass(t, ch.r + 7, .1, step * 2);
+            if (pos === 0 && st > L.profA + 3) tom(t, .15);
           } else if (sec === 3) {
-            if (pos % 4 === 0) kick(t, .7);
-            if (pos % 2 === 0) { bass(t, root, .25, .14); hat(t, .09); }
-            pluck(t, arp[pos % 4], .05);
-            if (pos % 8 === 4) snare(t, .2);
-          } else if (sec === 4) {
-            if (pos === 0) chord(t, [root + 12, arp[0], arp[1], arp[2]], step * 16 + .4, .05);
-            if (pos % 4 === 0) bl(t, arp[(pos >> 2) % 4] + 12, .09, 1.6);
-          } else {
-            v = .6 + .4 * p;
-            if (pos === 0) chord(t, [root + 12, arp[0], arp[2]], step * 16, .035 * v);
-            if (pos % 4 === 0) kick(t, .8 * v + .1);
-            bass(t, root + (pos % 4 === 2 ? 12 : 0), .26 * v, .11);
-            pluck(t, arp[[0, 1, 2, 3, 2, 1, 3, 2][pos % 8]] + 12, .05 * v + .01);
-            if (pos % 2 === 0 || p > .5) hat(t, .1 * v);
-            if (p > .84) { snare(t, .1 + .25 * (p - .84) / .16); if (p > .95) snare(t + step / 2, .3); }
-            else if (pos % 8 === 4) snare(t, .25 * v);
+            // 宝の地図: 笛の主題と、弾むような弦のかけ合い
+            if (pos === 0 || pos === 3) { bass(t, ch.r, .15, step * 2.2); tom(t, pos ? .12 : .2); }
+            if (pos !== 0 && pos !== 3) pluck(t, ch.t[(pos + bar) % 3] + 12, .035);
+            if (pos === 0) chord(t, ch.t, step * 6, .035);
+            if (pos === 1 || pos === 4) hat(t, .05);
+            THEME[bar % 8].forEach(function (nt) { if (nt[1] === pos) flute(t, nt[0], nt[2] * step, .1); });
+          } else if (sec === 5) {
+            // コンパス: 弦の細かい刻みと、ティンパニの連打が、針の止まるときへ向けて膨らむ
+            u = clamp((st - L.compass) / (L.lock - L.compass));
+            if (st < L.lock) {
+              pluck(t, [50, 57, 62, 65, 69, 74][pos] + (u > .6 ? 12 : 0), .025 + .06 * u);
+              if (pos % 2 === 0 || u > .55) tom(t, .15 + .5 * u);
+              if (pos === 0) bass(t, 38, .12 + .2 * u, step * 5);
+              if (u > .7) hat(t, .08);
+            }
+          } else if (sec === 6) {
+            // ハート: 静かな長調。鈴の分散和音と、やわらかい和音
+            if (pos === 0) { chord(t, mj.t, step * 6, .05); bass(t, mj.r, .12, step * 5); }
+            if (pos % 2 === 0) bl(t, mj.t[(pos >> 1) % 3] + 24, .07, 1.4);
+          } else if (sec === 7) {
+            // 財宝の価値が振り切れるまで、勢いを増していく
+            p = clamp((st - L.value) / (L.error - L.value));
+            if (st < L.error) {
+              if (pos === 0 || pos === 3) bass(t, ch.r, .2 + .1 * p, step * 2);
+              pluck(t, ch.t[pos % 3] + 12, .04 + .05 * p); hat(t, .05 + .08 * p);
+              if (pos === 0) kick(t, .35 + .35 * p);
+              if (pos === 3) snare(t, .1 + .2 * p);
+              if (p > .6) tom(t, .15 + .3 * p);
+            }
+          } else if (sec === 8) {
+            // 夜明けの海: 全員がそろう。全音上がり、テンポは上がり続ける
+            p = clamp((st - L.sea) / (T - L.sea)); v = .4 + .85 * p;
+            bass(t, ch.r + K + (pos === 3 ? 7 : 0), .3 * v, step * 2.2);
+            if (pos === 0 || pos === 3) kick(t, .5 + .4 * v);
+            if (pos === 3) snare(t, .2 + .15 * v);
+            hat(t, .04 + .1 * v);
+            pluck(t, ch.t[[0, 1, 2, 1, 2, 1][pos]] + 12 + K, .035 + .05 * v);
+            if (pos === 0) chord(t, ch.t.map(function (m) { return m + K; }), step * 6, .06 * v);
+            if (bar % 4 === 0 && pos === 0) crash(t, .12 + .12 * v);
+            if (bar % 4 === 3 && pos >= 3) tom(t, .3 + .3 * v);
+            th = THEME[bar % 8];
+            th.forEach(function (nt) { if (nt[1] === pos) { brass(t, nt[0] + K, nt[2] * step, .05 + .09 * v); if (p > .3) brass(t, nt[0] + K + 12, nt[2] * step, .03 + .06 * v); } });
+            if (st > T - 9) { snare(t, .1 + .4 * (st - (T - 9)) / 9); if (st > T - 3) tom(t, .6); }
+            q = p;
           }
         });
       }
+      var st = 0, sec = -1, n = 0;
       while (st < T) {
-        var s2 = 0; while (s2 < 5 && st >= SEC[s2 + 1]) s2++;
+        var s2 = secOf(st);
         if (s2 !== sec) { sec = s2; n = 0; }
-        var pr = sec === 5 ? (st - SEC[5]) / (T - SEC[5]) : 0, step = 60 / (BPM[sec] + pr * 28) / 4;
-        stepAt(st, sec, n % 16, Math.floor(n / 16), pr, step);
+        var step = 60 / (bpmAt(st) * 3);
+        if (sec !== 2 && !(sec === 7 && st >= L.error)) stepAt(st, sec, n % 6, Math.floor(n / 6), step);
         st += step; n++;
       }
-      // 低いうなり(最初からタイトルまで)
+      // 低いうなり(最初からタイトルまで。ゆっくり膨らむ)
       at(0, function (t) {
-        var lp = filt("lowpass", 110, B); lp.frequency.exponentialRampToValueAtTime(700, t + T);
-        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.1, t + 8); g.gain.setValueAtTime(.1, t + T - .1); g.gain.linearRampToValueAtTime(.0001, t + T + .3); g.connect(lp);
+        var lp = filt("lowpass", 110, B); lp.frequency.exponentialRampToValueAtTime(900, t + T);
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.09, t + 20); g.gain.setValueAtTime(.09, t + T - .1); g.gain.linearRampToValueAtTime(.0001, t + T + .3); g.connect(lp);
         [36.7, 36.9, 73.4].forEach(function (f) { osc(t, "sawtooth", f, T + .3, g); });
       });
-      // 最後の12秒: せり上がる風と、上がっていく音程
-      at(L.analyze, function (t) {
-        var d = T - L.analyze, bp = filt("bandpass", 300, B); bp.Q.value = 1.2; bp.frequency.exponentialRampToValueAtTime(6000, t + d);
-        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.28, t + d - .03); g.gain.setValueAtTime(.0001, t + d); g.connect(bp); noise(t, d, g);
+      // 最後の16秒: せり上がる風と、上がり続ける音程
+      at(T - 16, function (t) {
+        var d = 16, bp = filt("bandpass", 300, B, 1.2); bp.frequency.exponentialRampToValueAtTime(6500, t + d);
+        var g = ctx.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.3, t + d - .03); g.gain.setValueAtTime(.0001, t + d); g.connect(bp); noise(t, d, g);
         var g2 = ctx.createGain(); g2.gain.setValueAtTime(.0001, t); g2.gain.exponentialRampToValueAtTime(.06, t + d - .03); g2.gain.setValueAtTime(.0001, t + d); g2.connect(arpLP);
-        osc(t, "sawtooth", hz(50), d, g2).frequency.exponentialRampToValueAtTime(hz(74), t + d);
+        osc(t, "sawtooth", hz(52), d, g2).frequency.exponentialRampToValueAtTime(hz(76), t + d);
       });
-      // タイトル: 衝撃音、シンバル、長調の和音(ニ長調に抜ける)、上がる鈴
+      // タイトル: 大砲のような衝撃、シンバル、長調(ホ長調)の和音、上がる鈴
       at(T, function (t) {
-        boom(t, 1);
-        var g = env(t, .3, 2.6); g.connect(filt("highpass", 3000, B)); noise(t, 2.6, g);
-        chord(t, [38, 50, 57, 62, 66, 69], 6, .06);
-        [74, 78, 81, 86, 90].forEach(function (m, j) { bl(t + .3 + j * .26, m, .12, 3.4); });
+        boom(t, 1); crash(t, .4);
+        chord(t, [40, 52, 59, 64, 68, 71], 7, .07);
+        [76, 80, 83, 88, 92].forEach(function (m, j) { bl(t + .3 + j * .26, m, .12, 3.6); });
+        [64, 68, 71, 76].forEach(function (m) { brass(t, m, 3.5, .08); });
       });
-      at(T + 2.2, function (t) { kick(t, .6); }); at(T + 3.3, function (t) { kick(t, .5); bl(t, 86, .1, 3); });
+      at(T + 2.4, function (t) { kick(t, .6); }); at(T + 3.6, function (t) { kick(t, .5); bl(t, 88, .1, 3); });
 
       // ---- 画面に合わせた効果音 ----
       for (k = 0; k < 6; k++) at(.3 + k * .5, function (t) { tone(t, 1400, .06, .06, "square"); });
@@ -575,16 +630,34 @@ button { font: inherit; cursor: pointer; }
       for (k = 0; k < 8; k++) at(L.link + k * .2, function (t) { tone(t, 1800, .04, .05, "square"); });
       [L.profA, L.profB].forEach(function (b) {
         at(b, function (t) { var g = env(t, .2, .35); g.connect(filt("bandpass", 1200, B)); noise(t, .35, g); });
-        [0, 1, 2].forEach(function (j) { at(b + 1 + j * .8, function (t) { osc(t, "square", 500 + j * 200, .7, (function () { var g = env(t, .05, .7); g.connect(arpLP); return g; })()).frequency.exponentialRampToValueAtTime(1000 + j * 400, t + .7); }); });
+        [0, 1, 2].forEach(function (j) { at(b + 1 + j * .8, function (t) { var g = env(t, .05, .7); g.connect(arpLP); osc(t, "square", 500 + j * 200, .7, g).frequency.exponentialRampToValueAtTime(1000 + j * 400, t + .7); }); });
         at(b + 3.8, function (t) { kick(t, .7); tone(t, 1568, .1, .5); });
       });
-      L.ms.forEach(function (m, j) { at(m, function (t) { bl(t, [79, 83, 86][j], .14, 2.2); tone(t, 2000, .05, .05, "square"); }); });
-      for (k = 0; k < 5; k++) (function (k) { at(L.contact - 5 + k, function (t) { tone(t, 660 * Math.pow(2, k / 6), .16, .16, "square"); }); })(k);
-      at(L.contact, function (t) { boom(t, .9); });
-      at(L.heart + 2.4, function (t) { bl(t, 84, .13, 2.5); bl(t + .2, 91, .13, 2.5); });
-      for (k = 0; k < 40; k++) (function (k) { at(L.analyze + (L.error - L.analyze) * Math.sqrt(k / 40), function (t) { tone(t, 800 + k * 40, .04, .04, "square"); }); })(k);
-      at(L.error, function (t) { boom(t, .6); tone(t, 110, .14, .6, "sawtooth"); tone(t, 117, .14, .6, "sawtooth"); });
-      L.words.forEach(function (w) { at(w, function (t) { boom(t, .7); }); });
+      // 信号が途切れ、海の音に変わる
+      at(L.lost, function (t) { boom(t, .5); tone(t, 110, .12, 1.2, "sawtooth"); tone(t, 117, .12, 1.2, "sawtooth"); });
+      at(L.lost + 1.2, function (t) { waves(t, L.map - L.lost - 1.2, .22); });
+      at(L.lost + 1.8, function (t) { var g = env(t, .06, 1.2); g.connect(B); osc(t, "sine", 190, 1.2, g).frequency.exponentialRampToValueAtTime(120, t + 1.1); });
+      // 地図が広がる、島に着くたびの鐘、宝のありか
+      at(L.map, function (t) { var g = env(t, .22, 2); g.connect(filt("bandpass", 1500, B)); noise(t, 2, g); });
+      L.stops.forEach(function (sx, j) { at(sx, function (t) { bl(t, [76, 79, 83][j], .13, 2.4); tom(t, .35); tone(t, 900, .05, .06, "square"); }); });
+      at(L.arrive, function (t) { boom(t, .7); [74, 78, 81, 86].forEach(function (m, j) { bl(t + j * .12, m, .12, 3); }); });
+      // コンパスの針が回る音(だんだん間隔が開く)と、止まる瞬間
+      var ct = 0;
+      for (k = 0; ct < L.lock - L.compass; k++) { ct += .05 * (1 + k * k * .0125); (function (x) { at(L.compass + x, function (t) { tone(t, 3200, .03, .02, "square"); }); })(ct); }
+      at(L.lock, function (t) { hit(t); chord(t, [50, 57, 62, 65, 69], 4, .08); [86, 89, 93].forEach(function (m, j) { bl(t + .1 + j * .15, m, .12, 3); }); });
+      function hit(t) { boom(t, .9); }
+      // ハートの鈴と、「判定」の音
+      [72, 76, 79, 84, 88, 91, 96, 91, 88, 84].forEach(function (m, j) { at(L.heart + .4 + j * .22, function (t) { bl(t, m, .1, 1.8); }); });
+      at(L.heart + 3.5, function (t) { bl(t, 84, .13, 2.5); bl(t + .2, 91, .13, 2.5); });
+      // 財宝の価値が振り切れ、金貨があふれる
+      for (k = 0; k < 40; k++) (function (x) { at(L.value + (L.error - L.value) * Math.sqrt(x / 40), function (t) { tone(t, 800 + x * 40, .04, .04, "square"); }); })(k);
+      at(L.error, function (t) { boom(t, .8); crash(t, .3); tone(t, 110, .14, .6, "sawtooth"); tone(t, 117, .14, .6, "sawtooth"); });
+      for (k = 0; k < 36; k++) (function (x) { at(L.error + .15 + x * .08 + Math.random() * .05, function (t) { bl(t, 96 + (x * 5) % 14, .05, .5); }); })(k);
+      // 夜明けの海
+      at(L.sea, function (t) { waves(t, L.title - L.sea, .2); });
+      [L.ask, L.ask + 1, L.ask + 1.8, L.ask + 2.4, L.ask + 2.9, L.ask + 3.2].forEach(function (dt) {
+        at(dt, function (t) { var g = env(t, .5, .45); g.connect(B); osc(t, "sine", 70, .5, g).frequency.exponentialRampToValueAtTime(40, t + .3); });
+      });
 
       ev.sort(function (a, b) { return a[0] - b[0]; });
       var idx = 0;
@@ -1000,28 +1073,33 @@ button { font: inherit; cursor: pointer; }
     main.inert = true;
     $("#oSound").focus();
 
-    // ---- 作戦室の画面を、時刻 t(秒)から描く ----
-    // 接続 → 捜索 → 身元照会(2人) → 足取り → 接近 → 照合(ハート) → 相性解析(計測器が壊れる) → 言葉 → 問い → タイトル
-    var L = OPEN_TL, AMB = "255,179,71", PNK = "255,143,177";
-    var cv = $("#ofx"), ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0, land = [];
+    // ---- 映像: 時刻 t(秒)から、画面を描く ----
+    // 作戦室(接続 → 捜索 → 身元照会) → 信号が途切れる → 宝の地図(帆船の航海) → コンパス(2つの針が、おたがいを指す)
+    // → 作戦室が復旧(ハート) → 財宝の価値が振り切れて金貨があふれる → 夜明けの海 → 問い → タイトル
+    if (document.fonts && document.fonts.load) { document.fonts.load("800 20px 'Shippori Mincho B1'"); document.fonts.load("400 20px 'Pinyon Script'"); }
+    var L = OPEN_TL, AMB = "255,179,71", PNK = "255,143,177", INK = "#3b2410";
+    var SERIF = "'Shippori Mincho B1','Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif";
+    var cv = $("#ofx"), ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0, land = [], i0, j0;
     W = window.innerWidth; H = window.innerHeight;
     cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     for (var gx = 0; gx < W / 13; gx++) for (var gy = 0; gy < H / 13; gy++) {
       var nv = Math.sin(gx * .33) + Math.sin(gy * .29 + gx * .11) + Math.sin((gx + gy) * .17);
       if (nv > .95) land.push([gx * 13 + 6, gy * 13 + 6]);
     }
-    var R = Math.min(W, H) * .4, cx = W / 2, cy = H * .47;
+    var R = Math.min(W, H) * .4, cx = W / 2, cy = H * .47, U = Math.min(W, H);
     var PROF = [
       { code: "TARGET-A", name: "MISATO", stats: [["笑顔", "100%"], ["やさしさ", "上限突破"], ["幸福度", "測定不能"]] },
       { code: "TARGET-B", name: "TAIGA", stats: [["誠実", "100%"], ["度胸", "上限突破"], ["ミサトへの愛", "測定不能"]] }
     ];
-    var WORDS = ["愛", "絆", "笑い", "涙", "秘密", "全員、主役。"];
     function clamp(x) { return Math.max(0, Math.min(1, x)); }
     function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+    function lerp(a, b, f) { return a + (b - a) * f; }
     function txt(str, x, y, size, color, align, weight) {
-      ctx.font = (weight || 700) + " " + size + "px 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif";
+      ctx.font = (weight || 800) + " " + size + "px " + SERIF;
       ctx.fillStyle = color; ctx.textAlign = align || "left"; ctx.textBaseline = "middle"; ctx.fillText(str, x, y);
     }
+    function typed(str, t0, speed) { return str.slice(0, Math.max(0, Math.floor((t - t0) * speed))); }
+    var t = 0;
     function amb(a) { return "rgba(" + AMB + "," + a + ")"; }
     function pnk(a) { return "rgba(" + PNK + "," + a + ")"; }
     function glitch(strength) {
@@ -1032,26 +1110,41 @@ button { font: inherit; cursor: pointer; }
       }
       ctx.restore();
     }
-    function radar(t, fa, sweep) {
+    // 帆船(宝の地図では墨の色、夜明けの海では影絵)。旗は、ハートのジョリー・ロジャー
+    function ship(x, y, sc, rot, fill, flag) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(sc, sc); ctx.fillStyle = fill; ctx.strokeStyle = fill; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(38, 0); ctx.quadraticCurveTo(34, 14, 18, 16); ctx.lineTo(-18, 16); ctx.quadraticCurveTo(-30, 14, -34, 0); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(38, 0); ctx.lineTo(54, -9); ctx.stroke();
+      [[-14, -48], [6, -60], [24, -42]].forEach(function (m) {
+        ctx.beginPath(); ctx.moveTo(m[0], 0); ctx.lineTo(m[0], m[1]); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(m[0], m[1] + 3); ctx.quadraticCurveTo(m[0] + 17, (m[1] + 3 + (m[1] + 36)) / 2, m[0], m[1] + 36); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(m[0] - 1, m[1] + 40); ctx.quadraticCurveTo(m[0] + 12, m[1] + 44, m[0] - 1, m[1] + 52); ctx.closePath(); ctx.fill();
+      });
+      if (flag) { ctx.fillRect(6, -72, 17, 11); ctx.font = "800 10px " + SERIF; ctx.fillStyle = "#ff8fb1"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("♥", 14.5, -66); }
+      ctx.restore();
+    }
+
+    // ---- 作戦室の部品 ----
+    function radar(tt, fa, sweep) {
       var k;
       ctx.fillStyle = amb(.28 * fa); land.forEach(function (d) { ctx.fillRect(d[0], d[1], 2, 2); });
       ctx.strokeStyle = amb(.3 * fa); ctx.lineWidth = 1;
       for (k = 1; k <= 3; k++) { ctx.beginPath(); ctx.arc(cx, cy, R * k / 3, 0, 6.2832); ctx.stroke(); }
       ctx.beginPath(); ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy); ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R); ctx.stroke();
       if (!sweep) return;
-      var ang = t * 1.7;
+      var ang = tt * 1.7;
       for (k = 0; k < 26; k++) {
         ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R, ang - (k + 1) * .045, ang - k * .045); ctx.closePath();
         ctx.fillStyle = amb(.2 * (1 - k / 26) * fa); ctx.fill();
       }
     }
-    function pin(t, px, py, born, label, below) {
-      var a = t - born; if (a < 0) return;
+    function pin(tt, px, py, born, label, below) {
+      var a = tt - born; if (a < 0) return;
       var box = 14 + 34 * (1 - ease(clamp(a / .5)));
       ctx.strokeStyle = amb(1); ctx.lineWidth = 1.5; ctx.strokeRect(px - box, py - box, box * 2, box * 2);
       ctx.beginPath(); ctx.arc(px, py, 4, 0, 6.2832); ctx.fillStyle = amb(1); ctx.fill();
       ctx.beginPath(); ctx.arc(px, py, 6 + (a % 1.6) * 40, 0, 6.2832); ctx.strokeStyle = amb(.6 * (1 - (a % 1.6) / 1.6)); ctx.stroke();
-      txt(label, px, py + (below ? box + 14 : -box - 14), 13, amb(1), "center", 900);
+      txt(label, px, py + (below ? box + 14 : -box - 14), 13, amb(1), "center");
     }
     function link(ax, ay, bx, by, lk) {
       ctx.setLineDash([6, 6]); ctx.strokeStyle = amb(.7); ctx.lineWidth = 1.5; ctx.beginPath();
@@ -1059,11 +1152,10 @@ button { font: inherit; cursor: pointer; }
     }
     function profile(idx, a) {
       var P = PROF[idx], pw = Math.min(W * .84, 380), ph = 322, px = cx - pw / 2 + (1 - ease(clamp(a / .5))) * W * (idx ? 1 : -1), py = cy - ph / 2, k;
-      ctx.fillStyle = "rgba(4,7,13,.85)"; ctx.fillRect(px, py, pw, ph);
+      ctx.fillStyle = "rgba(4,7,13,.88)"; ctx.fillRect(px, py, pw, ph);
       ctx.strokeStyle = amb(.9); ctx.lineWidth = 1.5; ctx.strokeRect(px, py, pw, ph);
       ctx.fillStyle = amb(.14); ctx.fillRect(px, py, pw, 34);
-      txt(P.code + " ― 身元照会", px + 14, py + 17, 12, amb(1), "left", 900);
-      // 顔写真のかわりの人影と、上下に動く走査線
+      txt(P.code + " ― 身元照会", px + 14, py + 17, 12, amb(1), "left");
       var bx = px + 14, by = py + 48, bw = 96, bh = 104;
       ctx.strokeStyle = amb(.6); ctx.strokeRect(bx, by, bw, bh);
       ctx.save(); ctx.beginPath(); ctx.rect(bx, by, bw, bh); ctx.clip();
@@ -1072,184 +1164,292 @@ button { font: inherit; cursor: pointer; }
       ctx.beginPath(); ctx.ellipse(bx + bw / 2, by + bh + 8, 40, 38, 0, 3.1416, 6.2832); ctx.fill();
       ctx.fillStyle = pnk(.8); ctx.fillRect(bx, by + (a * 70) % bh, bw, 2);
       ctx.restore();
-      txt(P.name, bx + bw + 16, by + 34, Math.min(36, pw * .1), amb(1), "left", 900);
-      txt("STATUS : " + (a > 3.8 ? "確認済" : "照合中" + "...".slice(0, 1 + Math.floor(a * 3) % 3)), bx + bw + 16, by + 70, 12, amb(.85));
+      txt(P.name, bx + bw + 16, by + 34, Math.min(34, pw * .095), amb(1), "left");
+      txt("STATUS : " + (a > 3.8 ? "確認済" : "照合中" + "...".slice(0, 1 + Math.floor(a * 3) % 3)), bx + bw + 16, by + 70, 12, amb(.85), "left", 700);
       for (k = 0; k < 3; k++) {
         var y = py + 196 + k * 46, f = clamp((a - 1 - k * .8) / .7), over = k === 2 && f >= 1, bwid = pw - 28;
-        txt(P.stats[k][0], px + 14, y - 13, 13, amb(1), "left", 900);
+        txt(P.stats[k][0], px + 14, y - 13, 13, amb(1), "left");
         ctx.strokeStyle = amb(.6); ctx.lineWidth = 1; ctx.strokeRect(px + 14, y, bwid, 10);
         ctx.fillStyle = over ? pnk(.6 + .4 * Math.sin(a * 30)) : amb(.9);
         ctx.fillRect(px + 16, y + 2, (bwid - 4) * f * (over ? 1.09 : 1), 6);
-        if (f >= 1) txt(P.stats[k][1], px + pw - 14, y - 13, 13, k ? pnk(1) : amb(1), "right", 900);
+        if (f >= 1) txt(P.stats[k][1], px + pw - 14, y - 13, 13, k ? pnk(1) : amb(1), "right");
       }
       if (a > 3.8) {
         var sc = 1 + 1.2 * (1 - ease(clamp((a - 3.8) / .2)));
         ctx.save(); ctx.translate(bx + bw / 2 + 6, by + bh - 14); ctx.rotate(-.16); ctx.scale(sc, sc);
         ctx.fillStyle = "rgba(4,7,13,.7)"; ctx.fillRect(-42, -15, 84, 30);
         ctx.strokeStyle = "#ff5a4d"; ctx.lineWidth = 2.5; ctx.strokeRect(-42, -15, 84, 30);
-        txt("確認済", 0, 1, 17, "#ff5a4d", "center", 900); ctx.restore();
+        txt("確認済", 0, 1, 17, "#ff5a4d", "center"); ctx.restore();
       }
-    }
-    function braid(u) {
-      // 2人の足取り: 2本の線が、節目ごとに交わりながら下へ伸びる
-      var sMax = clamp(u / 7.5), y0 = H * .22, y1 = H * .8, A = Math.min(W * .3, 150), k, sv, who;
-      txt("行動記録 ― 再生中", cx, H * .13, 15, amb(1), "center", 900);
-      for (who = 0; who < 2; who++) {
-        ctx.beginPath();
-        for (sv = 0; sv <= sMax + .0001; sv += .004) {
-          var x = cx + (who ? 1 : -1) * A * Math.cos(sv * 9.4248), y = y0 + (y1 - y0) * sv;
-          if (sv === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = who ? pnk(.95) : amb(.95); ctx.lineWidth = 2.5; ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
-        var hx = cx + (who ? 1 : -1) * A * Math.cos(sMax * 9.4248), hy = y0 + (y1 - y0) * sMax;
-        ctx.beginPath(); ctx.arc(hx, hy, 5, 0, 6.2832); ctx.fillStyle = who ? pnk(1) : amb(1); ctx.fill();
-        if (sMax < 1) txt(who ? "TAIGA" : "MISATO", hx, hy + 18, 11, who ? pnk(1) : amb(1), "center", 900);
-      }
-      for (k = 0; k < 3; k++) {
-        var sk = (1 + 2 * k) / 6, age = u - sk * 7.5, my = y0 + (y1 - y0) * sk;
-        if (age < 0) continue;
-        ctx.strokeStyle = "rgba(255,246,220," + Math.max(0, 1 - age / 1.2) + ")"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, my, age * 60, 0, 6.2832); ctx.stroke();
-        ctx.beginPath(); ctx.arc(cx, my, 7, 0, 6.2832); ctx.fillStyle = "#fff6dc"; ctx.fill();
-        var lab = ["出会い", "初デート", "プロポーズ"][k]; ctx.font = "900 15px 'Zen Maru Gothic', sans-serif"; var lw = ctx.measureText(lab).width + 20;
-        ctx.fillStyle = "rgba(4,7,13,.85)"; ctx.fillRect(cx - lw / 2, my - 40, lw, 24); ctx.strokeStyle = amb(.8); ctx.lineWidth = 1; ctx.strokeRect(cx - lw / 2, my - 40, lw, 24);
-        txt(lab, cx, my - 27, 15, "#fff6dc", "center", 900);
-      }
-      if (u > 7.8) { var c = "結論 : 離れられない"; txt(c.slice(0, Math.floor((u - 7.8) * 12)), cx, H * .88, 16, pnk(1), "center", 900); }
     }
     function heart(a) {
-      var N = 130, sh = Math.min(W, H) * .0125, shown = Math.floor(clamp(a / 2.2) * N), pulse = 1 + .05 * Math.sin(a * 7) * clamp((a - 2.2) * 2), k;
+      var N = 130, sh = U * .0125, shown = Math.floor(clamp(a / 2.2) * N), pulse = 1 + .05 * Math.sin(a * 7) * clamp((a - 2.2) * 2), k;
       for (k = 0; k < shown; k++) {
         var th = k / N * 6.2832, hx = 16 * Math.pow(Math.sin(th), 3), hy = -(13 * Math.cos(th) - 5 * Math.cos(2 * th) - 2 * Math.cos(3 * th) - Math.cos(4 * th));
         ctx.beginPath(); ctx.arc(cx + hx * sh * pulse, cy + hy * sh * pulse - sh * 2, 3.2, 0, 6.2832);
         ctx.fillStyle = pnk(.95); ctx.shadowColor = pnk(1); ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
       }
-      if (a >= 2.4) txt("TARGET  MATCHED", cx, cy + sh * 19, 15, pnk(1), "center", 900);
+      if (a >= 2.4) txt("TARGET  MATCHED", cx, cy + sh * 19, 15, pnk(1), "center");
       if (a >= 3.5) {
         var gw = Math.min(W * .8, 340);
         ctx.strokeStyle = amb(1); ctx.lineWidth = 2; ctx.strokeRect(cx - gw / 2, H * .13 - 22, gw, 44);
-        txt("ACCESS GRANTED ― 判定 : 結婚", cx, H * .13, 16, amb(1), "center", 900);
+        txt("ACCESS GRANTED ― 判定 : 結婚", cx, H * .13, 16, amb(1), "center");
       }
     }
+    // 財宝の価値: 100%を超えても止まらず、計測器が壊れて、金貨があふれる
+    var coins = [];
     function analyze(u) {
-      // 相性の数値が100%を超えても止まらず、計測器が壊れる
-      var eu = L.error - L.analyze, val = u < 2 ? 100 * ease(u / 2) : 100 + 899 * Math.pow(clamp((u - 2) / (eu - 2)), 2), broke = u >= eu, over = val > 100;
+      var eu = L.error - L.value, val = u < 2 ? 100 * ease(u / 2) : 100 + 899 * Math.pow(clamp((u - 2) / (eu - 2)), 2), broke = u >= eu, over = val > 100, k;
       var sx = over && !broke ? (Math.random() - .5) * val / 999 * 14 : 0, sy = over && !broke ? (Math.random() - .5) * val / 999 * 14 : 0, gr = R * .82;
-      txt("相性解析", cx, H * .15, 18, amb(1), "center", 900);
+      txt("財宝の価値", cx, H * .15, 20, amb(1), "center");
       ctx.lineWidth = 8; ctx.strokeStyle = amb(.18); ctx.beginPath(); ctx.arc(cx, cy, gr, 0, 6.2832); ctx.stroke();
       ctx.strokeStyle = amb(1); ctx.beginPath(); ctx.arc(cx, cy, gr, -1.5708, -1.5708 + Math.min(val / 100, 1) * 6.2832); ctx.stroke();
       if (over) { ctx.strokeStyle = pnk(1); ctx.beginPath(); var sp = u * 9; ctx.arc(cx, cy, gr + 12, sp, sp + 1.2 + val / 999 * 3); ctx.stroke(); }
-      if (!broke) txt(Math.floor(val) + "%", cx + sx, cy + sy, Math.min(W * .24, 110), over ? pnk(1) : amb(1), "center", 900);
+      if (!broke) txt(Math.floor(val) + "%", cx + sx, cy + sy, Math.min(W * .19, 96), over ? pnk(1) : amb(1), "center");
       else {
-        txt("∞", cx, cy - 6, Math.min(W * .42, 190), pnk(1), "center", 900);
+        txt("∞", cx, cy - 6, Math.min(W * .42, 190), pnk(1), "center");
         if (Math.floor(u * 6) % 2 === 0) {
           var ew = Math.min(W * .8, 320);
           ctx.fillStyle = "rgba(255,59,59,.18)"; ctx.fillRect(cx - ew / 2, H * .8 - 22, ew, 44); ctx.strokeStyle = "#ff3b3b"; ctx.lineWidth = 2; ctx.strokeRect(cx - ew / 2, H * .8 - 22, ew, 44);
-          txt("ERROR ― 測定不能", cx, H * .8, 17, "#ff5a4d", "center", 900);
+          txt("ERROR ― 測定不能", cx, H * .8, 17, "#ff5a4d", "center");
         }
-        txt("計測器が壊れました", cx, H * .8 + 40, 12, amb(.9), "center", 700);
+        txt("計測器が壊れました。価値が、大きすぎて。", cx, H * .8 + 40, 12, amb(.9), "center", 700);
+        if (!coins.length) for (k = 0; k < 90; k++) coins.push({ x: Math.random() * W, y: -Math.random() * H * .8, vy: 4 + Math.random() * 5, r: 7 + Math.random() * 7, ph: Math.random() * 6.28, sp: 4 + Math.random() * 6 });
       }
     }
-    function hud(t) {
-      var k, phase, x, y;
-      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
-      ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H);
-      ctx.strokeStyle = amb(.05); ctx.lineWidth = 1; ctx.beginPath();
-      for (x = 0; x < W; x += 40) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
-      for (y = 0; y < H; y += 40) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
-      ctx.stroke();
-      var ax0 = cx - R * .78, ay0 = cy - R * .3, bx0 = cx + R * .78, by0 = cy + R * .34;
+    function drawCoins() {
+      coins.forEach(function (c) {
+        c.y += c.vy; c.ph += c.sp * .016;
+        var sq = Math.abs(Math.cos(c.ph)); ctx.save(); ctx.translate(c.x, c.y); ctx.scale(Math.max(.18, sq), 1);
+        ctx.beginPath(); ctx.arc(0, 0, c.r, 0, 6.2832); ctx.fillStyle = "#f2c14e"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#a9791a"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(-c.r * .25, -c.r * .25, c.r * .35, 0, 6.2832); ctx.fillStyle = "rgba(255,246,200,.8)"; ctx.fill(); ctx.restore();
+      });
+      coins = coins.filter(function (c) { return c.y < H + 30; });
+    }
 
-      if (t < L.radar) {
-        phase = "1/9 接続";
-        ["CONNECTING ...", "SERVER : WEDDING-QUIZ", "USER   : GUEST", "暗号鍵 : ********", "認証 ― OK", "作戦名 : 永遠の誓い"].forEach(function (ln, i) {
-          var n = Math.floor((t - .3 - i * .5) * 30); if (n <= 0) return;
-          txt(ln.slice(0, n) + (n < ln.length && Math.floor(t * 8) % 2 ? "▌" : ""), W * .12, H * .3 + i * 30, 16, i === 5 ? pnk(1) : amb(1));
-        });
-        var pg = clamp((t - .3) / 3.4);
-        ctx.strokeStyle = amb(.7); ctx.strokeRect(W * .12, H * .64, W * .76, 10);
-        ctx.fillStyle = amb(.9); ctx.fillRect(W * .12 + 2, H * .64 + 2, (W * .76 - 4) * pg, 6);
-        txt(Math.floor(pg * 100) + " %", W * .88, H * .64 + 28, 13, amb(.8), "right");
-      } else if (t < L.profA) {
-        phase = "2/9 捜索";
-        radar(t, clamp((t - L.radar) / 1.2), true);
-        if (t >= L.link) link(ax0, ay0, bx0, by0, ease(clamp((t - L.link) / 1.4)));
-        pin(t, ax0, ay0, L.pinA, "TARGET-A  MISATO", false); pin(t, bx0, by0, L.pinB, "TARGET-B  TAIGA", true);
-        if (t >= L.pinB + .4) txt("2 TARGETS FOUND", cx, H * .13, 15, amb(1), "center", 900);
-      } else if (t < L.route) {
-        phase = "3/9 身元照会";
-        radar(t, .4, false);
-        if (t < L.profB) profile(0, t - L.profA); else profile(1, t - L.profB);
-      } else if (t < L.count) {
-        phase = "4/9 足取り";
-        braid(t - L.route);
-      } else if (t < L.heart) {
-        phase = "5/9 接近";
-        radar(t, 1, true);
-        var pm = ease(clamp((t - L.count) / (L.contact - L.count)));
-        var ax = ax0 + (cx - 9 - ax0) * pm, ay = ay0 + (cy - 4 - ay0) * pm, bx = bx0 + (cx + 9 - bx0) * pm, by = by0 + (cy + 4 - by0) * pm;
-        if (t < L.contact) {
-          var left = L.contact - t;
-          if (left <= 5) txt(String(Math.ceil(left)), cx, cy, R * 1.1, amb(.1 + .14 * (1 - (left % 1))), "center", 900);
-          link(ax, ay, bx, by, 1);
-          pin(t, ax, ay, L.count - 9, "MISATO", false); pin(t, bx, by, L.count - 9, "TAIGA", true);
-          txt("DISTANCE  " + String(Math.round(8412 * (1 - pm))).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " km", cx, H * .13, 15, amb(1), "center", 900);
-          if (left <= 5) txt("CONTACT IN  00:0" + Math.ceil(left), cx, H * .87, 15, amb(1), "center", 900);
-        } else {
-          var ca = t - L.contact;
-          ctx.strokeStyle = amb(1 - ca / .8); ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, ca * R * 1.8, 0, 6.2832); ctx.stroke();
-          ctx.fillStyle = "rgba(255,246,220," + Math.max(0, .55 - ca * 1.4) + ")"; ctx.fillRect(0, 0, W, H);
-          txt("CONTACT", cx, H * .13, 26, amb(1), "center", 900);
-        }
-      } else if (t < L.analyze) {
-        phase = "6/9 照合";
-        radar(t, .7, true); heart(t - L.heart);
-      } else if (t < L.words[0]) {
-        phase = "7/9 相性解析";
-        analyze(t - L.analyze);
-      } else if (t < L.ask) {
-        phase = "8/9 結論";
-        for (k = 0; k < WORDS.length; k++) {
-          var wt = t - L.words[k], dur = k < WORDS.length - 1 ? .8 : 1.6;
-          if (wt < 0 || wt > dur) continue;
-          var word = WORDS[k], fs = word.length === 1 ? Math.min(W * .5, 240) : word.length === 2 ? Math.min(W * .4, 200) : Math.min(W * .17, 100);
-          ctx.fillStyle = amb(Math.max(0, .85 - wt * 4)); ctx.fillRect(0, 0, W, H);
-          var off = Math.max(0, 10 - wt * 40);
-          ctx.globalCompositeOperation = "lighter";
-          txt(word, cx - off, cy, fs, "rgba(255,45,85,.9)", "center", 900);
-          txt(word, cx + off, cy, fs, "rgba(0,229,255,.9)", "center", 900);
-          txt(word, cx, cy, fs, "rgba(255,217,160,.95)", "center", 900);
-          ctx.globalCompositeOperation = "source-over";
-          ctx.fillStyle = "rgba(0,0,0,.5)"; ctx.fillRect(0, (wt * 900) % H, W, 3);
-        }
-      } else if (t < L.title) {
-        phase = "9/9 出題";
-        var qp = clamp((t - L.ask) / (L.title - L.ask)), q = "ご列席のみなさまに、問う。", gap = (1 - qp) * H * .36 + 34;
-        ctx.strokeStyle = amb(.9); ctx.lineWidth = 2; ctx.beginPath();
-        ctx.moveTo(0, cy - gap); ctx.lineTo(W, cy - gap); ctx.moveTo(0, cy + gap); ctx.lineTo(W, cy + gap); ctx.stroke();
-        txt(q.slice(0, Math.floor((t - L.ask) * 16)), cx, cy, Math.min(26, W * .06), "rgb(255,217,160)", "center", 900);
-      } else {
-        for (k = 0; k < 3; k++) {
-          var rp = ((t - L.title) * .5 + k / 3) % 1;
-          ctx.strokeStyle = amb(.25 * (1 - rp)); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx, cy, rp * R * 1.4, 0, 6.2832); ctx.stroke();
-        }
+    // ---- 宝の地図 ----
+    var ctrl = [[.16, .8], [.34, .6], [.64, .7], [.78, .44], [.5, .22]], route = [], blots = [], islands = [], marks = [], j, seg;
+    function cr(p0, p1, p2, p3, f) {
+      var f2 = f * f, f3 = f2 * f;
+      return [0, 1].map(function (q) { return .5 * (2 * p1[q] + (-p0[q] + p2[q]) * f + (2 * p0[q] - 5 * p1[q] + 4 * p2[q] - p3[q]) * f2 + (-p0[q] + 3 * p1[q] - 3 * p2[q] + p3[q]) * f3); });
+    }
+    for (seg = 0; seg < 4; seg++) for (j = 0; j < 48; j++) { var q = cr(ctrl[Math.max(0, seg - 1)], ctrl[seg], ctrl[seg + 1], ctrl[Math.min(4, seg + 2)], j / 48); route.push([q[0] * W, q[1] * H]); }
+    route.push([ctrl[4][0] * W, ctrl[4][1] * H]);
+    for (i0 = 0; i0 < 16; i0++) blots.push({ x: Math.random() * W, y: Math.random() * H, r: 50 + Math.random() * 130, a: .05 + Math.random() * .08 });
+    ctrl.forEach(function (c, idx) {
+      var r = U * (idx === 4 ? .12 : idx === 0 ? .05 : .075), poly = [];
+      for (j = 0; j < 16; j++) { var an = j / 16 * 6.2832, rr = r * (.7 + Math.random() * .5); poly.push([Math.cos(an) * rr * 1.2, Math.sin(an) * rr * .85]); }
+      islands.push({ x: c[0] * W, y: c[1] * H, poly: poly, r: r });
+    });
+    for (i0 = 0; i0 < 70; i0++) marks.push({ x: Math.random() * W, y: Math.random() * H, w: 14 + Math.random() * 16 });
+    function shipIdx(tt) {
+      var ts = [L.map + 2.6, L.stops[0], L.stops[1], L.stops[2], L.arrive], i;
+      if (tt <= ts[0]) return 0;
+      for (i = 0; i < 4; i++) if (tt < ts[i + 1]) return i * 48 + ease(clamp((tt - ts[i]) / (ts[i + 1] - ts[i] - .9))) * 48;
+      return 192;
+    }
+    function parchment(tt) {
+      var u = tt - L.map, k, g;
+      ctx.fillStyle = "#150c06"; ctx.fillRect(0, 0, W, H);
+      var open = ease(clamp(u / 2.4)), hh = H * open, y0 = cy - hh / 2;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, H / 2 - hh / 2, W, hh); ctx.clip();
+      g = ctx.createRadialGradient(cx, cy, U * .1, cx, cy, Math.max(W, H) * .75); g.addColorStop(0, "#ead3a2"); g.addColorStop(1, "#bf9a63"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      blots.forEach(function (b) { var bg = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r); bg.addColorStop(0, "rgba(110,70,25," + b.a + ")"); bg.addColorStop(1, "rgba(110,70,25,0)"); ctx.fillStyle = bg; ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2); });
+      // 海の波
+      ctx.strokeStyle = "rgba(75,48,20,.35)"; ctx.lineWidth = 1.2;
+      marks.forEach(function (m) { ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.quadraticCurveTo(m.x + m.w * .25, m.y - 5, m.x + m.w * .5, m.y); ctx.quadraticCurveTo(m.x + m.w * .75, m.y + 5, m.x + m.w, m.y); ctx.stroke(); });
+      // 島
+      islands.forEach(function (is, idx) {
+        ctx.beginPath(); is.poly.forEach(function (pt, n) { if (n) ctx.lineTo(is.x + pt[0], is.y + pt[1]); else ctx.moveTo(is.x + pt[0], is.y + pt[1]); }); ctx.closePath();
+        ctx.fillStyle = "rgba(160,120,62,.55)"; ctx.fill(); ctx.strokeStyle = "rgba(59,36,16,.85)"; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = "rgba(59,36,16,.4)"; ctx.lineWidth = 1;
+        for (k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(is.x + k * is.r * .3 - 6, is.y + is.r * .15); ctx.lineTo(is.x + k * is.r * .3 + 6, is.y - is.r * .2); ctx.stroke(); }
+      });
+      // 羅針盤(右下)
+      var rx = W - U * .17, ry = H - U * .2, rr2 = U * .1; ctx.save(); ctx.translate(rx, ry); ctx.rotate(Math.sin(tt * .5) * .05);
+      ctx.strokeStyle = "rgba(59,36,16,.8)"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, rr2, 0, 6.2832); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, rr2 * .78, 0, 6.2832); ctx.stroke();
+      for (k = 0; k < 8; k++) { var an2 = k * .7854, len = k % 2 ? rr2 * .62 : rr2 * 1.18; ctx.fillStyle = k % 2 ? "rgba(59,36,16,.5)" : "rgba(59,36,16,.9)"; ctx.beginPath(); ctx.moveTo(Math.cos(an2) * len, Math.sin(an2) * len); ctx.lineTo(Math.cos(an2 + .22) * rr2 * .2, Math.sin(an2 + .22) * rr2 * .2); ctx.lineTo(Math.cos(an2 - .22) * rr2 * .2, Math.sin(an2 - .22) * rr2 * .2); ctx.closePath(); ctx.fill(); }
+      ctx.restore(); txt("N", rx, ry - rr2 * 1.45, 16, INK, "center");
+      // 航路(点線)と帆船
+      var idx = shipIdx(tt), i1 = Math.floor(idx), f1 = idx - i1, pa = route[i1], pb = route[Math.min(192, i1 + 1)], sx = lerp(pa[0], pb[0], f1), sy = lerp(pa[1], pb[1], f1);
+      var hx = route[Math.min(192, i1 + 4)][0] - route[Math.max(0, i1 - 1)][0], ang = Math.atan2(route[Math.min(192, i1 + 4)][1] - route[Math.max(0, i1 - 1)][1], hx);
+      ctx.setLineDash([7, 7]); ctx.strokeStyle = "rgba(150,40,30,.85)"; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(route[0][0], route[0][1]);
+      for (k = 1; k <= i1; k++) ctx.lineTo(route[k][0], route[k][1]); ctx.lineTo(sx, sy); ctx.stroke(); ctx.setLineDash([]);
+      // 目的地のバツ印
+      if (tt >= L.arrive - 1) {
+        var xp = ease(clamp((tt - (L.arrive - 1)) / .7)), is4 = islands[4], xr = U * .06; ctx.strokeStyle = "#a3231a"; ctx.lineWidth = 6; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(is4.x - xr, is4.y - xr); ctx.lineTo(is4.x - xr + xr * 2 * Math.min(1, xp * 2), is4.y - xr + xr * 2 * Math.min(1, xp * 2)); ctx.stroke();
+        if (xp > .5) { ctx.beginPath(); ctx.moveTo(is4.x + xr, is4.y - xr); ctx.lineTo(is4.x + xr - xr * 2 * (xp - .5) * 2, is4.y - xr + xr * 2 * (xp - .5) * 2); ctx.stroke(); }
+        ctx.lineCap = "butt";
       }
+      ship(sx, sy + Math.sin(tt * 3) * 2, U * .0022, Math.sin(tt * 2) * .05 + (Math.abs(ang) < 1.4 ? 0 : 0), INK, true);
+      // 到着した島の名札
+      var names = ["出会いの島", "初デートの入り江", "プロポーズの岬"];
+      L.stops.forEach(function (st, n) {
+        var a = tt - st; if (a < 0) return;
+        var is = islands[n + 1], sc = ease(clamp(a / .4)), above = n === 1 ? 1 : -1; ctx.save(); ctx.translate(is.x, is.y + above * (is.r + 18)); ctx.scale(sc, sc);
+        ctx.font = "800 " + Math.max(14, U * .04) + "px " + SERIF; var lw = ctx.measureText(names[n]).width + 28, lh = Math.max(14, U * .04) + 16;
+        ctx.fillStyle = "#f3e2b8"; ctx.fillRect(-lw / 2, -lh / 2, lw, lh); ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.strokeRect(-lw / 2, -lh / 2, lw, lh);
+        ctx.beginPath(); ctx.moveTo(-lw / 2, -lh / 2); ctx.lineTo(-lw / 2 - 9, 0); ctx.lineTo(-lw / 2, lh / 2); ctx.moveTo(lw / 2, -lh / 2); ctx.lineTo(lw / 2 + 9, 0); ctx.lineTo(lw / 2, lh / 2); ctx.stroke();
+        txt(names[n], 0, 1, Math.max(14, U * .04), INK, "center"); ctx.restore();
+      });
+      if (tt >= L.arrive) {
+        var a5 = tt - L.arrive, is5 = islands[4], sc5 = ease(clamp(a5 / .5)); ctx.save(); ctx.translate(is5.x, is5.y + is5.r + 26); ctx.scale(sc5, sc5);
+        ctx.font = "800 " + Math.max(15, U * .046) + "px " + SERIF; var lw5 = ctx.measureText("宝は、ここに。").width + 32; ctx.fillStyle = "#a3231a"; ctx.fillRect(-lw5 / 2, -22, lw5, 44);
+        txt("宝は、ここに。", 0, 1, Math.max(15, U * .046), "#fbeccc", "center"); ctx.restore();
+      }
+      ctx.restore();
+      // 巻物のふち(開くあいだ、上下に丸い影)
+      if (open < 1) for (k = 0; k < 2; k++) { var ey = k ? H / 2 + hh / 2 : H / 2 - hh / 2, gr2 = ctx.createLinearGradient(0, ey - 14, 0, ey + 14); gr2.addColorStop(0, "rgba(40,22,8,0)"); gr2.addColorStop(.5, "rgba(40,22,8,.9)"); gr2.addColorStop(1, "rgba(40,22,8,0)"); ctx.fillStyle = gr2; ctx.fillRect(0, ey - 14, W, 28); }
+      // ふちの焼け焦げ
+      var vg = ctx.createRadialGradient(cx, cy, U * .35, cx, cy, Math.max(W, H) * .72); vg.addColorStop(0, "rgba(40,20,5,0)"); vg.addColorStop(1, "rgba(40,20,5,.82)"); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+      txt(typed("航海日誌", L.map + 2, 8), W / 2, H * .1, Math.max(20, U * .06), "rgba(235,215,170,.95)", "center");
+      if (open >= 1) { ctx.fillStyle = "rgba(235,215,170,.5)"; ctx.fillRect(W / 2 - U * .16, H * .1 + U * .05, U * .32, 1.5); }
+    }
 
-      // 画面の四隅(録画中の表示、時刻、座標、いまの段階)
-      var m = 14, bl = 22;
+    // ---- コンパス(ジャックのコンパスの発想: 持ち主が、いちばん欲しいものを指す) ----
+    function drawCompass(x, y, r, ang, col, label) {
+      var k, g = ctx.createRadialGradient(x - r * .3, y - r * .3, r * .1, x, y, r * 1.05);
+      g.addColorStop(0, "#f6dc8c"); g.addColorStop(.6, "#c9a24a"); g.addColorStop(1, "#7c5a1a");
+      ctx.beginPath(); ctx.arc(x, y, r * 1.06, 0, 6.2832); ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, r * .92, 0, 6.2832); ctx.fillStyle = "#0e1418"; ctx.fill();
+      ctx.strokeStyle = "rgba(246,220,140,.7)"; ctx.lineWidth = 1.4;
+      for (k = 0; k < 60; k++) { var a = k / 60 * 6.2832, l = k % 5 ? .05 : .11; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r * .88, y + Math.sin(a) * r * .88); ctx.lineTo(x + Math.cos(a) * r * (.88 - l), y + Math.sin(a) * r * (.88 - l)); ctx.stroke(); }
+      [["N", -1.5708], ["E", 0], ["S", 1.5708], ["W", 3.1416]].forEach(function (c) { txt(c[0], x + Math.cos(c[1]) * r * .66, y + Math.sin(c[1]) * r * .66, r * .17, "rgba(246,220,140,.85)", "center"); });
+      ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.shadowColor = col; ctx.shadowBlur = 14;
+      ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(r * .8, 0); ctx.lineTo(0, -r * .075); ctx.lineTo(0, r * .075); ctx.closePath(); ctx.fill();
+      ctx.shadowBlur = 0; ctx.fillStyle = "rgba(230,230,230,.85)"; ctx.beginPath(); ctx.moveTo(-r * .62, 0); ctx.lineTo(0, -r * .075); ctx.lineTo(0, r * .075); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      ctx.beginPath(); ctx.arc(x, y, r * .06, 0, 6.2832); ctx.fillStyle = "#f6dc8c"; ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, r * .78, 3.6, 4.6); ctx.strokeStyle = "rgba(255,255,255,.18)"; ctx.lineWidth = r * .08; ctx.stroke();
+      txt(label, x, y + r * 1.32, Math.max(13, r * .17), "rgba(246,220,140,.95)", "center");
+    }
+    function compassScene(tt) {
+      var u = tt - L.compass, dur = L.lock - L.compass, k, portrait = H >= W * 1.05, r = portrait ? Math.min(W * .3, H * .135) : Math.min(H * .24, W * .17);
+      var bg = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.max(W, H) * .7); bg.addColorStop(0, "#10242b"); bg.addColorStop(1, "#04070d"); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+      for (k = 0; k < 40; k++) { var sx2 = (k * 137.5) % W, sy2 = (k * 71.3) % (H * .8); ctx.fillStyle = "rgba(255,240,200," + (.2 + .5 * Math.abs(Math.sin(tt * 1.3 + k))) + ")"; ctx.fillRect(sx2, sy2, 1.6, 1.6); }
+      var pa = portrait ? [cx, H * .325] : [W * .28, cy], pb = portrait ? [cx, H * .655] : [W * .72, cy], ta = Math.atan2(pb[1] - pa[1], pb[0] - pa[0]), tb = ta + Math.PI;
+      var p = ease(clamp(u / dur)), locked = tt >= L.lock, ra = ta + (1 - p) * 31 + (locked ? 0 : .3 * Math.sin(u * 11) * Math.exp(-u * .35)), rb = tb - (1 - p) * 37 - (locked ? 0 : .3 * Math.sin(u * 9) * Math.exp(-u * .35));
+      if (locked) { var pul = .02 * Math.sin((tt - L.lock) * 18) * Math.exp(-(tt - L.lock) * 2); ra += pul; rb -= pul; }
+      drawCompass(pa[0], pa[1], r, ra, "#ff8fb1", "ミサトの コンパス");
+      drawCompass(pb[0], pb[1], r, rb, "#ffb347", "タイガの コンパス");
+      if (locked) {
+        var la = clamp((tt - L.lock) / .6); ctx.strokeStyle = pnk(.9 * la); ctx.lineWidth = 3; ctx.shadowColor = pnk(1); ctx.shadowBlur = 16;
+        ctx.setLineDash([2, 8]); ctx.beginPath(); ctx.moveTo(pa[0] + Math.cos(ta) * r * 1.1, pa[1] + Math.sin(ta) * r * 1.1); ctx.lineTo(pb[0] + Math.cos(tb) * r * 1.1, pb[1] + Math.sin(tb) * r * 1.1); ctx.stroke(); ctx.setLineDash([]); ctx.shadowBlur = 0;
+        ctx.fillStyle = "rgba(255,246,220," + Math.max(0, .6 - (tt - L.lock) * 1.6) + ")"; ctx.fillRect(0, 0, W, H);
+      }
+      var fs = Math.max(14, Math.min(20, W * .048));
+      var cap = "このコンパスは、いちばん欲しいものを指す。", cn = Math.floor((tt - L.compass - .6) * 14);
+      txt(cap.slice(0, Math.min(cn, 8)), cx, H * .125, fs, "rgba(246,220,140,.95)", "center");
+      if (cn > 8) txt(cap.slice(8, cn), cx, H * .125 + fs * 1.6, fs, "rgba(246,220,140,.95)", "center");
+      if (locked) txt(typed("ふたつの針は、おたがいを指した。", L.lock + .8, 12), cx, H * .875, fs, pnk(1), "center");
+    }
+
+    // ---- 夜明けの海 ----
+    function sea(tt) {
+      var s = tt - L.sea, k = clamp(s / 11), hz = H * .56, g = ctx.createLinearGradient(0, 0, 0, hz);
+      function mix(a, b) { return "rgb(" + a.map(function (c, i) { return Math.round(lerp(c, b[i], k)); }).join(",") + ")"; }
+      g.addColorStop(0, mix([5, 9, 20], [34, 46, 100])); g.addColorStop(.6, mix([26, 27, 58], [200, 96, 108])); g.addColorStop(1, mix([74, 42, 82], [255, 179, 107]));
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, hz);
+      var sunY = hz + (1 - ease(clamp(s / 12))) * H * .13, sg = ctx.createRadialGradient(cx * .9, sunY, 0, cx * .9, sunY, U * .8);
+      sg.addColorStop(0, "rgba(255,244,210," + (.95 * k) + ")"); sg.addColorStop(.1, "rgba(255,190,110," + (.8 * k) + ")"); sg.addColorStop(.4, "rgba(255,120,90," + (.25 * k) + ")"); sg.addColorStop(1, "rgba(255,120,90,0)");
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, W, hz);
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, hz); ctx.clip(); ctx.beginPath(); ctx.arc(cx * .9, sunY, U * .06, 0, 6.2832); ctx.fillStyle = "rgba(255,246,220," + k + ")"; ctx.fill(); ctx.restore();
+      var wg = ctx.createLinearGradient(0, hz, 0, H); wg.addColorStop(0, mix([10, 20, 40], [120, 70, 80])); wg.addColorStop(1, "#050a14"); ctx.fillStyle = wg; ctx.fillRect(0, hz, W, H - hz);
+      var n;
+      for (n = 0; n < 16; n++) { var wy = hz + Math.pow(n / 16, 1.7) * (H - hz); ctx.strokeStyle = "rgba(255,200,160," + (.05 + .1 * k * (1 - n / 16)) + ")"; ctx.lineWidth = 1 + n * .12; ctx.beginPath(); for (var wx = 0; wx <= W; wx += 12) { var yy = wy + Math.sin(wx * .02 + tt * 1.4 + n) * (1 + n * .5); if (wx) ctx.lineTo(wx, yy); else ctx.moveTo(wx, yy); } ctx.stroke(); }
+      for (n = 0; n < 70; n++) { var gy2 = hz + 4 + (n / 70) * (H - hz) * .8, spread = 8 + (gy2 - hz) * .35, gxx = cx * .9 + Math.sin(tt * 2.2 + n * 1.7) * spread; ctx.fillStyle = "rgba(255,226,170," + (.55 * k * Math.max(0, Math.sin(tt * 3 + n * 2.1)) * (1 - (gy2 - hz) / (H - hz))) + ")"; ctx.fillRect(gxx, gy2, 8 + (gy2 - hz) * .06, 1.5); }
+      var shx = W * (1.12 - .34 * clamp(s / 14)) , shy = hz + H * .045 + Math.sin(tt * 1.6) * 3;
+      ship(shx, shy, U * .0044, Math.sin(tt * 1.3) * .03, "#08070c", true);
+      for (n = 0; n < 3; n++) { var gx3 = (W * (.15 + n * .28) + tt * (12 + n * 5)) % (W + 80) - 40, gy3 = H * (.2 + n * .06) + Math.sin(tt * 2 + n) * 6, fl = Math.sin(tt * 7 + n) * 5; ctx.strokeStyle = "rgba(20,14,24,.85)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gx3 - 12, gy3 - fl); ctx.quadraticCurveTo(gx3 - 5, gy3 - 7, gx3, gy3); ctx.quadraticCurveTo(gx3 + 5, gy3 - 7, gx3 + 12, gy3 - fl); ctx.stroke(); }
+      var fs = Math.max(17, Math.min(26, W * .058));
+      function line(str, a, b) { var al = clamp(Math.min((tt - a) / 1.2, (b - tt) / 1.2)); if (al <= 0) return; ctx.save(); ctx.shadowColor = "rgba(0,0,0,.8)"; ctx.shadowBlur = 14; txt(str, cx, H * .22, fs, "rgba(255,240,215," + al + ")", "center"); ctx.restore(); }
+      line("ふたりは、ついに見つけた。", L.line1, L.line1 + 4); line("世界でいちばんの宝は、すぐそばにあった。", L.line2, L.line2 + 4.2);
+      if (tt >= L.ask && tt < L.title) {
+        var qp = clamp((tt - L.ask) / (L.title - L.ask)), gap = (1 - qp) * H * .3 + 32; ctx.fillStyle = "rgba(0,0,0,.55)"; ctx.fillRect(0, hz - gap * .5 - 34, W, 68);
+        txt(typed("ご列席のみなさまに、問う。", L.ask, 9), cx, hz - gap * .5, Math.min(26, W * .06), "rgb(255,230,190)", "center");
+      }
+      if (tt >= L.title) { ctx.fillStyle = "rgba(4,7,13,.5)"; ctx.fillRect(0, 0, W, H); }
+    }
+    function bars(a) { var bh = H * .085 * a; ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, bh); ctx.fillRect(0, H - bh, W, bh); }
+    function corners(tt, phase) {
+      var m = 14, bl = 22, pad = function (v) { return (v < 10 ? "0" : "") + v; };
       ctx.strokeStyle = amb(.8); ctx.lineWidth = 2; ctx.beginPath();
       ctx.moveTo(m, m + bl); ctx.lineTo(m, m); ctx.lineTo(m + bl, m);
       ctx.moveTo(W - m - bl, H - m); ctx.lineTo(W - m, H - m); ctx.lineTo(W - m, H - m - bl);
       ctx.moveTo(m, H - m - bl); ctx.lineTo(m, H - m); ctx.lineTo(m + bl, H - m);
       ctx.stroke();
-      var pad = function (v) { return (v < 10 ? "0" : "") + v; };
-      if (Math.floor(t * 2) % 2 === 0) { ctx.beginPath(); ctx.arc(m + 8, m + 30, 5, 0, 6.2832); ctx.fillStyle = "#ff3b3b"; ctx.fill(); }
-      txt("REC  00:00:" + pad(Math.floor(t)) + ":" + pad(Math.floor((t % 1) * 30)), m + 20, m + 30, 12, amb(.9), "left", 900);
-      txt("N 35." + (6812 + Math.floor(t * 37) % 900) + "  E 139." + (7671 + Math.floor(t * 53) % 900), m + 8, H - m - 14, 10, amb(.7), "left", 700);
-      if (phase) txt("PHASE " + phase, W - m - 8, H - m - 34, 11, amb(.9), "right", 900);
-
-      // 場面の切り替わりで画面を乱す
-      var cut = [L.radar, L.profA, L.profB, L.route, L.count, L.contact, L.analyze, L.error, L.words[0], L.title].some(function (g) { return t >= g && t < g + .25; });
-      if (cut) glitch(60); else if (Math.random() < .015) glitch(24);
+      if (Math.floor(tt * 2) % 2 === 0) { ctx.beginPath(); ctx.arc(m + 8, m + 30, 5, 0, 6.2832); ctx.fillStyle = "#ff3b3b"; ctx.fill(); }
+      txt("REC  00:" + pad(Math.floor(tt / 60)) + ":" + pad(Math.floor(tt % 60)) + ":" + pad(Math.floor((tt % 1) * 30)), m + 20, m + 30, 12, amb(.9), "left");
+      txt("N 35." + (6812 + Math.floor(tt * 37) % 900) + "  E 139." + (7671 + Math.floor(tt * 53) % 900), m + 8, H - m - 14, 10, amb(.7), "left", 700);
+      if (phase) txt(phase, W - m - 8, H - m - 34, 11, amb(.9), "right");
+    }
+    function hud(tt) {
+      var k, x, y, phase = "";
+      t = tt;
+      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H);
+      var ax0 = cx - R * .78, ay0 = cy - R * .3, bx0 = cx + R * .78, by0 = cy + R * .34, hudOn = tt < L.map || (tt >= L.heart && tt < L.sea);
+      if (hudOn) {
+        ctx.strokeStyle = amb(.05); ctx.lineWidth = 1; ctx.beginPath();
+        for (x = 0; x < W; x += 40) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+        for (y = 0; y < H; y += 40) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+        ctx.stroke();
+      }
+      if (tt < L.radar) {
+        phase = "PHASE 1/9 接続";
+        ["CONNECTING ...", "SERVER : WEDDING-QUIZ", "USER   : GUEST", "暗号鍵 : ********", "認証 ― OK", "作戦名 : 宝を探せ"].forEach(function (ln, i) {
+          var n = Math.floor((tt - .3 - i * .5) * 30); if (n <= 0) return;
+          txt(ln.slice(0, n) + (n < ln.length && Math.floor(tt * 8) % 2 ? "▌" : ""), W * .12, H * .3 + i * 30, 16, i === 5 ? pnk(1) : amb(1), "left");
+        });
+        var pg = clamp((tt - .3) / 3.4);
+        ctx.strokeStyle = amb(.7); ctx.strokeRect(W * .12, H * .64, W * .76, 10);
+        ctx.fillStyle = amb(.9); ctx.fillRect(W * .12 + 2, H * .64 + 2, (W * .76 - 4) * pg, 6);
+        txt(Math.floor(pg * 100) + " %", W * .88, H * .64 + 28, 13, amb(.8), "right", 700);
+      } else if (tt < L.profA) {
+        phase = "PHASE 2/9 捜索";
+        radar(tt, clamp((tt - L.radar) / 1.2), true);
+        if (tt >= L.link) link(ax0, ay0, bx0, by0, ease(clamp((tt - L.link) / 1.4)));
+        pin(tt, ax0, ay0, L.pinA, "TARGET-A  MISATO", false); pin(tt, bx0, by0, L.pinB, "TARGET-B  TAIGA", true);
+        if (tt >= L.pinB + .4) txt("2 TARGETS FOUND", cx, H * .13, 15, amb(1), "center");
+      } else if (tt < L.lost) {
+        phase = "PHASE 3/9 身元照会";
+        radar(tt, .4, false);
+        if (tt < L.profB) profile(0, tt - L.profA); else profile(1, tt - L.profB);
+      } else if (tt < L.map) {
+        // 信号が途切れ、暗闇の中から海の音が聞こえてくる
+        var lu = tt - L.lost;
+        if (lu < 1.4) {
+          radar(tt, .4, false); profile(1, 4);
+          ctx.fillStyle = "rgba(255,59,59," + (.12 + .1 * Math.sin(lu * 30)) + ")"; ctx.fillRect(0, 0, W, H);
+          txt("SIGNAL LOST", cx, H * .13, 24, "#ff5a4d", "center");
+          for (k = 0; k < 40; k++) { ctx.fillStyle = "rgba(255,255,255," + Math.random() * .25 + ")"; ctx.fillRect(Math.random() * W, Math.random() * H, 20 + Math.random() * 90, 2); }
+          phase = "ERROR";
+        } else {
+          var ca2 = Math.min(1, (lu - 1.4) / 1.2);
+          txt(typed("古い地図が、見つかった。", L.lost + 1.8, 9), cx, cy, Math.min(26, W * .06), "rgba(235,215,170," + ca2 + ")", "center");
+        }
+      } else if (tt < L.compass) {
+        parchment(tt);
+      } else if (tt < L.heart) {
+        compassScene(tt);
+      } else if (tt < L.value) {
+        phase = "PHASE 6/9 照合";
+        radar(tt, .7, true);
+        if (tt < L.heart + 1.1) txt("SIGNAL RESTORED", cx, H * .87, 16, amb(1), "center");
+        heart(tt - L.heart);
+      } else if (tt < L.sea) {
+        phase = "PHASE 7/9 価値の算定";
+        analyze(tt - L.value); drawCoins();
+      } else {
+        sea(tt);
+      }
+      // 画面の枠と演出
+      if (hudOn) corners(tt, phase);
+      var cin = tt >= L.lost + 1.6 && tt < L.heart ? 1 : tt >= L.sea ? 1 : 0;
+      if (cin) bars(tt < L.lost + 2.4 ? clamp((tt - L.lost - 1.6) / .8) : tt >= L.heart - .6 && tt < L.heart ? clamp((L.heart - tt) / .6) : 1);
+      var cut = [L.radar, L.profA, L.profB, L.lost, L.map, L.compass, L.lock, L.heart, L.value, L.error, L.sea, L.title].some(function (g) { return tt >= g && tt < g + .22; });
+      if (cut) glitch(50); else if (hudOn && Math.random() < .012) glitch(22);
     }
     (function frame() {
       openRaf = requestAnimationFrame(frame);
