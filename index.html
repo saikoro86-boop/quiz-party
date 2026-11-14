@@ -199,44 +199,25 @@ button { font: inherit; cursor: pointer; }
 #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
 #app { display: flex; flex-direction: column; gap: 20px; }
 
-/* ---- オープニング(夜明けの砂漠。映画の予告のように、暗転から始まる) ---- */
-#open { position: fixed; inset: 0; z-index: 50; background: #05060d; color: #f3e6cf; overflow: hidden; font-family: var(--font-body); }
+/* ---- オープニング(作戦室の画面。回線 → レーダー → 接触 → ハート → 画面が割れる → タイトル) ---- */
+#open { position: fixed; inset: 0; z-index: 50; background: #04070d; color: #ffd9a0; overflow: hidden; font-family: var(--font-body); }
 #open.out { opacity: 0; transition: opacity .9s ease; pointer-events: none; }
-.o-scene { position: absolute; inset: 0; transform-origin: 50% 70%; }
-.o-dawn, .o-sun { position: absolute; inset: 0; opacity: 0; }
-.o-dawn { background: linear-gradient(to top, #e27a3e 0%, #b0484a 20%, #4a2650 46%, #130d2a 74%, #05060d 100%); }
-.o-sun { inset: auto; left: 50%; top: 66%; width: 110vmax; height: 110vmax; margin: -55vmax 0 0 -55vmax;
-  background: radial-gradient(circle, #fff0c2 0, #ffd08a 3%, rgba(255, 170, 90, .75) 9%, rgba(255, 110, 70, .28) 26%, transparent 52%); transform: translateY(24vh); }
-.o-dunes { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 58%; }
 #ofx { position: absolute; inset: 0; width: 100%; height: 100%; }
-.o-vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 55%, transparent 38%, rgba(0, 0, 0, .7) 100%); pointer-events: none; }
-.o-bar { position: absolute; left: 0; right: 0; height: 50%; background: #000; z-index: 3; }
-.o-bar.top { top: 0; } .o-bar.bot { bottom: 0; }
-.o-text { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; padding: 0 28px; text-align: center; }
-.o-line { grid-area: 1 / 1; opacity: 0; font-weight: 700; font-size: clamp(16px, 4.6vw, 26px); line-height: 2; letter-spacing: .22em; text-indent: .22em; text-wrap: balance; text-shadow: 0 0 22px rgba(255, 190, 120, .55); }
-.o-title { grid-area: 1 / 1; margin-top: -9vh; opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.o-vig { position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(0, 0, 0, .65) 100%); }
+.o-text { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; padding: 0 24px; text-align: center; pointer-events: none; }
+.o-title { opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .o-eye { font-weight: 900; font-size: 13px; letter-spacing: .6em; text-indent: .6em; color: #f6d98a; }
-.o-names { font-family: var(--font-script); font-size: clamp(64px, 20vw, 132px); line-height: 1.02; display: flex; flex-direction: column; align-items: center;
-  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .7)); }
+.o-names { font-family: var(--font-script); font-size: clamp(64px, 20vw, 132px); line-height: 1.02; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .8)); }
 .o-names span { padding: 0 .1em .08em; background: linear-gradient(100deg, #b8842a 0%, #f6d98a 30%, #fff3c9 48%, #f6d98a 66%, #b8842a 100%); background-size: 260% 100%; background-position: 100% 0;
   -webkit-background-clip: text; background-clip: text; color: transparent; }
 .o-names span:first-child { transform: translateX(-.4em); } .o-names span:last-child { transform: translateX(.35em); }
 @media (min-width: 640px) { .o-names { flex-direction: row; column-gap: .25em; align-items: baseline; font-size: 112px; } .o-names span:first-child, .o-names span:last-child { transform: none; } }
 .o-rule { width: 0; height: 1.5px; background: linear-gradient(90deg, transparent, #f6d98a, transparent); }
 .o-tag { opacity: 0; font-weight: 900; font-size: clamp(15px, 4vw, 20px); letter-spacing: .5em; text-indent: .5em; }
-.o-bird { position: absolute; left: -12%; width: 40px; opacity: 0; fill: #0a0610; }
-.o-bird.b1 { top: 26%; } .o-bird.b2 { top: 18%; width: 26px; }
-.o-bird path { transform-origin: 50% 40%; }
-.o-dos { grid-area: 1 / 1; position: relative; opacity: 0; text-align: left; font-weight: 700; font-size: clamp(15px, 4.2vw, 21px); line-height: 2.2; letter-spacing: .12em;
-  padding: 2px 44px 2px 16px; border-left: 3px solid #f6d98a; text-shadow: 0 0 14px rgba(255, 190, 120, .5); }
-.o-dl { clip-path: inset(0 100% 0 0); white-space: nowrap; }
-.o-dl.l1 { color: #f6d98a; font-weight: 900; }
-.o-stamp { position: absolute; right: 0; bottom: -40px; opacity: 0; border: 3px solid #e8483c; color: #e8483c; background: rgba(0, 0, 0, .35); padding: 0 12px; font-weight: 900; font-size: 26px; letter-spacing: .2em; text-indent: .2em; transform: rotate(-9deg); text-shadow: none; }
-.o-word { grid-area: 1 / 1; opacity: 0; font-weight: 900; font-size: clamp(110px, 38vw, 240px); line-height: 1.1; color: #fff3d6; text-shadow: 0 0 40px rgba(255, 170, 90, .8), 0 6px 0 rgba(0, 0, 0, .45); text-wrap: balance; }
-.o-word.w4 { font-size: clamp(44px, 14vw, 104px); letter-spacing: .06em; }
-.o-credit { margin-top: 10px; opacity: 0; font-size: 13px; font-weight: 700; letter-spacing: .3em; text-indent: .3em; color: rgba(243, 230, 207, .75); }
+.o-credit { margin-top: 10px; opacity: 0; font-size: 13px; font-weight: 700; letter-spacing: .3em; text-indent: .3em; color: rgba(243, 230, 207, .8); }
 .o-flash { position: absolute; inset: 0; background: #fff6dc; opacity: 0; z-index: 4; pointer-events: none; }
-.o-gate { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 24px; background: #05060d; transition: opacity .5s ease; }
+.o-gate { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 24px; background: #04070d; transition: opacity .5s ease; }
 .o-gate.go { opacity: 0; pointer-events: none; }
 .o-gate .o-eye { margin-bottom: 8px; }
 #open button:focus-visible { outline: 3px solid #f6d98a; outline-offset: 3px; }
@@ -247,47 +228,15 @@ button { font: inherit; cursor: pointer; }
 #oskip { position: absolute; z-index: 7; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); height: 40px; padding: 0 16px; border-radius: 99px;
   border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
 #open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
-@media (prefers-reduced-motion: no-preference) {
-  #open.run .o-scene { animation: ozoom 33s ease-out forwards; }
-  #open.run .o-dawn { animation: ofade 22s ease-in forwards; }
-  #open.run .o-sun { animation: osun 24s cubic-bezier(.2, .6, .3, 1) forwards; }
-  #open.run .o-bar { animation: obar 2s cubic-bezier(.7, 0, .2, 1) forwards; }
-  #open.run .o-bird.b1 { animation: obird 17s 3s linear forwards; }
-  #open.run .o-bird.b2 { animation: obird 15s 8s linear forwards; }
-  #open.run .o-bird path { animation: oflap .8s ease-in-out infinite alternate; }
-  #open.run .o-line.a { animation: oline 3.4s 2.4s ease-in-out forwards; }
-  #open.run .o-dos { animation: odos 7s 5.8s linear forwards; }
-  #open.run .o-dl.l1 { animation: ofile .8s 6.2s steps(12) forwards; }
-  #open.run .o-dl.l2 { animation: ofile .8s 7.1s steps(13) forwards; }
-  #open.run .o-dl.l3 { animation: ofile .8s 8.0s steps(11) forwards; }
-  #open.run .o-dl.l4 { animation: ofile .8s 8.9s steps(11) forwards; }
-  #open.run .o-stamp { animation: ostamp .35s 10.0s cubic-bezier(.2, 1.6, .4, 1) forwards; }
-  #open.run .o-line.b { animation: oline 3.8s 12.4s ease-in-out forwards; }
-  #open.run .o-line.c { animation: oline 3.6s 16.2s ease-in-out forwards; }
-  #open.run .o-word.w1 { animation: oword .8s 20.0s forwards; }
-  #open.run .o-word.w2 { animation: oword .8s 20.8s forwards; }
-  #open.run .o-word.w3 { animation: oword .8s 21.6s forwards; }
-  #open.run .o-word.w4 { animation: oword 1.8s 22.4s forwards; }
-  #open.run .o-line.d { animation: oline 2.8s 24.0s ease-in-out forwards; }
-  #open.run .o-title { animation: otitle 2.2s 26.8s cubic-bezier(.1, .8, .2, 1) forwards; }
-  #open.run .o-names span { animation: osheen 4s 27.0s ease-out forwards; }
-  #open.run .o-rule { animation: orule 1.6s 28.4s ease-out forwards; }
-  #open.run .o-tag { animation: ofade 1.4s 29.4s ease-out forwards; }
-  #open.run .o-credit { animation: ofade 1.4s 30.6s ease-out forwards; }
-  #open.run .o-flash { animation: oflash .9s 26.8s ease-out; }
-}
-@keyframes obird { 0% { opacity: .9; transform: translate(0, 0); } 50% { transform: translate(60vw, -4vh); } 100% { opacity: .9; transform: translate(125vw, 3vh); } }
-@keyframes oflap { from { transform: scaleY(1); } to { transform: scaleY(.45); } }
-@keyframes odos { 0% { opacity: 0; } 5% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes ofile { to { clip-path: inset(0 0 0 0); } }
-@keyframes ostamp { from { opacity: 0; transform: rotate(-9deg) scale(2.2); } to { opacity: .95; transform: rotate(-9deg) scale(1); } }
-@keyframes oword { 0% { opacity: 1; transform: scale(1.4); } 14% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(.97); } }
-@keyframes ozoom { from { transform: scale(1); } to { transform: scale(1.12); } }
+#open.run .o-title { animation: otitle 2.2s 26.8s cubic-bezier(.1, .8, .2, 1) forwards, oglitch .5s 26.8s steps(1); }
+#open.run .o-names span { animation: osheen 4s 27.0s ease-out forwards; }
+#open.run .o-rule { animation: orule 1.6s 28.4s ease-out forwards; }
+#open.run .o-tag { animation: ofade 1.4s 29.4s ease-out forwards; }
+#open.run .o-credit { animation: ofade 1.4s 30.6s ease-out forwards; }
+#open.run .o-flash { animation: oflash .9s 26.8s ease-out; }
 @keyframes ofade { to { opacity: 1; } }
-@keyframes osun { to { opacity: 1; transform: translateY(2vh); } }
-@keyframes obar { to { height: 11%; } }
-@keyframes oline { 0% { opacity: 0; transform: translateY(8px); letter-spacing: .3em; } 25%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; letter-spacing: .2em; } }
 @keyframes otitle { from { opacity: 0; transform: scale(1.18); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes oglitch { 0% { transform: translate(-8px, 2px) scale(1.18); } 25% { transform: translate(6px, -2px) scale(1.18); } 50% { transform: translate(-3px, 0) scale(1.18); } 75% { transform: translate(2px, 1px) scale(1.18); } }
 @keyframes osheen { from { background-position: 100% 0; } to { background-position: 0% 0; } }
 @keyframes orule { to { width: min(300px, 70vw); } }
 @keyframes oflash { 0% { opacity: .95; } 100% { opacity: 0; } }
@@ -316,31 +265,9 @@ button { font: inherit; cursor: pointer; }
 </style>
 
 <div id="open" role="dialog" aria-modal="true" aria-label="オープニング" hidden>
-  <div class="o-scene">
-    <div class="o-dawn"></div><div class="o-sun"></div>
-    <svg class="o-bird b1" viewBox="-16 -10 32 20" aria-hidden="true" focusable="false"><path d="M-15 0 Q-8 -9 0 -1 Q8 -9 15 0 Q8 -3 0 3 Q-8 -3 -15 0Z"/></svg>
-    <svg class="o-bird b2" viewBox="-16 -10 32 20" aria-hidden="true" focusable="false"><path d="M-15 0 Q-8 -9 0 -1 Q8 -9 15 0 Q8 -3 0 3 Q-8 -3 -15 0Z"/></svg>
-    <svg class="o-dunes" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <path d="M0 120 C60 100 120 130 200 112 S340 100 400 118 L400 200 L0 200Z" fill="#3a1a2a"/>
-      <path d="M0 142 C80 118 150 152 230 134 S350 120 400 140 L400 200 L0 200Z" fill="#22101c"/>
-      <path d="M0 168 C70 152 130 178 210 162 S340 152 400 170 L400 200 L0 200Z" fill="#0d0610"/>
-    </svg>
-    <canvas id="ofx"></canvas>
-  </div>
+  <canvas id="ofx"></canvas>
   <div class="o-vig"></div>
   <div class="o-text">
-    <p class="o-line a">ふたりは、出会った。</p>
-    <div class="o-dos" aria-hidden="true">
-      <div class="o-dl l1">FILE No.0001</div>
-      <div class="o-dl l2">対象 ： ミサト &amp; タイガ</div>
-      <div class="o-dl l3">容疑 ： 幸せすぎること</div>
-      <div class="o-dl l4">判定 ： 結婚(確定)</div>
-      <div class="o-stamp">極秘</div>
-    </div>
-    <p class="o-line b">笑って、ぶつかって、<br>それでも、手を離さなかった。</p>
-    <p class="o-line c">そして今夜、<br>すべての秘密が明かされる。</p>
-    <div class="o-word w1" aria-hidden="true">愛</div><div class="o-word w2" aria-hidden="true">絆</div><div class="o-word w3" aria-hidden="true">秘密</div><div class="o-word w4" aria-hidden="true">全員、主役。</div>
-    <p class="o-line d">ご列席のみなさまに、問う。</p>
     <div class="o-title">
       <div class="o-eye">WEDDING QUIZ</div>
       <div class="o-names" aria-label="Misato and Taiga"><span>Misato</span><span>&amp; Taiga</span></div>
@@ -349,7 +276,6 @@ button { font: inherit; cursor: pointer; }
       <div class="o-credit">出演 ― ご列席のみなさま全員</div>
     </div>
   </div>
-  <div class="o-bar top"></div><div class="o-bar bot"></div>
   <div class="o-flash"></div>
   <div class="o-gate" id="ogate">
     <div class="o-eye">WEDDING QUIZ</div>
@@ -448,6 +374,8 @@ button { font: inherit; cursor: pointer; }
   // 「曲を選ぶ」で、その端末に入っている自分の音楽ファイルを流すこともできる。
   // ファイルは端末の中で読み込むだけで、アップロードも他の人への配信もしない。
   // どちらも「オン」にした端末だけで鳴る。
+  // オープニングの時刻表(秒)。画面と音の両方がこれに合わせる
+  var OPEN_TL = { radar: 3.4, pinA: 5.2, pinB: 6.6, link: 7.4, move: 11, contact: 16.2, heart: 17, grant: 19.4, words: [21, 21.8, 22.6, 23.4], ask: 24.6, title: 26.8 };
   var Snd = (function () {
     var ctx = null, out = null, conv = null, bus = null, on = false, timer = null, nextT = 0, bar = 0;
     var fileBuf = null, fileSrc = null;
@@ -536,45 +464,21 @@ button { font: inherit; cursor: pointer; }
       });
     }
 
-    // オープニング用の演出音: 低いうなり → 鼓動 → せり上がる風 → 衝撃音 → 金色の和音(すべてその場で合成。市販曲は使わない)
+    // オープニング用の演出音(画面の進行 OPEN_TL と同じ時刻で鳴らす)。
+    // 回線の電子音 → レーダーの探知音 → カウントダウン → 接触の衝撃 → ハートが灯る音 → 言葉ごとの衝撃 → タイトル。すべてその場で合成。
     var cineBus = null;
     function cine() {
       if (!init()) return false;
       ctx.resume();
-      var t0 = ctx.currentTime + .12, T = 26.8, old = bus, i;
+      var L = OPEN_TL, t0 = ctx.currentTime + .12, T = L.title, old = bus, i, k;
       cineBus = ctx.createGain(); cineBus.connect(out); cineBus.connect(conv); bus = cineBus;
       out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.9, ctx.currentTime, .1);
-      var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(120, t0); lp.frequency.exponentialRampToValueAtTime(900, t0 + T);
-      var dg = ctx.createGain(); dg.gain.setValueAtTime(.0001, t0); dg.gain.exponentialRampToValueAtTime(.2, t0 + T); dg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 4.5);
-      lp.connect(dg); dg.connect(bus);
-      [55, 55.4, 82.4].forEach(function (f) { var o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.connect(lp); o.start(t0); o.stop(t0 + T + 4.6); });
       var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), nd = nb.getChannelData(0);
       for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
-      var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
-      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + T - 6); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
-      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + T - 6); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
-      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + T - 6); ns.stop(t0 + T + .1);
-      [2.4, 4.6, 6.8, 9, 11, 13, 15, 16.6, 18, 19, 19.6, 24.6, 25.4, 26, 26.4, 26.7].forEach(function (dt) {
-        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
-        o.frequency.setValueAtTime(70, t0 + dt); o.frequency.exponentialRampToValueAtTime(40, t0 + dt + .3);
-        g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(.5, t0 + dt + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .45);
-        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .5);
-      });
-      var bo = ctx.createOscillator(), bg = ctx.createGain(); bo.type = "sine";
-      bo.frequency.setValueAtTime(90, t0 + T); bo.frequency.exponentialRampToValueAtTime(30, t0 + T + 1);
-      bg.gain.setValueAtTime(.9, t0 + T); bg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 2.6);
-      bo.connect(bg); bg.connect(bus); bo.start(t0 + T); bo.stop(t0 + T + 2.7);
-      var n2 = ctx.createBufferSource(); n2.buffer = nb;
-      var lp2 = ctx.createBiquadFilter(); lp2.type = "lowpass"; lp2.frequency.setValueAtTime(2200, t0 + T); lp2.frequency.exponentialRampToValueAtTime(200, t0 + T + 1.4);
-      var g2 = ctx.createGain(); g2.gain.setValueAtTime(.6, t0 + T); g2.gain.exponentialRampToValueAtTime(.0001, t0 + T + 1.6);
-      n2.connect(lp2); lp2.connect(g2); g2.connect(bus); n2.start(t0 + T); n2.stop(t0 + T + 1.7);
-      // 山場までの、静かで少し切ない旋律
-      [[2.6, 64], [4.2, 67], [6.6, 62], [8.8, 65], [12.6, 59], [14.2, 62], [16.4, 57], [18, 60], [24.2, 64], [25.4, 67]].forEach(function (n) { bell(t0 + n[0], n[1], .09, 4.2); });
-      // 極秘ファイルを打つ音と、言葉が切り替わるたびの衝撃音
-      function click(dt) {
-        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "square"; o.frequency.value = 2200;
-        g.gain.setValueAtTime(.05, t0 + dt); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .03);
-        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .04);
+      function tone(dt, f, v, d, type) {
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = type || "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(v, t0 + dt + .006); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + d);
+        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + d + .02);
       }
       function hit(dt, v) {
         var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
@@ -585,10 +489,47 @@ button { font: inherit; cursor: pointer; }
         var ng = ctx.createGain(); ng.gain.setValueAtTime(.35, t0 + dt); ng.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .25);
         n.connect(f); f.connect(ng); ng.connect(bus); n.start(t0 + dt); n.stop(t0 + dt + .3);
       }
-      [[6.2, 12], [7.1, 13], [8, 11], [8.9, 11]].forEach(function (l) { for (var k = 0; k < l[1]; k++) click(l[0] + k * (.8 / l[1])); });
-      hit(10, .7); hit(20, .8); hit(20.8, .8); hit(21.6, .9); hit(22.4, 1);
+      // 低いうなり(ずっと鳴り続け、タイトルへ向けて膨らむ)
+      var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(110, t0); lp.frequency.exponentialRampToValueAtTime(800, t0 + T);
+      var dg = ctx.createGain(); dg.gain.setValueAtTime(.0001, t0); dg.gain.exponentialRampToValueAtTime(.14, t0 + T); dg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 4.5);
+      lp.connect(dg); dg.connect(bus);
+      [55, 55.4, 82.4].forEach(function (f) { var o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.connect(lp); o.start(t0); o.stop(t0 + T + 4.6); });
+      // タイトルへ向かうせり上がる風
+      var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
+      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + T - 6); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
+      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + T - 6); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
+      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + T - 6); ns.stop(t0 + T + .1);
+      // 回線がつながる電子音
+      [.3, 1, 1.7, 2.4].forEach(function (dt) { tone(dt, 1400, .07, .08, "square"); });
+      tone(3.0, 700, .09, .5); tone(3.2, 1050, .09, .5);
+      // レーダー: 探知音(2人が見つかるたびに高くなる)
+      [[L.radar, 660], [L.pinA, 880], [L.pinB, 1175]].forEach(function (p) { tone(p[0], p[1], .22, 1.8); });
+      for (k = 0; k < 8; k++) tone(L.link + k * .2, 1800, .04, .05, "square");
+      // カウントダウン(1秒ごとに音程が上がる)
+      for (k = 0; k < 5; k++) tone(L.move + k, 660 * Math.pow(2, k / 6), .18, .18, "square");
+      hit(L.contact, 1);
+      // 点がハートになる間の、上がっていく鈴の音
+      [72, 76, 79, 84, 88, 91, 96, 91, 88, 84].forEach(function (m, j) { bell(t0 + L.heart + j * .22, m, .1, 1.8); });
+      bell(t0 + L.grant, 84, .14, 2.5); bell(t0 + L.grant + .2, 91, .14, 2.5);
+      // 言葉が切り替わるたびの衝撃
+      hit(L.words[0], .8); hit(L.words[1], .8); hit(L.words[2], .9); hit(L.words[3], 1);
+      [24.6, 25.4, 25.9, 26.3, 26.6].forEach(function (dt) {
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
+        o.frequency.setValueAtTime(70, t0 + dt); o.frequency.exponentialRampToValueAtTime(40, t0 + dt + .3);
+        g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(.5, t0 + dt + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .45);
+        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .5);
+      });
+      // タイトル: 衝撃音と金色の和音
+      var bo = ctx.createOscillator(), bg = ctx.createGain(); bo.type = "sine";
+      bo.frequency.setValueAtTime(90, t0 + T); bo.frequency.exponentialRampToValueAtTime(30, t0 + T + 1);
+      bg.gain.setValueAtTime(.9, t0 + T); bg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 2.6);
+      bo.connect(bg); bg.connect(bus); bo.start(t0 + T); bo.stop(t0 + T + 2.7);
+      var n2 = ctx.createBufferSource(); n2.buffer = nb;
+      var lp2 = ctx.createBiquadFilter(); lp2.type = "lowpass"; lp2.frequency.setValueAtTime(2200, t0 + T); lp2.frequency.exponentialRampToValueAtTime(200, t0 + T + 1.4);
+      var g2 = ctx.createGain(); g2.gain.setValueAtTime(.6, t0 + T); g2.gain.exponentialRampToValueAtTime(.0001, t0 + T + 1.6);
+      n2.connect(lp2); lp2.connect(g2); g2.connect(bus); n2.start(t0 + T); n2.stop(t0 + T + 1.7);
       [60, 67, 72, 76, 79].forEach(function (m) { bell(t0 + T + .02, m, .16, 5); });
-      [84, 88, 91, 96].forEach(function (m, k) { bell(t0 + T + .5 + k * .28, m, .13, 3.2); });
+      [84, 88, 91, 96].forEach(function (m, j) { bell(t0 + T + .5 + j * .28, m, .13, 3.2); });
       bus = old;
       return true;
     }
@@ -991,22 +932,176 @@ button { font: inherit; cursor: pointer; }
     if (reduced || (!force && Date.now() - last < OPEN_WINDOW)) { ov.hidden = true; return; }
     cancelAnimationFrame(openRaf);
     ov.classList.remove("run", "out"); $("#ogate").classList.remove("go"); ov.hidden = false; void ov.offsetWidth;
-    var main = $("main"), gate = $("#ogate"), withSound = false, ended = false, endTimer;
+    var main = $("main"), gate = $("#ogate"), withSound = false, ended = false, endTimer, startAt = 0;
     main.inert = true;
     $("#oSound").focus();
-    // 舞う砂: 風に流れる金色の粒
-    var cv = $("#ofx"), ctx = cv.getContext("2d"), W = 0, H = 0, dust = [], i;
-    W = cv.width = window.innerWidth; H = cv.height = window.innerHeight;
-    for (i = 0; i < 90; i++) dust.push({ x: Math.random() * W, y: H * (.3 + Math.random() * .65), v: 1.2 + Math.random() * 3, s: .8 + Math.random() * 1.8, a: .15 + Math.random() * .5, w: Math.random() * 6.28 });
-    var t = 0;
+
+    // ---- 作戦室の画面を、時刻 t(秒)から描く ----
+    var L = OPEN_TL, AMB = "255,179,71", HEART = "255,143,177";
+    var cv = $("#ofx"), ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0, land = [];
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (var gx = 0; gx < W / 13; gx++) for (var gy = 0; gy < H / 13; gy++) {
+      var nv = Math.sin(gx * .33) + Math.sin(gy * .29 + gx * .11) + Math.sin((gx + gy) * .17);
+      if (nv > .95) land.push([gx * 13 + 6, gy * 13 + 6]);
+    }
+    function clamp(x) { return Math.max(0, Math.min(1, x)); }
+    function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+    function txt(str, x, y, size, color, align, weight) {
+      ctx.font = (weight || 700) + " " + size + "px 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif";
+      ctx.fillStyle = color; ctx.textAlign = align || "left"; ctx.textBaseline = "middle"; ctx.fillText(str, x, y);
+    }
+    function glitch(strength) {
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+      for (var n = 0; n < 6; n++) {
+        var y = Math.floor(Math.random() * cv.height), hh = 6 + Math.floor(Math.random() * 40 * dpr), dx = Math.floor((Math.random() - .5) * strength * dpr);
+        ctx.drawImage(cv, 0, y, cv.width, hh, dx, y, cv.width, hh);
+      }
+      ctx.restore();
+    }
+    function hud(t) {
+      var R = Math.min(W, H) * .4, cx = W / 2, cy = H * .47, x, y, k;
+      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+      ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(" + AMB + ",.05)"; ctx.lineWidth = 1; ctx.beginPath();
+      for (x = 0; x < W; x += 40) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (y = 0; y < H; y += 40) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+
+      // 1) 回線がつながる
+      if (t < L.radar) {
+        var lines = ["CONNECTING ...", "SERVER : WEDDING-QUIZ", "USER   : GUEST", "認証 ― OK"], at = [.3, 1, 1.7, 2.4];
+        lines.forEach(function (ln, i) {
+          var n = Math.floor((t - at[i]) * 26); if (n <= 0) return;
+          txt(ln.slice(0, n) + (n < ln.length && Math.floor(t * 8) % 2 ? "▌" : ""), W * .12, H * .34 + i * 30, 16, "rgb(" + AMB + ")");
+        });
+        var pg = clamp((t - .3) / 2.9);
+        ctx.strokeStyle = "rgba(" + AMB + ",.7)"; ctx.strokeRect(W * .12, H * .6, W * .76, 10);
+        ctx.fillStyle = "rgba(" + AMB + ",.9)"; ctx.fillRect(W * .12 + 2, H * .6 + 2, (W * .76 - 4) * pg, 6);
+        txt(Math.floor(pg * 100) + " %", W * .88, H * .6 + 28, 13, "rgba(" + AMB + ",.8)", "right");
+      }
+
+      // 2) レーダーと地図
+      if (t >= L.radar) {
+        var fa = clamp((t - L.radar) / 1.2);
+        ctx.fillStyle = "rgba(" + AMB + "," + (.28 * fa) + ")";
+        land.forEach(function (d) { ctx.fillRect(d[0], d[1], 2, 2); });
+        ctx.strokeStyle = "rgba(" + AMB + "," + (.3 * fa) + ")";
+        for (k = 1; k <= 3; k++) { ctx.beginPath(); ctx.arc(cx, cy, R * k / 3, 0, 6.2832); ctx.stroke(); }
+        ctx.beginPath(); ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy); ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R); ctx.stroke();
+        if (t < L.title) {
+          var ang = (t - L.radar) * 1.7;
+          for (k = 0; k < 26; k++) {
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R, ang - (k + 1) * .045, ang - k * .045); ctx.closePath();
+            ctx.fillStyle = "rgba(" + AMB + "," + (.2 * (1 - k / 26) * fa) + ")"; ctx.fill();
+          }
+        }
+      }
+
+      // 3) 2人の位置、結ぶ線、距離、カウントダウン
+      if (t >= L.pinA && t < L.words[0] - .05) {
+        var pm = ease(clamp((t - L.move) / (L.contact - L.move)));
+        var ax = (cx - R * .78) + (R * .78 - 9) * pm, ay = (cy - R * .3) + (R * .3 - 4) * pm;
+        var bx = (cx + R * .78) - (R * .78 - 9) * pm, by = (cy + R * .34) - (R * .34 - 4) * pm;
+        function pin(px, py, born, label, below) {
+          var a = t - born; if (a < 0) return;
+          var box = 14 + 34 * (1 - ease(clamp(a / .5)));
+          ctx.strokeStyle = "rgba(" + AMB + ",1)"; ctx.lineWidth = 1.5;
+          ctx.strokeRect(px - box, py - box, box * 2, box * 2);
+          ctx.beginPath(); ctx.arc(px, py, 4, 0, 6.2832); ctx.fillStyle = "rgb(" + AMB + ")"; ctx.fill();
+          ctx.beginPath(); ctx.arc(px, py, 6 + (a % 1.6) * 40, 0, 6.2832); ctx.strokeStyle = "rgba(" + AMB + "," + (.6 * (1 - (a % 1.6) / 1.6)) + ")"; ctx.stroke();
+          txt(label, px, py + (below ? box + 14 : -box - 14), 13, "rgb(" + AMB + ")", "center", 900);
+        }
+        if (t < L.contact + .3) {
+          if (t >= L.link) {
+            var lk = ease(clamp((t - L.link) / 1.6));
+            ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(" + AMB + ",.7)"; ctx.lineWidth = 1.5; ctx.beginPath();
+            ctx.moveTo(ax, ay); ctx.lineTo(ax + (bx - ax) * lk, ay + (by - ay) * lk); ctx.stroke(); ctx.setLineDash([]);
+          }
+          pin(ax, ay, L.pinA, "TARGET-A  MISATO", false);
+          pin(bx, by, L.pinB, "TARGET-B  TAIGA", true);
+          if (t >= L.link) {
+            var dist = Math.round(8412 * (1 - pm));
+            txt("DISTANCE  " + (t < L.link + 1.6 ? "- - - -" : String(dist).replace(/\B(?=(\d{3})+(?!\d))/g, ",")) + " km", cx, H * .13, 15, "rgb(" + AMB + ")", "center", 900);
+          }
+          if (t >= L.move && t < L.contact) {
+            var sec = Math.ceil(L.contact - t);
+            txt(String(sec), cx, cy, R * 1.1, "rgba(" + AMB + "," + (.1 + .12 * (1 - ((L.contact - t) % 1))) + ")", "center", 900);
+            txt("CONTACT IN  00:0" + sec, cx, H * .87, 15, "rgb(" + AMB + ")", "center", 900);
+          }
+        }
+        // 接触: 輪が広がり、点がハートになっていく
+        if (t >= L.contact && t < L.contact + 1.4) {
+          var cr = (t - L.contact) * R * 1.8;
+          ctx.strokeStyle = "rgba(" + AMB + "," + (1 - (t - L.contact) / 1.4) + ")"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, cr, 0, 6.2832); ctx.stroke();
+          ctx.fillStyle = "rgba(255,246,220," + Math.max(0, .5 - (t - L.contact) * 1.6) + ")"; ctx.fillRect(0, 0, W, H);
+          txt("CONTACT", cx, H * .13, 26, "rgb(" + AMB + ")", "center", 900);
+        }
+        if (t >= L.heart) {
+          var N = 130, sh = Math.min(W, H) * .0125, shown = Math.floor(clamp((t - L.heart) / 2.2) * N), pulse = 1 + .05 * Math.sin(t * 7) * clamp((t - L.heart - 2.2) * 2);
+          for (k = 0; k < shown; k++) {
+            var th = k / N * 6.2832, hx = 16 * Math.pow(Math.sin(th), 3), hy = -(13 * Math.cos(th) - 5 * Math.cos(2 * th) - 2 * Math.cos(3 * th) - Math.cos(4 * th));
+            ctx.beginPath(); ctx.arc(cx + hx * sh * pulse, cy + hy * sh * pulse - sh * 2, 3.2, 0, 6.2832);
+            ctx.fillStyle = "rgba(" + HEART + ",.95)"; ctx.shadowColor = "rgb(" + HEART + ")"; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
+          }
+          if (t >= L.heart + 2.2) txt("TARGET  MATCHED", cx, cy + sh * 19, 15, "rgb(" + HEART + ")", "center", 900);
+          if (t >= L.grant && t < L.words[0] - .1) {
+            var gw = Math.min(W * .8, 340);
+            ctx.strokeStyle = "rgb(" + AMB + ")"; ctx.lineWidth = 2; ctx.strokeRect(cx - gw / 2, H * .13 - 22, gw, 44);
+            txt("ACCESS GRANTED ― 判定 : 結婚", cx, H * .13, 16, "rgb(" + AMB + ")", "center", 900);
+          }
+        }
+      }
+
+      // 4) 画面が割れて、言葉が叩きつけられる
+      for (k = 0; k < 4; k++) {
+        var wt = t - L.words[k], dur = k < 3 ? .8 : 1.8;
+        if (wt < 0 || wt > dur) continue;
+        var word = ["愛", "絆", "秘密", "全員、主役。"][k], fs = k < 3 ? Math.min(W * .5, 240) : Math.min(W * .17, 100);
+        ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "rgba(" + AMB + "," + Math.max(0, .85 - wt * 4) + ")"; ctx.fillRect(0, 0, W, H);
+        var off = Math.max(0, 10 - wt * 40);
+        ctx.globalCompositeOperation = "lighter";
+        txt(word, cx - off, cy, fs, "rgba(255,45,85,.9)", "center", 900);
+        txt(word, cx + off, cy, fs, "rgba(0,229,255,.9)", "center", 900);
+        txt(word, cx, cy, fs, "rgba(255,217,160,.95)", "center", 900);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = "rgba(0,0,0,.5)"; var by2 = (wt * 900) % H; ctx.fillRect(0, by2, W, 3);
+      }
+      if (t >= L.ask && t < L.title) {
+        var q = "ご列席のみなさまに、問う。", qn = Math.floor((t - L.ask) * 14);
+        ctx.fillStyle = "rgba(4,7,13,.85)"; ctx.fillRect(0, cy - 40, W, 80);
+        txt(q.slice(0, qn), cx, cy, Math.min(26, W * .06), "rgb(255,217,160)", "center", 900);
+      }
+      // タイトルのあいだも、背景で輪が静かに広がる
+      if (t >= L.title) {
+        for (k = 0; k < 3; k++) {
+          var rp = ((t - L.title) * .5 + k / 3) % 1;
+          ctx.strokeStyle = "rgba(" + AMB + "," + (.25 * (1 - rp)) + ")"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx, cy, rp * R * 1.4, 0, 6.2832); ctx.stroke();
+        }
+      }
+
+      // 5) 画面の四隅(録画中の表示、時刻、座標)
+      var m = 14, bl = 22;
+      ctx.strokeStyle = "rgba(" + AMB + ",.8)"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(m, m + bl); ctx.lineTo(m, m); ctx.lineTo(m + bl, m);
+      ctx.moveTo(W - m - bl, H - m); ctx.lineTo(W - m, H - m); ctx.lineTo(W - m, H - m - bl);
+      ctx.moveTo(m, H - m - bl); ctx.lineTo(m, H - m); ctx.lineTo(m + bl, H - m);
+      ctx.moveTo(W - m, m + bl + 50); ctx.lineTo(W - m, m + 50);
+      ctx.stroke();
+      var ss = Math.floor(t), ff = Math.floor((t % 1) * 30), pad = function (v) { return (v < 10 ? "0" : "") + v; };
+      if (Math.floor(t * 2) % 2 === 0) { ctx.beginPath(); ctx.arc(m + 8, m + 30, 5, 0, 6.2832); ctx.fillStyle = "#ff3b3b"; ctx.fill(); }
+      txt("REC  00:00:" + pad(ss) + ":" + pad(ff), m + 20, m + 30, 12, "rgba(" + AMB + ",.9)", "left", 900);
+      txt("N 35." + (6812 + Math.floor(t * 37) % 900) + "   E 139." + (7671 + Math.floor(t * 53) % 900), m + 8, H - m - 34, 11, "rgba(" + AMB + ",.8)", "left", 700);
+
+      // 6) 切り替わりの乱れ
+      var gl = [L.radar, L.move, L.contact, L.words[0] - .05, L.title].some(function (g) { return t >= g && t < g + .25; });
+      if (gl) glitch(60); else if (Math.random() < .015) glitch(24);
+    }
     (function frame() {
       openRaf = requestAnimationFrame(frame);
-      t += .02; ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#ffd9a0";
-      dust.forEach(function (d) {
-        d.x += d.v; d.y += Math.sin(t * 2 + d.w) * .35; if (d.x > W + 5) { d.x = -5; d.y = H * (.3 + Math.random() * .65); }
-        ctx.globalAlpha = d.a; ctx.fillRect(d.x, d.y, d.s * 3, d.s * .8);
-      });
-      ctx.globalAlpha = 1;
+      if (!startAt) { ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H); return; }
+      hud((performance.now() - startAt) / 1000);
     })();
     function finish() {
       if (ended) return; ended = true;
@@ -1020,7 +1115,7 @@ button { font: inherit; cursor: pointer; }
     function go(sound) {
       withSound = sound;
       if (sound && !Snd.cine()) withSound = false;
-      gate.classList.add("go"); ov.classList.add("run");
+      gate.classList.add("go"); ov.classList.add("run"); startAt = performance.now();
       $("#oskip").focus();
       endTimer = setTimeout(finish, 33800);
     }
