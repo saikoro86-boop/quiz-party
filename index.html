@@ -235,17 +235,19 @@ button { font: inherit; cursor: pointer; }
   border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
 #open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
 @media (prefers-reduced-motion: no-preference) {
-  #open.run .o-scene { animation: ozoom 11s ease-out forwards; }
-  #open.run .o-dawn { animation: ofade 6.8s ease-in forwards; }
-  #open.run .o-sun { animation: osun 7s cubic-bezier(.2, .6, .3, 1) forwards; }
-  #open.run .o-bar { animation: obar 1.5s cubic-bezier(.7, 0, .2, 1) forwards; }
-  #open.run .o-line.a { animation: oline 2.4s 1.5s ease-in-out forwards; }
-  #open.run .o-line.b { animation: oline 2.6s 4.0s ease-in-out forwards; }
-  #open.run .o-title { animation: otitle 1.8s 6.2s cubic-bezier(.1, .8, .2, 1) forwards; }
-  #open.run .o-names span { animation: osheen 3.4s 6.4s ease-out forwards; }
-  #open.run .o-rule { animation: orule 1.4s 7.0s ease-out forwards; }
-  #open.run .o-tag { animation: ofade 1.2s 7.6s ease-out forwards; }
-  #open.run .o-flash { animation: oflash .9s 6.2s ease-out; }
+  #open.run .o-scene { animation: ozoom 26s ease-out forwards; }
+  #open.run .o-dawn { animation: ofade 17s ease-in forwards; }
+  #open.run .o-sun { animation: osun 18s cubic-bezier(.2, .6, .3, 1) forwards; }
+  #open.run .o-bar { animation: obar 2.2s cubic-bezier(.7, 0, .2, 1) forwards; }
+  #open.run .o-line.a { animation: oline 3.4s 2.6s ease-in-out forwards; }
+  #open.run .o-line.b { animation: oline 4.0s 6.2s ease-in-out forwards; }
+  #open.run .o-line.c { animation: oline 3.8s 10.4s ease-in-out forwards; }
+  #open.run .o-line.d { animation: oline 3.2s 14.4s ease-in-out forwards; }
+  #open.run .o-title { animation: otitle 2.2s 17.6s cubic-bezier(.1, .8, .2, 1) forwards; }
+  #open.run .o-names span { animation: osheen 4s 17.8s ease-out forwards; }
+  #open.run .o-rule { animation: orule 1.6s 19.2s ease-out forwards; }
+  #open.run .o-tag { animation: ofade 1.4s 20.2s ease-out forwards; }
+  #open.run .o-flash { animation: oflash .9s 17.6s ease-out; }
 }
 @keyframes ozoom { from { transform: scale(1); } to { transform: scale(1.12); } }
 @keyframes ofade { to { opacity: 1; } }
@@ -293,7 +295,9 @@ button { font: inherit; cursor: pointer; }
   <div class="o-vig"></div>
   <div class="o-text">
     <p class="o-line a">ふたりは、出会った。</p>
-    <p class="o-line b">そして今夜、<br>すべての秘密が明かされる。</p>
+    <p class="o-line b">笑って、ぶつかって、<br>それでも、手を離さなかった。</p>
+    <p class="o-line c">そして今夜、<br>すべての秘密が明かされる。</p>
+    <p class="o-line d">ご列席のみなさまに、問う。</p>
     <div class="o-title">
       <div class="o-eye">WEDDING QUIZ</div>
       <div class="o-names" aria-label="Misato and Taiga"><span>Misato</span><span>&amp; Taiga</span></div>
@@ -492,7 +496,7 @@ button { font: inherit; cursor: pointer; }
     function cine() {
       if (!init()) return false;
       ctx.resume();
-      var t0 = ctx.currentTime + .12, T = 6.2, old = bus, i;
+      var t0 = ctx.currentTime + .12, T = 17.6, old = bus, i;
       cineBus = ctx.createGain(); cineBus.connect(out); cineBus.connect(conv); bus = cineBus;
       out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.9, ctx.currentTime, .1);
       var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(120, t0); lp.frequency.exponentialRampToValueAtTime(900, t0 + T);
@@ -502,10 +506,10 @@ button { font: inherit; cursor: pointer; }
       var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), nd = nb.getChannelData(0);
       for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
       var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
-      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + 1.5); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
-      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + 1.5); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
-      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + 1.5); ns.stop(t0 + T + .1);
-      [1.4, 2.6, 3.8, 4.7, 5.4, 5.9].forEach(function (dt) {
+      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + T - 5); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
+      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + T - 5); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
+      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + T - 5); ns.stop(t0 + T + .1);
+      [2.6, 5, 7.4, 9.8, 11.4, 13, 14.2, 15.2, 16, 16.6, 17, 17.3].forEach(function (dt) {
         var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
         o.frequency.setValueAtTime(70, t0 + dt); o.frequency.exponentialRampToValueAtTime(40, t0 + dt + .3);
         g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(.5, t0 + dt + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .45);
@@ -519,6 +523,8 @@ button { font: inherit; cursor: pointer; }
       var lp2 = ctx.createBiquadFilter(); lp2.type = "lowpass"; lp2.frequency.setValueAtTime(2200, t0 + T); lp2.frequency.exponentialRampToValueAtTime(200, t0 + T + 1.4);
       var g2 = ctx.createGain(); g2.gain.setValueAtTime(.6, t0 + T); g2.gain.exponentialRampToValueAtTime(.0001, t0 + T + 1.6);
       n2.connect(lp2); lp2.connect(g2); g2.connect(bus); n2.start(t0 + T); n2.stop(t0 + T + 1.7);
+      // 山場までの、静かで少し切ない旋律
+      [[2.8, 64], [4.4, 67], [6.4, 62], [8, 65], [10.6, 59], [12.2, 62], [14.6, 57], [16, 60]].forEach(function (n) { bell(t0 + n[0], n[1], .09, 4.2); });
       [60, 67, 72, 76, 79].forEach(function (m) { bell(t0 + T + .02, m, .16, 5); });
       [84, 88, 91, 96].forEach(function (m, k) { bell(t0 + T + .5 + k * .28, m, .13, 3.2); });
       bus = old;
@@ -952,7 +958,7 @@ button { font: inherit; cursor: pointer; }
       if (sound && !Snd.cine()) withSound = false;
       gate.classList.add("go"); ov.classList.add("run");
       $("#oskip").focus();
-      endTimer = setTimeout(finish, 10800);
+      endTimer = setTimeout(finish, 25200);
     }
     $("#oSound").addEventListener("click", function () { go(true); });
     $("#oQuiet").addEventListener("click", function () { go(false); });
