@@ -228,6 +228,10 @@ button { font: inherit; cursor: pointer; }
 .o-note { font-size: 12px; color: rgba(243, 230, 207, .6); text-align: center; }
 #oskip { position: absolute; z-index: 7; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); height: 40px; padding: 0 16px; border-radius: 99px;
   border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
+#ochap { position: absolute; z-index: 8; left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px)); bottom: max(8px, env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 6px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; }
+#ochap button { flex: none; height: 34px; padding: 0 12px; border-radius: 99px; border: 1px solid rgba(246, 217, 138, .55); background: rgba(0, 0, 0, .6); color: #f6d98a; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+#ochap button[aria-pressed="false"] { color: rgba(246, 217, 138, .55); text-decoration: line-through; }
 #open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
 #open.run .o-title { animation: otitle 2.2s 89s cubic-bezier(.1, .8, .2, 1) forwards, oglitch .5s 89s steps(1); }
 #open.run .o-names span { animation: osheen 4s 89.2s ease-out forwards; }
@@ -283,6 +287,12 @@ button { font: inherit; cursor: pointer; }
     <button class="btn gold" id="oSound" type="button">音ありで始める</button>
     <button class="btn ghost" id="oQuiet" type="button">音なしで始める</button>
     <p class="o-note">約1分半です。右上の SKIP でいつでも飛ばせます。<br>音ありは、終わったあとBGMが続きます(右下の ♪ で止められます)。</p>
+  </div>
+  <div id="ochap" hidden aria-label="場面を選んで見る(司会用)">
+    <button type="button" id="oChapSnd" aria-pressed="true">音あり</button>
+    <button type="button" data-sec="0">最初から</button><button type="button" data-sec="4">捜索</button><button type="button" data-sec="10">照会</button>
+    <button type="button" data-sec="27.5">地図</button><button type="button" data-sec="49.5">コンパス</button><button type="button" data-sec="61">ハート</button>
+    <button type="button" data-sec="67.5">金貨</button><button type="button" data-sec="75">夜明け</button><button type="button" data-sec="86">タイトル</button>
   </div>
   <button id="oskip" type="button">SKIP ▸</button>
 </div>
@@ -390,7 +400,9 @@ button { font: inherit; cursor: pointer; }
       if (!AC) return false;
       ctx = new AC();
       out = ctx.createGain(); out.gain.value = 0;
-      var comp = ctx.createDynamicsCompressor(); out.connect(comp); comp.connect(ctx.destination);
+      // 出力の最後に、音量の上限を抑える(盛り上がりの場面で、音が割れないように)
+      var comp = ctx.createDynamicsCompressor(); comp.threshold.value = -12; comp.knee.value = 6; comp.ratio.value = 20; comp.attack.value = .002; comp.release.value = .2;
+      out.connect(comp); comp.connect(ctx.destination);
       // 残響: 減衰するノイズを畳み込む
       var len = Math.floor(ctx.sampleRate * 2.6), buf = ctx.createBuffer(2, len, ctx.sampleRate);
       for (var c = 0; c < 2; c++) { var d = buf.getChannelData(c); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.4); }
@@ -416,7 +428,8 @@ button { font: inherit; cursor: pointer; }
         var tt = t + pos * step;
         K.bass(tt, ch.r + (pos === 3 ? 7 : 0), .24 * v, step * 2.2);
         K.cello(tt, ch.r + 12 + [0, 0, 7, 0, 0, 7][pos], step * .85, (pos % 3 === 0 ? .17 : .1) * v);
-        if (pos === 0 || pos === 3) { K.kick(tt, .45 + .35 * v); if (pass >= 2) K.taiko(tt, .2 + .1 * pass); }
+        if (pos === 0 || pos === 3) { K.kick(tt, .45 + .35 * v); if (pass >= 2) K.taiko(tt, .3 + .12 * pass); }
+        if (pass === 3 && bar % 4 === 3 && (pos === 2 || pos === 4 || pos === 5)) K.taiko(tt, .5);
         if (pos === 3) K.snare(tt, .18 + .12 * v);
         if (pos === 5 && pass >= 1) K.snare(tt, .06 + .03 * pass);
         K.hat(tt, .05 + .06 * v);
@@ -521,8 +534,10 @@ button { font: inherit; cursor: pointer; }
         notes.forEach(function (m) { osc(t, "sawtooth", hz(m), d + .03, g); osc(t, "sawtooth", hz(m) * 1.005, d + .03, g); });
       }
       function taiko(t, v) {
-        var g = env(t, v, .5); g.connect(B); osc(t, "sine", 95, .5, g).frequency.exponentialRampToValueAtTime(42, t + .35);
-        var g2 = env(t, v * .5, .12); g2.connect(filt("lowpass", 900, B)); noise(t, .12, g2);
+        var g = env(t, v, .8); g.connect(B); osc(t, "sine", 100, .8, g).frequency.exponentialRampToValueAtTime(38, t + .5);        // 低い打撃
+        var g1 = env(t, v * .6, .28); g1.connect(B); osc(t, "triangle", 190, .28, g1).frequency.exponentialRampToValueAtTime(70, t + .22); // 胴の鳴り
+        var g2 = env(t, v * .7, .1); g2.connect(filt("bandpass", 2400, B, 1.2)); noise(t, .1, g2);                                       // 革を打つ音
+        var g3 = env(t, v * .5, .35); g3.connect(filt("lowpass", 700, B)); noise(t, .35, g3);                                            // 響き
       }
       function boom(t, v) {
         var g = env(t, v, 1.6); g.connect(B); osc(t, "sine", 100, 1.6, g).frequency.exponentialRampToValueAtTime(28, t + .9);
@@ -547,13 +562,13 @@ button { font: inherit; cursor: pointer; }
     // → 金貨の洪水 → 夜明けの海で全員がそろい、半音2つ分(全音)上がって、テンポを上げ続けながらタイトルへ。
     // 1分半ぶんを一度に予約すると重いので、少し先の音だけを順に予約していく。
     var cineBus = null, cineTimer = null;
-    function cine() {
+    function cine(off) {
       if (!init()) return false;
       ctx.resume();
-      var L = OPEN_TL, t0 = ctx.currentTime + .15, T = L.title, B = ctx.createGain(), ev = [], i, k;
+      var L = OPEN_TL, t0 = ctx.currentTime + .15 - (off || 0), T = L.title, B = ctx.createGain(), ev = [], i, k;
       clearInterval(cineTimer);
       cineBus = B; B.connect(out); B.connect(conv);
-      out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.68, ctx.currentTime, .1);
+      out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.58, ctx.currentTime, .1);
       var K = kit(B), nb = K.nb, filt = K.filt, env = K.env, osc = K.osc, noise = K.noise, kick = K.kick, tom = K.tom, snare = K.snare, hat = K.hat, crash = K.crash, bass = K.bass, pluck = K.pluck, tone = K.tone, bl = K.bl, flute = K.flute, brass = K.brass, cello = K.cello, choir = K.choir, taiko = K.taiko, boom = K.boom, chord = K.chord, waves = K.waves, arpLP = K.arpLP;
       function at(sec, fn) { ev.push([sec, fn]); }
 
@@ -604,7 +619,9 @@ button { font: inherit; cursor: pointer; }
             p = clamp((st - L.sea) / (T - L.sea)); v = .4 + .85 * p;
             bass(t, ch.r + K + (pos === 3 ? 7 : 0), .3 * v, step * 2.2);
             cello(t, ch.r + 12 + K + [0, 0, 7, 0, 0, 7][pos], step * .85, (pos % 3 === 0 ? .2 : .12) * v);
-            if (pos === 0 || pos === 3) { kick(t, .5 + .4 * v); if (p > .2) taiko(t, .25 + .3 * v); }
+            if (pos === 0 || pos === 3) { kick(t, .5 + .4 * v); if (p > .15) taiko(t, .3 + .5 * v); }
+            if (p > .45 && bar % 4 === 3 && (pos === 2 || pos === 4 || pos === 5)) taiko(t, .3 + .45 * v);   // 「ドン・ドン・ドドン」のフィル
+            if (st > T - 6) { var rr = (st - (T - 6)) / 6; taiko(t, .25 + .42 * rr); taiko(t + step / 2, .15 + .32 * rr); }   // タイトル直前の連打
             if (pos === 3) snare(t, .2 + .15 * v);
             if (pos === 5) snare(t, .06 + .06 * v);
             hat(t, .04 + .1 * v);
@@ -621,7 +638,7 @@ button { font: inherit; cursor: pointer; }
               if (p > .3) brass(t, nt[0] + K + 12, nt[2] * step, .03 + .06 * v);
               if (p > .55) brass(t, nt[0] + K - 5, nt[2] * step, .03 + .05 * v);
             });
-            if (st > T - 9) { snare(t, .1 + .4 * (st - (T - 9)) / 9); if (st > T - 3) tom(t, .6); }
+            if (st > T - 9) { snare(t, .1 + .28 * (st - (T - 9)) / 9); if (st > T - 3) { tom(t, .6); taiko(t, .9); } }
             q = p;
           }
         });
@@ -649,12 +666,12 @@ button { font: inherit; cursor: pointer; }
       });
       // タイトル: 大砲のような衝撃、シンバル、長調(ホ長調)の和音、上がる鈴
       at(T, function (t) {
-        boom(t, 1); crash(t, .4);
+        boom(t, 1); crash(t, .4); taiko(t, 1.3); taiko(t + .02, 1);
         chord(t, [40, 52, 59, 64, 68, 71], 7, .07);
         [76, 80, 83, 88, 92].forEach(function (m, j) { bl(t + .3 + j * .26, m, .12, 3.6); });
         [64, 68, 71, 76].forEach(function (m) { brass(t, m, 3.5, .08); });
       });
-      at(T + 2.4, function (t) { kick(t, .6); }); at(T + 3.6, function (t) { kick(t, .5); bl(t, 88, .1, 3); });
+      at(T + 1, function (t) { taiko(t, .9); }); at(T + 1.8, function (t) { taiko(t, .9); }); at(T + 2.6, function (t) { taiko(t, 1.1); bl(t, 88, .1, 3); });
 
       // ---- 画面に合わせた効果音 ----
       for (k = 0; k < 6; k++) at(.3 + k * .5, function (t) { tone(t, 1400, .06, .06, "square"); });
@@ -1095,7 +1112,8 @@ button { font: inherit; cursor: pointer; }
   // 開いた直後に流す。公開の更新などで読み込み直されたとき、クイズの途中で流れないように、
   // 見てから20分以内は省く。動きを減らす設定の端末では出さない。
   // 司会は、ページ下の「オープニングをもう一度見る」で、いつでも見直せる。
-  var OPEN_WINDOW = 20 * 60 * 1000, openRaf = 0, openKeyBound = false;
+  var OPEN_WINDOW = 20 * 60 * 1000, openRaf = 0, openKeyBound = false, chapSound = true;
+  $("#oChapSnd").addEventListener("click", function () { chapSound = !chapSound; this.setAttribute("aria-pressed", String(chapSound)); this.textContent = chapSound ? "音あり" : "音なし"; });
   function opening(force) {
     var ov = $("#open"), last = 0;
     try { last = parseInt(sessionStorage.getItem("quiz.opened") || "0", 10) || 0; } catch (e) {}
@@ -1422,6 +1440,8 @@ button { font: inherit; cursor: pointer; }
       t = tt;
       ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.shadowBlur = 0;
       ctx.fillStyle = "#04070d"; ctx.fillRect(0, 0, W, H);
+      var shake = 0; [L.title, L.title + 1, L.title + 1.8, L.title + 2.6].forEach(function (hh) { var d = tt - hh; if (d >= 0 && d < .3) shake = Math.max(shake, (1 - d / .3) * 9); });
+      ctx.save(); if (shake) ctx.translate((Math.random() - .5) * shake * 2, (Math.random() - .5) * shake * 2);
       var ax0 = cx - R * .78, ay0 = cy - R * .3, bx0 = cx + R * .78, by0 = cy + R * .34, hudOn = tt < L.map || (tt >= L.heart && tt < L.sea);
       if (hudOn) {
         ctx.strokeStyle = amb(.05); ctx.lineWidth = 1; ctx.beginPath();
@@ -1477,6 +1497,7 @@ button { font: inherit; cursor: pointer; }
       } else {
         sea(tt);
       }
+      ctx.restore();
       // 画面の枠と演出
       if (hudOn) corners(tt, phase);
       var cin = tt >= L.lost + 1.6 && tt < L.heart ? 1 : tt >= L.sea ? 1 : 0;
@@ -1498,15 +1519,27 @@ button { font: inherit; cursor: pointer; }
       ov.classList.add("out"); main.inert = false;
       setTimeout(function () { if (!ended) return; cancelAnimationFrame(openRaf); ov.hidden = true; ov.classList.remove("run", "out"); gate.classList.remove("go"); }, 1000);
     }
-    function go(sound) {
-      withSound = sound;
-      if (sound && !Snd.cine()) withSound = false;
-      gate.classList.add("go"); ov.classList.add("run"); startAt = performance.now();
-      $("#oskip").focus();
-      endTimer = setTimeout(finish, OPEN_TL.end * 1000);
+    // 見たい場面(offset 秒)から始める。再生中に呼べば、その場面へ飛ぶ(映像・文字・音のすべてを、その時刻に合わせ直す)
+    function applyOffset(off) {
+      var set = function (sel, base, n) { var el = $(sel); if (el) el.style.animationDelay = new Array(n || 1).fill((base - off) + "s").join(", "); };
+      set("#open .o-title", 89, 2); set("#open .o-names span:first-child", 89.2); set("#open .o-names span:last-child", 89.2);
+      set("#open .o-rule", 90.6); set("#open .o-tag", 91.6); set("#open .o-credit", 92.8); set("#open .o-flash", 89);
     }
-    $("#oSound").onclick = function () { go(true); };
-    $("#oQuiet").onclick = function () { go(false); };
+    function go(sound, offset) {
+      offset = offset || 0;
+      clearTimeout(endTimer); Snd.cineStop();
+      withSound = sound;
+      if (sound && Snd.isOn()) Snd.set(false);
+      if (sound && !Snd.cine(offset)) withSound = false;
+      gate.classList.add("go"); ov.classList.remove("run", "out"); void ov.offsetWidth; applyOffset(offset); ov.classList.add("run");
+      coins.length = 0; ended = false; main.inert = true;
+      startAt = performance.now() - offset * 1000;
+      $("#oskip").focus();
+      endTimer = setTimeout(finish, (OPEN_TL.end - offset) * 1000);
+    }
+    $("#oSound").onclick = function () { go(true, 0); };
+    $("#oQuiet").onclick = function () { go(false, 0); };
+    Array.prototype.forEach.call(document.querySelectorAll("#ochap [data-sec]"), function (b) { b.onclick = function () { go(chapSound, parseFloat(b.getAttribute("data-sec"))); }; });
     $("#oskip").onclick = finish;
     if (!openKeyBound) {
       openKeyBound = true;
@@ -1546,7 +1579,7 @@ button { font: inherit; cursor: pointer; }
     var user = r[1];
     return Promise.all([user ? user.canEdit() : false, user ? user.can("data.write") : null]).then(function (v) {
       isHost = !!v[0]; canWrite = v[1] !== false;
-      $("#foot").hidden = !isHost;
+      $("#foot").hidden = !isHost; $("#ochap").hidden = !isHost;
       start();
     });
   });
