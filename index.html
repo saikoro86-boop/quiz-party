@@ -197,6 +197,66 @@ button { font: inherit; cursor: pointer; }
 #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
 #app { display: flex; flex-direction: column; gap: 20px; }
 
+/* ---- オープニング(夜明けの砂漠。映画の予告のように、暗転から始まる) ---- */
+#open { position: fixed; inset: 0; z-index: 50; background: #05060d; color: #f3e6cf; overflow: hidden; font-family: var(--font-body); }
+#open.out { opacity: 0; transition: opacity .9s ease; pointer-events: none; }
+.o-scene { position: absolute; inset: 0; transform-origin: 50% 70%; }
+.o-dawn, .o-sun { position: absolute; inset: 0; opacity: 0; }
+.o-dawn { background: linear-gradient(to top, #e27a3e 0%, #b0484a 20%, #4a2650 46%, #130d2a 74%, #05060d 100%); }
+.o-sun { inset: auto; left: 50%; top: 66%; width: 110vmax; height: 110vmax; margin: -55vmax 0 0 -55vmax;
+  background: radial-gradient(circle, #fff0c2 0, #ffd08a 3%, rgba(255, 170, 90, .75) 9%, rgba(255, 110, 70, .28) 26%, transparent 52%); transform: translateY(24vh); }
+.o-dunes { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 58%; }
+#ofx { position: absolute; inset: 0; width: 100%; height: 100%; }
+.o-vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 55%, transparent 38%, rgba(0, 0, 0, .7) 100%); pointer-events: none; }
+.o-bar { position: absolute; left: 0; right: 0; height: 50%; background: #000; z-index: 3; }
+.o-bar.top { top: 0; } .o-bar.bot { bottom: 0; }
+.o-text { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; padding: 0 28px; text-align: center; }
+.o-line { grid-area: 1 / 1; opacity: 0; font-weight: 700; font-size: clamp(16px, 4.6vw, 26px); line-height: 2; letter-spacing: .22em; text-indent: .22em; text-wrap: balance; text-shadow: 0 0 22px rgba(255, 190, 120, .55); }
+.o-title { grid-area: 1 / 1; margin-top: -9vh; opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.o-eye { font-weight: 900; font-size: 13px; letter-spacing: .6em; text-indent: .6em; color: #f6d98a; }
+.o-names { font-family: var(--font-script); font-size: clamp(64px, 20vw, 132px); line-height: 1.02; display: flex; flex-direction: column; align-items: center;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .7)); }
+.o-names span { padding: 0 .1em .08em; background: linear-gradient(100deg, #b8842a 0%, #f6d98a 30%, #fff3c9 48%, #f6d98a 66%, #b8842a 100%); background-size: 260% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.o-names span:first-child { transform: translateX(-.4em); } .o-names span:last-child { transform: translateX(.35em); }
+@media (min-width: 640px) { .o-names { flex-direction: row; column-gap: .25em; align-items: baseline; font-size: 112px; } .o-names span:first-child, .o-names span:last-child { transform: none; } }
+.o-rule { width: 0; height: 1.5px; background: linear-gradient(90deg, transparent, #f6d98a, transparent); }
+.o-tag { opacity: 0; font-weight: 900; font-size: clamp(15px, 4vw, 20px); letter-spacing: .5em; text-indent: .5em; }
+.o-flash { position: absolute; inset: 0; background: #fff6dc; opacity: 0; z-index: 4; pointer-events: none; }
+.o-gate { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 24px; background: #05060d; transition: opacity .5s ease; }
+.o-gate.go { opacity: 0; pointer-events: none; }
+.o-gate .o-eye { margin-bottom: 8px; }
+#open button:focus-visible { outline: 3px solid #f6d98a; outline-offset: 3px; }
+.o-gate .btn { width: min(320px, 100%); }
+.o-gate .btn.ghost { background: transparent; border-color: rgba(246, 217, 138, .6); color: #f6d98a; box-shadow: none; }
+.o-gate .btn.gold { background: linear-gradient(135deg, #f6d98a, #d9a441); color: #3a2606; border-color: transparent; box-shadow: 0 5px 0 #8a5f12, 0 12px 24px rgba(0, 0, 0, .5); }
+.o-note { font-size: 12px; color: rgba(243, 230, 207, .6); text-align: center; }
+#oskip { position: absolute; z-index: 7; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); height: 40px; padding: 0 16px; border-radius: 99px;
+  border: 1px solid rgba(243, 230, 207, .5); background: rgba(0, 0, 0, .35); color: #f3e6cf; font-weight: 900; font-size: 13px; letter-spacing: .14em; opacity: 0; pointer-events: none; }
+#open.run #oskip { opacity: 1; pointer-events: auto; transition: opacity .6s .8s; }
+@media (prefers-reduced-motion: no-preference) {
+  #open.run .o-scene { animation: ozoom 11s ease-out forwards; }
+  #open.run .o-dawn { animation: ofade 6.8s ease-in forwards; }
+  #open.run .o-sun { animation: osun 7s cubic-bezier(.2, .6, .3, 1) forwards; }
+  #open.run .o-bar { animation: obar 1.5s cubic-bezier(.7, 0, .2, 1) forwards; }
+  #open.run .o-line.a { animation: oline 2.4s 1.5s ease-in-out forwards; }
+  #open.run .o-line.b { animation: oline 2.6s 4.0s ease-in-out forwards; }
+  #open.run .o-title { animation: otitle 1.8s 6.2s cubic-bezier(.1, .8, .2, 1) forwards; }
+  #open.run .o-names span { animation: osheen 3.4s 6.4s ease-out forwards; }
+  #open.run .o-rule { animation: orule 1.4s 7.0s ease-out forwards; }
+  #open.run .o-tag { animation: ofade 1.2s 7.6s ease-out forwards; }
+  #open.run .o-flash { animation: oflash .9s 6.2s ease-out; }
+}
+@keyframes ozoom { from { transform: scale(1); } to { transform: scale(1.12); } }
+@keyframes ofade { to { opacity: 1; } }
+@keyframes osun { to { opacity: 1; transform: translateY(2vh); } }
+@keyframes obar { to { height: 11%; } }
+@keyframes oline { 0% { opacity: 0; transform: translateY(8px); letter-spacing: .3em; } 25%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; letter-spacing: .2em; } }
+@keyframes otitle { from { opacity: 0; transform: scale(1.18); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes osheen { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+@keyframes orule { to { width: min(300px, 70vw); } }
+@keyframes oflash { 0% { opacity: .95; } 100% { opacity: 0; } }
+
 @media (prefers-reduced-motion: no-preference) {
   .btn, .opt { transition: transform .1s, box-shadow .1s, opacity .25s; }
   .hearts span.cur { animation: beat 1.1s ease-in-out infinite; }
@@ -220,6 +280,37 @@ button { font: inherit; cursor: pointer; }
 @keyframes seal { from { transform: rotate(-10deg) scale(2); opacity: 0; } }
 </style>
 
+<div id="open" role="dialog" aria-modal="true" aria-label="オープニング" hidden>
+  <div class="o-scene">
+    <div class="o-dawn"></div><div class="o-sun"></div>
+    <svg class="o-dunes" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <path d="M0 120 C60 100 120 130 200 112 S340 100 400 118 L400 200 L0 200Z" fill="#3a1a2a"/>
+      <path d="M0 142 C80 118 150 152 230 134 S350 120 400 140 L400 200 L0 200Z" fill="#22101c"/>
+      <path d="M0 168 C70 152 130 178 210 162 S340 152 400 170 L400 200 L0 200Z" fill="#0d0610"/>
+    </svg>
+    <canvas id="ofx"></canvas>
+  </div>
+  <div class="o-vig"></div>
+  <div class="o-text">
+    <p class="o-line a">ふたりは、出会った。</p>
+    <p class="o-line b">そして今夜、<br>すべての秘密が明かされる。</p>
+    <div class="o-title">
+      <div class="o-eye">WEDDING QUIZ</div>
+      <div class="o-names" aria-label="Misato and Taiga"><span>Misato</span><span>&amp; Taiga</span></div>
+      <div class="o-rule"></div>
+      <div class="o-tag">全問、正解せよ。</div>
+    </div>
+  </div>
+  <div class="o-bar top"></div><div class="o-bar bot"></div>
+  <div class="o-flash"></div>
+  <div class="o-gate" id="ogate">
+    <div class="o-eye">WEDDING QUIZ</div>
+    <button class="btn gold" id="oSound" type="button">音ありで始める</button>
+    <button class="btn ghost" id="oQuiet" type="button">音なしで始める</button>
+    <p class="o-note">音ありは、オープニングの音のあと、BGMが続きます。<br>あとから右下の ♪ で止められます。</p>
+  </div>
+  <button id="oskip" type="button">SKIP ▸</button>
+</div>
 <canvas id="petals" aria-hidden="true"></canvas>
 <main>
   <header class="hero">
@@ -395,10 +486,54 @@ button { font: inherit; cursor: pointer; }
         if (on) { clearInterval(timer); out.gain.setTargetAtTime(.9, ctx.currentTime, .1); try { bus.disconnect(); } catch (e) {} startPlayback(); }
       });
     }
+
+    // オープニング用の演出音: 低いうなり → 鼓動 → せり上がる風 → 衝撃音 → 金色の和音(すべてその場で合成。市販曲は使わない)
+    var cineBus = null;
+    function cine() {
+      if (!init()) return false;
+      ctx.resume();
+      var t0 = ctx.currentTime + .12, T = 6.2, old = bus, i;
+      cineBus = ctx.createGain(); cineBus.connect(out); cineBus.connect(conv); bus = cineBus;
+      out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setTargetAtTime(.9, ctx.currentTime, .1);
+      var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(120, t0); lp.frequency.exponentialRampToValueAtTime(900, t0 + T);
+      var dg = ctx.createGain(); dg.gain.setValueAtTime(.0001, t0); dg.gain.exponentialRampToValueAtTime(.2, t0 + T); dg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 4.5);
+      lp.connect(dg); dg.connect(bus);
+      [55, 55.4, 82.4].forEach(function (f) { var o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.connect(lp); o.start(t0); o.stop(t0 + T + 4.6); });
+      var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), nd = nb.getChannelData(0);
+      for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+      var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
+      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t0 + 1.5); bp.frequency.exponentialRampToValueAtTime(5000, t0 + T);
+      var rg = ctx.createGain(); rg.gain.setValueAtTime(.0001, t0 + 1.5); rg.gain.exponentialRampToValueAtTime(.3, t0 + T - .05); rg.gain.setValueAtTime(.0001, t0 + T);
+      ns.connect(bp); bp.connect(rg); rg.connect(bus); ns.start(t0 + 1.5); ns.stop(t0 + T + .1);
+      [1.4, 2.6, 3.8, 4.7, 5.4, 5.9].forEach(function (dt) {
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine";
+        o.frequency.setValueAtTime(70, t0 + dt); o.frequency.exponentialRampToValueAtTime(40, t0 + dt + .3);
+        g.gain.setValueAtTime(.0001, t0 + dt); g.gain.exponentialRampToValueAtTime(.5, t0 + dt + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + dt + .45);
+        o.connect(g); g.connect(bus); o.start(t0 + dt); o.stop(t0 + dt + .5);
+      });
+      var bo = ctx.createOscillator(), bg = ctx.createGain(); bo.type = "sine";
+      bo.frequency.setValueAtTime(90, t0 + T); bo.frequency.exponentialRampToValueAtTime(30, t0 + T + 1);
+      bg.gain.setValueAtTime(.9, t0 + T); bg.gain.exponentialRampToValueAtTime(.0001, t0 + T + 2.6);
+      bo.connect(bg); bg.connect(bus); bo.start(t0 + T); bo.stop(t0 + T + 2.7);
+      var n2 = ctx.createBufferSource(); n2.buffer = nb;
+      var lp2 = ctx.createBiquadFilter(); lp2.type = "lowpass"; lp2.frequency.setValueAtTime(2200, t0 + T); lp2.frequency.exponentialRampToValueAtTime(200, t0 + T + 1.4);
+      var g2 = ctx.createGain(); g2.gain.setValueAtTime(.6, t0 + T); g2.gain.exponentialRampToValueAtTime(.0001, t0 + T + 1.6);
+      n2.connect(lp2); lp2.connect(g2); g2.connect(bus); n2.start(t0 + T); n2.stop(t0 + T + 1.7);
+      [60, 67, 72, 76, 79].forEach(function (m) { bell(t0 + T + .02, m, .16, 5); });
+      [84, 88, 91, 96].forEach(function (m, k) { bell(t0 + T + .5 + k * .28, m, .13, 3.2); });
+      bus = old;
+      return true;
+    }
+    function cineStop() {
+      if (!cineBus || !ctx) return;
+      var b = cineBus; cineBus = null;
+      out.gain.setTargetAtTime(0, ctx.currentTime, .15);
+      setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 900);
+    }
     function fx(notes, step, v, d) { if (!on || fileBuf) return; var t = ctx.currentTime + .03; notes.forEach(function (m, i) { bell(t + i * step, m, v, d); }); }
     document.addEventListener("visibilitychange", function () { if (!ctx || !on) return; if (document.hidden) ctx.suspend(); else ctx.resume(); });
     return {
-      isOn: function () { return on; }, set: set, loadFile: loadFile,
+      isOn: function () { return on; }, set: set, loadFile: loadFile, cine: cine, cineStop: cineStop,
       pon: function () { fx([91], 0, .08, .9); },
       correct: function () { fx([84, 88, 91, 96], .09, .2, 1.8); },
       fanfare: function () { fx([72, 76, 79, 84, 88, 91, 96, 100], .12, .2, 2.6); }
@@ -776,6 +911,55 @@ button { font: inherit; cursor: pointer; }
     coll("questions"); coll("players"); coll("answers");
   }
 
+
+  // ---------- オープニング ----------
+  // 同じタブでは1回だけ(公開の更新などで読み込み直しても、クイズの途中で再生されないように)。
+  // 動きを減らす設定の端末では出さない。
+  function opening() {
+    var ov = $("#open"), seen = false;
+    try { seen = sessionStorage.getItem("quiz.opened") === "1"; } catch (e) {}
+    if (reduced || seen) { ov.remove(); return; }
+    ov.hidden = false;
+    var main = $("main"), gate = $("#ogate"), withSound = false, ended = false, endTimer, raf = 0;
+    main.inert = true;
+    $("#oSound").focus();
+    // 舞う砂: 風に流れる金色の粒
+    var cv = $("#ofx"), ctx = cv.getContext("2d"), W = 0, H = 0, dust = [], i;
+    function size() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+    size();
+    for (i = 0; i < 90; i++) dust.push({ x: Math.random() * W, y: H * (.3 + Math.random() * .65), v: 1.2 + Math.random() * 3, s: .8 + Math.random() * 1.8, a: .15 + Math.random() * .5, w: Math.random() * 6.28 });
+    var t = 0;
+    (function frame() {
+      raf = requestAnimationFrame(frame);
+      t += .02; ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#ffd9a0";
+      dust.forEach(function (d) {
+        d.x += d.v; d.y += Math.sin(t * 2 + d.w) * .35; if (d.x > W + 5) { d.x = -5; d.y = H * (.3 + Math.random() * .65); }
+        ctx.globalAlpha = d.a; ctx.fillRect(d.x, d.y, d.s * 3, d.s * .8);
+      });
+      ctx.globalAlpha = 1;
+    })();
+    function finish() {
+      if (ended) return; ended = true;
+      clearTimeout(endTimer);
+      try { sessionStorage.setItem("quiz.opened", "1"); } catch (e) {}
+      Snd.cineStop();
+      if (withSound && Snd.set(true)) $("#snd").setAttribute("aria-pressed", "true");
+      ov.classList.add("out"); main.inert = false;
+      setTimeout(function () { cancelAnimationFrame(raf); ov.remove(); }, 1000);
+    }
+    function go(sound) {
+      withSound = sound;
+      if (sound && !Snd.cine()) withSound = false;
+      gate.classList.add("go"); ov.classList.add("run");
+      $("#oskip").focus();
+      endTimer = setTimeout(finish, 10800);
+    }
+    $("#oSound").addEventListener("click", function () { go(true); });
+    $("#oQuiet").addEventListener("click", function () { go(false); });
+    $("#oskip").addEventListener("click", finish);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov.classList.contains("run")) finish(); });
+  }
+
   // 音の切り替え(端末ごと。押した人の端末だけ鳴る)
   var snd = $("#snd");
   snd.addEventListener("click", function () {
@@ -798,6 +982,7 @@ button { font: inherit; cursor: pointer; }
   });
 
   petals();
+  opening();
   var c = window.claude;
   if (!c || !c.use) { fail("このページはClaudeの画面で開いてください。"); return; }
   Promise.all([c.use("db"), c.use("user")]).then(function (r) {
